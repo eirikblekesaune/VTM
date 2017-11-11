@@ -32,10 +32,6 @@ VTMContext : VTMElement {
 			//   declaration[\definition]); //returns a ContextDefinition obj.
 		});
 		def = definition ? def;
-		//use the local network node as manager
-		//TODO: Will there problems when one class is listed as manager
-		//for multiple type of objects, in the case of Context/LocalNetworkNode?
-		manager = manager ? VTM.local.findManagerForContextClass(this);
 		^super.new(name, declaration, manager).initContext(def, prototypes);
 	}
 

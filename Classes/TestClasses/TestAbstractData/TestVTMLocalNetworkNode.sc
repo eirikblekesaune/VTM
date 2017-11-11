@@ -8,4 +8,7 @@ TestVTMLocalNetworkNode : TestVTMAbstractDataManager {
 			"Constructor returned singleton object"
 		);
 	}
+
+	test_autoAddUnmanagedContexts{
+	}
 }

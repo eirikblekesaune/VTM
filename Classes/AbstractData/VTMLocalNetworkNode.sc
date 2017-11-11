@@ -7,10 +7,13 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 	var discoveryReplyResponder;
 	var remoteActivateResponder;
 	var <networkNodeManager;
+
+	//global data managers for unnamed contexts
 	var <hardwareSetup;
 	var <moduleHost;
 	var <sceneOwner;
 	var <scoreManager;
+
 	var <active = false;
 
 	*dataClass{ ^VTMApplication; }

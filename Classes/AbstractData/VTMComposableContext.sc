@@ -2,6 +2,11 @@ VTMComposableContext : VTMContext {
 	var <children;
 
 	*new{arg name, declaration, manager, definition;
+		//If no manager defined, use the local network node as manager.
+		//TODO?: Will there be problems when a class is listed as manager
+		//for multiple type of objects, in the case of Context/LocalNetworkNode?
+		manager = manager ? VTM.local.findManagerForContextClass(this);
+
 		^super.new(name, declaration, manager, definition).initComposableContext;
 	}
 
