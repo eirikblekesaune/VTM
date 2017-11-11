@@ -45,14 +45,23 @@ VTMUnitTest : UnitTest {
 		//This checks if any Responders have not been removed.
 		if(this.class.checkFreeingResponderFuncs, {
 			if(AbstractResponderFunc.allFuncProxies.isEmpty.not, {
-				this.failed(currentMethod,
-					"Some AbstractResponderFunc proxies were not freed after test.:\n\t:%".format(
-						AbstractResponderFunc.allFuncProxies).postln;
-				);
-				if(this.class.forceFreeingResponderFuncs, {
-					AbstractResponderFunc.allFuncProxies.do({arg funcs;
-						funcs.do(_.free)
+				//and this is not listening to a VTM discovery port, indicating that it
+				//is a VTM responder that is not to be freed.
+				if(AbstractResponderFunc.allFuncProxies.includesKey('OSC unmatched') and: {
+					AbstractResponderFunc.allFuncProxies['OSC unmatched'].every({arg resp;
+						resp.recvPort != VTMLocalNetworkNode.discoveryBroadcastPort
+					})
+				}, {
+					this.failed(currentMethod,
+						"Some AbstractResponderFunc proxies were not freed after test.:\n\t:%".format(
+							AbstractResponderFunc.allFuncProxies).postln;
+					);
+					if(this.class.forceFreeingResponderFuncs, {
+						AbstractResponderFunc.allFuncProxies.do({arg funcs;
+							funcs.do(_.free)
+						});
 					});
+
 				});
 			});
 		});
