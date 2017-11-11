@@ -1,7 +1,7 @@
 //a Singleton class that communicates with the network and manages Applications
 VTMLocalNetworkNode : VTMAbstractDataManager {
 	classvar <singleton;
-	classvar <discoveryBroadcastPort = 57200;
+	classvar <discoveryBroadcastPort = 57500;
 	var <hostname;
 	var <localNetworks;
 	var discoveryReplyResponder;
