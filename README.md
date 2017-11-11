@@ -6,7 +6,6 @@ This code is in a state of severe alpha and early development. That means that r
 
 * UnitTesting quark
 * API quark
-* json quark
 * Modality-toolkit quark
 * sc3-plugins
 
