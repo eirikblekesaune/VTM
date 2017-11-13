@@ -6,9 +6,9 @@ VTMContext : VTMElement {
 	var <addr; //the address for this object instance.
 	var <state;
 	var stateChangeCallbacks;
-	var <cues;
-	var <mappings;
-	var <scores;
+	var cues;
+	var mappings;
+	var scores;
 	var condition;
 
 	classvar <viewClassSymbol = 'VTMContextView';
@@ -287,5 +287,17 @@ VTMContext : VTMElement {
 			result = func.inEnvir;
 		};
 		^result;
+	}
+
+	cues {
+		^cues.names;
+	}
+
+	mappings {
+		^mappings.names;
+	}
+
+	scores {
+		^scores.names;
 	}
 }
