@@ -2,7 +2,7 @@ VTMContext : VTMElement {
 	var definition;
 	var buildFunction;
 	var fullPathThunk;
-	var <envir;//TEMP getter
+	var envir;
 	var <addr; //the address for this object instance.
 	var <state;
 	var stateChangeCallbacks;

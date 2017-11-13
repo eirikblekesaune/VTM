@@ -1,6 +1,6 @@
 VTMAbstractDataManager {
 	var <context;
-	var <items;//TEMP getter
+	var items;
 	var oscInterface;
 	var itemDeclarations;
 

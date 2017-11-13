@@ -1,5 +1,5 @@
 VTMDefinitionLibrary : VTMElement {
-	var <definitions; //TEMP getter
+	var definitions; 
 
 	*managerClass{ ^VTMDefinitionLibraryManager; }
 
