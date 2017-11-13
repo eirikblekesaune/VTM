@@ -97,8 +97,9 @@ VTMValueElement : VTMAbstractData {
 	}
 
 	disable{
-		super.disable;
+		this.dump;
 		valueObj.disable;
+		super.disable;
 	}
 
 	enable{

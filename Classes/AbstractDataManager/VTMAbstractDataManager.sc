@@ -54,6 +54,10 @@ VTMAbstractDataManager {
 		^items.includesKey(key);
 	}
 
+	items{
+		^items.values;
+	}
+
 	at{arg key;
 		^items.at(key);
 	}
@@ -67,7 +71,7 @@ VTMAbstractDataManager {
 	}
 
 	names{
-		^items.collect(_.name);
+		^items.order;
 	}
 
 	name{ this.subclassResponsibility(thisMethod); }

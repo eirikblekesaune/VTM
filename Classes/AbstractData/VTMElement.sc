@@ -113,19 +113,19 @@ VTMElement : VTMAbstractData {
 	}
 
 	attributes {
-		^attributes.items.keys;
+		^attributes.names;
 	}
 
 	commands{
-		^commands.items.keys;
+		^commands.names;
 	}
 
 	returns{
-		^returns.items.keys;
+		^returns.names;
 	}
 
 	signals{
-		^signals.items.keys;
+		^signals.names;
 	}
 
 	addForwarding{arg key, compName, itemName,  addr, path, vtmJson = false, mapFunc;
