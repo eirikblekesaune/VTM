@@ -49,7 +49,6 @@ VTMValueElement : VTMAbstractData {
 		forwardings.clear;
 		forwarder.remove(\value);
 		valueObj.release;
-		valueObj = nil;
 		super.free;
 	}
 
@@ -69,7 +68,6 @@ VTMValueElement : VTMAbstractData {
 	disableForwarding{
 		forwarder.remove(\value);
 		forwarder.clear;
-		forwarder = nil;
 	}
 
 	type{
@@ -97,7 +95,6 @@ VTMValueElement : VTMAbstractData {
 	}
 
 	disable{
-		this.dump;
 		valueObj.disable;
 		super.disable;
 	}
