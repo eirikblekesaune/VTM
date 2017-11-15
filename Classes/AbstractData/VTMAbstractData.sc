@@ -43,8 +43,8 @@ VTMAbstractData {
 				checkType = val[\strictType] ? true;
 				if(checkType, {
 					if(tempVal.isValidType(declaration[key]).not, {
-						Error("Parameter value '%' must be of type '%'"
-							.format(key, tempVal.type)).throw;
+						Error("Parameter value '%' must be of type '%' value: %"
+							.format(key, tempVal.type, tempVal.value.asCompileString)).throw;
 					});
 				});
 				//check if value is e.g. within described range.

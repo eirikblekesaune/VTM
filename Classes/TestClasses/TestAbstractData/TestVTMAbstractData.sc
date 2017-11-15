@@ -2,11 +2,11 @@ TestVTMAbstractData : VTMUnitTest {
 
 	*classesForTesting{
 		^[
-			VTMAttribute,
-			VTMCommand,
-			VTMReturn,
+//			VTMAttribute,
+//			VTMCommand,
+//			VTMReturn,
 //			VTMMapping,
-//			VTMDefinitionLibrary,
+			VTMDefinitionLibrary,
 //			VTMRemoteNetworkNode,
 //			VTMApplication,
 //			VTMCue,
@@ -78,6 +78,7 @@ TestVTMAbstractData : VTMUnitTest {
 			);
 
 			testParameters = testClass.makeRandomParameters;
+			"Making with these parameters: %".format(testParameters).postln;
 			obj = class.new(
 				testName,
 				testParameters
@@ -104,11 +105,11 @@ TestVTMAbstractData : VTMUnitTest {
 			// 	"[%] - init 'manager' correctly".format(class)
 			// );
 			//
-			obj.free;
+			//obj.free;
 			// managerObj.free;
 		});
 	}
-
+/*
 	test_parametersNil{
 		var obj, testParameters, managerObj;
 		this.class.classesForTesting.do({arg class;
@@ -191,4 +192,5 @@ TestVTMAbstractData : VTMUnitTest {
 			});
 		});
 	}
+	*/
 }

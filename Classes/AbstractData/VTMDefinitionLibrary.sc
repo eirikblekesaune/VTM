@@ -8,13 +8,13 @@ VTMDefinitionLibrary : VTMElement {
 	}
 
 	initDefinitionLibrary{
-		definitions = this.readLibrary(this.get(\path));
+		definitions = this.readLibrary(this.get(\folderPath));
 	}
 
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll(
 			VTMOrderedIdentityDictionary[
-				\path -> (type: \string, optional: false),
+				\folderPath -> (type: \string, optional: false),
 				\includedPaths -> (type: \array, itemType: \string),
 				\excludedPaths -> (type: \array, itemType: \string)
 			]
@@ -29,7 +29,7 @@ VTMDefinitionLibrary : VTMElement {
 	   );
 	}
 
-	readLibrary{arg path;
+	readLibrary{arg folderPath;
 		var result = VTMOrderedIdentityDictionary.new;
 		var readEntry;
 		readEntry = {arg entryPathName, res;
@@ -59,12 +59,12 @@ VTMDefinitionLibrary : VTMElement {
 				});
 			};
 		};
-		if(File.exists(path), {
-			PathName(path).entries.do({arg entry;
+		if(File.exists(folderPath), {
+			PathName(folderPath).entries.do({arg entry;
 				readEntry.value(entry, result);
 			});
 		}, {
-			Error("Did not find library folder: '%'".format(path).postln;).throw;
+			Error("Did not find library folder: '%'".format(folderPath).postln;).throw;
 		});
 
 		^result;
