@@ -9,6 +9,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 	var <networkNodeManager;
 
 	//global data managers for unnamed contexts
+	var <applicationManager;
 	var <hardwareSetup;
 	var <moduleHost;
 	var <sceneOwner;
@@ -16,12 +17,11 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 
 	var <active = false;
 
-	*dataClass{ ^VTMApplication; }
 
 	*initClass{
 		Class.initClassTree(VTMAbstractData);
 		Class.initClassTree(VTMNetworkNodeManager);
-		singleton = super.new.initLocalNetworkNode;
+		//singleton = super.new.initLocalNetworkNode;
 	}
 
 	*new{
@@ -29,6 +29,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 	}
 
 	initLocalNetworkNode{
+		applicationManager = VTMApplicationManager.new(this);
 		networkNodeManager = VTMNetworkNodeManager.new(this);
 		hardwareSetup = VTMHardwareSetup.new(this);
 		moduleHost = VTMModuleHost.new(this);
@@ -105,7 +106,9 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 		active = false;
 	}
 
-	applications{ ^items; }
+	applications{
+		^applicationManager.applications;
+	}
 
 	findLocalNetworks{
 		var lines, entries;
@@ -307,7 +310,8 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 		{class.isKindOf(VTMModule.class) } {managerObj =  moduleHost; }
 		{class.isKindOf(VTMHardwareDevice.class) } {managerObj =  hardwareSetup; }
 		{class.isKindOf(VTMScene.class) } {managerObj =  sceneOwner; }
-		{class.isKindOf(VTMScore.class) } {managerObj =  scoreManager; };
+		{class.isKindOf(VTMScore.class) } {managerObj =  scoreManager; }
+		{class.isKindOf(VTMApplication.class) } {managerObj =  applicationManager; };
 		^managerObj;
 	}
 }
