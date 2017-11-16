@@ -27,7 +27,6 @@ VTMAbstractDataManager {
 			var newItem;
 			itemName = decl.key;
 			itemDeclaration = decl.value;
-			"decl: % itemName: % itemDecl: %".format(decl, itemName, itemDeclaration).postln;
 			newItem = this.class.dataClass.new(itemName, itemDeclaration, this);
 			this.addItem(newItem);
 		});

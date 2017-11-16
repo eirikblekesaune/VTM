@@ -10,9 +10,9 @@ VTMElement : VTMAbstractData {
 
 	initElement{
 		this.prInitAttributes;
-		this.prInitSignals;
-		this.prInitReturns;
-		this.prInitCommands;
+//		this.prInitSignals;
+//		this.prInitReturns;
+//		this.prInitCommands;
 
 		//TODO: register with LocalNetworkNode singleton.
 	}
@@ -25,22 +25,22 @@ VTMElement : VTMAbstractData {
 				itemDeclarations.at(attrKey).put(\value, declaration[attrKey]);
 			});
 		});
-		attributes = VTMAttributeManager(this, itemDeclarations);
+		attributes = VTMAttributeManager(itemDeclarations);
 	}
 
 	prInitSignals{
 		var itemDeclarations = this.class.signalDescriptions.deepCopy;
-		signals = VTMSignalManager(this, itemDeclarations);
+		signals = VTMSignalManager(itemDeclarations);
 	}
 
 	prInitReturns{
 		var itemDeclarations = this.class.returnDescriptions.deepCopy;
-		returns  = VTMReturnManager(this, itemDeclarations);
+		returns  = VTMReturnManager(itemDeclarations);
 	}
 
 	prInitCommands{
 		var itemDeclarations = this.class.commandDescriptions.deepCopy;
-		commands = VTMCommandManager(this, itemDeclarations);
+		commands = VTMCommandManager(itemDeclarations);
 	}
 
 	components{

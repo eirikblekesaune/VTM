@@ -62,17 +62,17 @@ VTMContext : VTMElement {
 
 	prInitCues{
 		var itemDeclarations = this.class.cueDescriptions.deepCopy;
-		cues = VTMCueManager(this, itemDeclarations);
+		cues = VTMCueManager(itemDeclarations, this);
 	}
 
 	prInitMappings{
 		var itemDeclarations = this.class.mappingDescriptions.deepCopy;
-		mappings = VTMMappingManager(this, itemDeclarations);
+		mappings = VTMMappingManager(itemDeclarations, this);
 	}
 
 	prInitScores{
 		var itemDeclarations = this.class.scoreDescriptions.deepCopy;
-		scores = VTMScoreManager(this, itemDeclarations);
+		scores = VTMScoreManager(itemDeclarations, this);
 	}
 
 	prInitComponentsWithContextDefinition{

@@ -29,12 +29,12 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 	}
 
 	initLocalNetworkNode{
-		applicationManager = VTMApplicationManager.new(this);
-		networkNodeManager = VTMNetworkNodeManager.new(this);
-		hardwareSetup = VTMHardwareSetup.new(this);
-		moduleHost = VTMModuleHost.new(this);
-		sceneOwner = VTMSceneOwner.new(this);
-		scoreManager = VTMScoreManager.new(this);
+		applicationManager = VTMApplicationManager.new(nil, this);
+		networkNodeManager = VTMNetworkNodeManager.new(nil, this);
+		hardwareSetup = VTMHardwareSetup.new(nil, this);
+		moduleHost = VTMModuleHost.new(nil, this);
+		sceneOwner = VTMSceneOwner.new(nil, this);
+		scoreManager = VTMScoreManager.new(nil, this);
 		hostname = Pipe("hostname", "r").getLine();
 		if(".local$".matchRegexp(hostname), {
 			hostname = hostname.drop(-6);

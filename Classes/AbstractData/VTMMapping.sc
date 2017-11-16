@@ -8,8 +8,8 @@ VTMMapping : VTMElement {
 	}
 
 	initMapping{
-		source = VTMMappingSource.make(this.get(\source));
-		destination = VTMMappingDestination.make(this.get(\destination));
+		source = VTMMappingSource(this.get(\source));
+		destination = VTMMappingDestination(this.get(\destination));
 		source.map(destination);
 	}
 
