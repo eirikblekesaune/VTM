@@ -1,5 +1,4 @@
 VTMAbstractDataManager {
-	var <context;
 	var items;
 	var oscInterface;
 	var itemDeclarations;
@@ -9,14 +8,12 @@ VTMAbstractDataManager {
 	}
 
 	//itemDeclarations is a VTMOrderedIdentityDictionary
-	*new{arg context, itemDeclarations;
-		^super.new.initAbstractDataManager(context, itemDeclarations);
+	*new{arg itemDeclarations;
+		^super.new.initAbstractDataManager(itemDeclarations);
 	}
 
-	//context is an instance of kind VTMContext or a symbol.
 	//itemDeclarations is an array of Dictionaries.
-	initAbstractDataManager{arg context_, itemDeclarations_;
-		context = context_;
+	initAbstractDataManager{arg itemDeclarations_;
 		itemDeclarations = itemDeclarations_;
 		items = VTMOrderedIdentityDictionary.new;
 		if(itemDeclarations_.notNil, {
@@ -30,6 +27,7 @@ VTMAbstractDataManager {
 			var newItem;
 			itemName = decl.key;
 			itemDeclaration = decl.value;
+			"decl: % itemName: % itemDecl: %".format(decl, itemName, itemDeclaration).postln;
 			newItem = this.class.dataClass.new(itemName, itemDeclaration, this);
 			this.addItem(newItem);
 		});
@@ -67,7 +65,6 @@ VTMAbstractDataManager {
 	free{
 		this.disableOSC;
 		items.do(_.free);
-		context = nil;
 	}
 
 	names{
@@ -91,13 +88,6 @@ VTMAbstractDataManager {
 	}
 
 	path{
-		if(context.notNil, {
-			if(context.isKindOf(VTMContext), {
-				^context.fullPath;
-			}, {
-				"/%".format(context).asSymbol;
-			});
-		});
 		^'/';
 	}
 
