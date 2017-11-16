@@ -1,6 +1,4 @@
 VTMMappingDestination{
 
-	*make{arg declaration;
-	}
 
 }
