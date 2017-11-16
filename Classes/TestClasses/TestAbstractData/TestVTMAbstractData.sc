@@ -2,11 +2,14 @@ TestVTMAbstractData : VTMUnitTest {
 
 	*classesForTesting{
 		^[
-//			VTMAttribute,
-//			VTMCommand,
-//			VTMReturn,
+			//ValueElements
+			VTMAttribute,
+			VTMCommand,
+			VTMReturn,
+			VTMSignal,
+			//Elements
 //			VTMMapping,
-			VTMDefinitionLibrary,
+//			VTMDefinitionLibrary,
 //			VTMRemoteNetworkNode,
 //			VTMApplication,
 //			VTMCue,

@@ -1,0 +1,2 @@
+TestVTMSignal : TestVTMValueElement {
+}
