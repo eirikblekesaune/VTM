@@ -10,7 +10,6 @@ VTMMapping : VTMElement {
 	initMapping{
 		source = VTMMappingSource.make(this.get(\source));
 		destination = VTMMappingDestination.make(this.get(\destination));
-
 		source.map(destination);
 	}
 
@@ -39,7 +38,6 @@ VTMMapping : VTMElement {
 	}
 
 	disable{
-
 		super.disable;
 	}
 
@@ -58,14 +56,18 @@ VTMMapping : VTMElement {
 	*attributeDescriptions{
 		^super.attributeDescriptions.putAll(
 			VTMOrderedIdentityDictionary[
-				(name: \enabled, type: \boolean, defaultValue: true, action: {
-					arg attr, mapping;
-					if(attr.value, {
-						mapping.enable;
-					}, {
-						mapping.disable;
-					});
-				})
+				\enabled -> (
+					type: \boolean,
+					defaultValue: true,
+					action: {
+						arg attr, mapping;
+						if(attr.value, {
+							mapping.enable;
+						}, {
+							mapping.disable;
+						});
+					}
+				)
 			]
 		);
 	}

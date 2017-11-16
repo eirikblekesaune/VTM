@@ -64,7 +64,6 @@ VTMAbstractData {
 						.format(key)).throw;
 				});
 			});
-
 		});
 		parameters = VTMParameterManager.newFrom(declaration);
 	}
