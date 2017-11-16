@@ -46,12 +46,12 @@ VTMCue : VTMComposableContext {
 	}
 
 	*commandDescriptions{
-		^[
-			(name: \go, action: {this.go;}),
-			(name: \signal, action: {this.signal;}),
-			(name: \stop, action: {this.stop;}),
-			(name: \reset, action: {this.reset;})
-		];
+		^super.commandDescriptions.putAll(VTMOrderedIdentityDictionary[
+			\go -> (action: {this.go;}),
+			\signal -> (action: {this.signal;}),
+			\stop -> (action: {this.stop;}),
+			\reset -> (action: {this.reset;})
+		]);
 	}
 
 	go{
