@@ -7,26 +7,23 @@ VTMAbstractDataManager {
 		^this.subclassResponsibility(thisMethod);
 	}
 
-	//itemDeclarations is a VTMOrderedIdentityDictionary
+	//% itemDeclarations : VTMOrderedIdentityDictionary
 	*new{arg itemDeclarations;
 		^super.new.initAbstractDataManager(itemDeclarations);
 	}
 
-	//itemDeclarations is an array of Dictionaries.
+	//% itemDeclarations : VTMOrderedIdentityDictionary
 	initAbstractDataManager{arg itemDeclarations_;
 		itemDeclarations = itemDeclarations_;
 		items = VTMOrderedIdentityDictionary.new;
-		if(itemDeclarations_.notNil, {
-			this.addItemsFromItemDeclarations(itemDeclarations_);
+		if(itemDeclarations.notNil, {
+			this.addItemsFromItemDeclarations(itemDeclarations);
 		});
 	}
 
 	addItemsFromItemDeclarations{arg itemDecls;
-		itemDecls.do({arg decl;
-			var itemName, itemDeclaration;
+		itemDecls.keysValuesDo({arg itemName, itemDeclaration;
 			var newItem;
-			itemName = decl.key;
-			itemDeclaration = decl.value;
 			newItem = this.class.dataClass.new(itemName, itemDeclaration, this);
 			this.addItem(newItem);
 		});

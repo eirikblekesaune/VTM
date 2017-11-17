@@ -12,8 +12,8 @@ VTMAbstractData {
 		^this.subclassResponsibility(thisMethod);
 	}
 
-	*new{arg name_, declaration_, manager_;
-		^super.new.initAbstractData(name_, declaration_, manager_);
+	*new{arg name, declaration, manager;
+		^super.new.initAbstractData(name, declaration, manager);
 	}
 
 	*newFromDeclaration{arg declaration, manager;
