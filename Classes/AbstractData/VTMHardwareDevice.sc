@@ -6,6 +6,6 @@ VTMHardwareDevice : VTMComposableContext {
 	}
 
 	initHardwareDevice{
-		"VTMHardwareDevice initialized".postln;
+		//"VTMHardwareDevice initialized".debug;
 	}
 }

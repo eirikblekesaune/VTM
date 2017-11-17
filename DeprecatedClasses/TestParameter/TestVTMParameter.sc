@@ -371,13 +371,13 @@ TestVTMParameter : VTMUnitTest {
 			// topEnvironment.put(\attributes, attributes);
 
 			/*
-			"Attributes:".postln;
+			"Attributes:".debug;
 			param.attributes.keysValuesDo({arg key, val;
-			"\t:% - [%]%".format(key, val.class, val).postln;
+			"\t:% - [%]%".format(key, val.class, val).debug;
 			});
-			"Attributes".postln;
+			"Attributes".debug;
 			attributes.keysValuesDo({arg key, val;
-			"\t:% - [%]%".format(key, val.class, val).postln;
+			"\t:% - [%]%".format(key, val.class, val).debug;
 			});
 			*/
 			//If the action is not a closed function it should not get returned as attribute

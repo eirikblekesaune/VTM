@@ -84,22 +84,22 @@ VTMNumberValue : VTMValue {
 		result = val;
 		switch(this.clipmode,
 			\none, {
-				// "NONE CLIPPING".postln;
+				// "NONE CLIPPING".debug
 			},
 			\low, {
-				// "LOW CLIPPING".postln;
+				// "LOW CLIPPING".debug
 				if(this.minVal.notNil and: {val < this.minVal}, {
 					result = val.max(this.minVal);
 				});
 			},
 			\high, {
-				// "HIGH CLIPPING".postln;
+				// "HIGH CLIPPING".debug
 				if(this.maxVal.notNil and: {val > this.maxVal}, {
 					result = val.min(this.maxVal);
 				});
 			},
 			\both, {
-				// "BOTH CLIPPING".postln;
+				// "BOTH CLIPPING".debug
 				if(this.minVal.notNil and: {val < this.minVal}, {
 					result = val.max(this.minVal);
 				}, {

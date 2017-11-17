@@ -15,13 +15,6 @@ VTMApplication : VTMContext {
 		hardwareDevices = VTMHardwareSetup(nil, this);
 		modules = VTMModuleHost(nil, this);
 		scenes = VTMSceneOwner(nil, this);
-		// //Discover other application on the network
-		// if(declaration.includesKey(\openView), {
-		// 	if(declaration[\openView], {
-		// 		var viewDesc, viewDef;
-		// 		this.makeView( declaration[\viewDefinition], declaration[\viewSettings] );
-		// 	});
-		// });
 	}
 
 	components{ ^super.components ++ [hardwareDevices, modules, scenes, libraries]; }

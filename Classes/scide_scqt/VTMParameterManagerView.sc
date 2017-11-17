@@ -13,10 +13,10 @@ VTMParameterManagerView : VTMView {
 
 	initParameterManagerView{
 		parameterViews = [];
-		"Context parameters are : %".format(this.context.parameters).postln;
+		//"Context parameters are : %".format(this.context.parameters).debug;
 		if(this.context.parameters.notEmpty, {
 			parameterViews = this.context.parameterOrder.collect({arg item;
-				"making para view: %".format(item).postln;
+				//"making para view: %".format(item).debug;
 				this.context.parameters[item].makeView(this);
 			});
 		});

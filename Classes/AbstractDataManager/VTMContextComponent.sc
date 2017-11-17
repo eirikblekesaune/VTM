@@ -58,7 +58,7 @@ VTMContextComponent : VTMElementComponent {
 			//we free the old context.
 			//TODO: See if this need to be scheduled/synced in some way.
 			if(this.hasItemNamed(newItemName), {
-				"Freeing item: % from %".format(newItemName, this.fullPath).postln;
+				//"Freeing item: % from %".format(newItemName, this.fullPath).debug;
 				this.freeItem(newItemName);
 			});
 			super.addItem(newItem);

@@ -98,9 +98,7 @@ VTMListValue : VTMCollectionValue {
 		var result;
 		desc.do({arg item, i;
 			if(item.isKindOf(Association), {
-				// "Parsing association: %".format(item).postln;
 				if(item.key.isArray and: {item.isString.not}, {
-					// "Expanding association key: %".format(item).postln;
 					item.key.do({arg jtem, j;
 						var jDesc = ();
 						item.value.keysValuesDo({arg ke, va;

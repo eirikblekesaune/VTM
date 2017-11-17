@@ -11,7 +11,7 @@ TestVTMAbstractData : VTMUnitTest {
 			VTMMapping,
 			VTMDefinitionLibrary,
 			VTMRemoteNetworkNode,
-//			VTMApplication,
+			VTMApplication,
 //			VTMCue,
 //			VTMHardwareDevice,
 //			VTMScore,
@@ -43,7 +43,7 @@ TestVTMAbstractData : VTMUnitTest {
 
 		//omit name
 		object.description.keysValuesDo({arg attrKey, attrVal;
-			"Object attr '%' - %".format(attrKey, attrVal).postln;
+			//"Object attr '%' - %".format(attrKey, attrVal).debug;
 		});
 	}
 
@@ -81,7 +81,7 @@ TestVTMAbstractData : VTMUnitTest {
 			);
 
 			testParameters = testClass.makeRandomParameters;
-			"Making with these parameters: %".format(testParameters).postln;
+			//"Making with these parameters: %".format(testParameters).debug;
 			obj = class.new(
 				testName,
 				testParameters

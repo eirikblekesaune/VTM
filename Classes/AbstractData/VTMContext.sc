@@ -16,12 +16,12 @@ VTMContext : VTMElement {
 	*new{arg name, declaration, manager, definition, prototypes;
 		var def;
 		/*
-		A definition is mandatory for making a Context.
-		The definition can either be specified in the declaration as a symbol, or
-		can be defined in sclang code using the definition argument for this constructor.
-		The definition environment in the declaration argument takes presedence over the
-		definition named in the declaration. This makes it easier to temporary override
-		context defitnitions in the case they need to be worked on or modified on the spot.
+		The definition can either be specified in the declaration as a symbol, 
+		or can be defined in sclang code using the definition argument for this 
+		constructor. The definition environment in the declaration argument
+		takes presedence over the definition named in the declaration.
+		This makes it easier to temporary override context defitnitions in case
+		they need to be worked on or modified on the spot.
 		*/
 		if(declaration.notNil and: {declaration.includesKey(\definition)}, {
 			//TODO: Load definition from DefinitionLibrary here.
@@ -88,14 +88,17 @@ VTMContext : VTMElement {
 	}
 
 	prAddComponentsToEnvir{arg componentDeclarations;
-		this.components.do({arg component;
-			var compName = component.name;
+		this.components.select(_.notNil).do({arg component;
+			var compName;
+			compName = component.name;
 			if(componentDeclarations.includesKey(compName), {
 				var newItem, itemDeclarations;
 				itemDeclarations = componentDeclarations[compName];
 				//TODO: This is a temporary hack that checks the type of the argument.
 				if(itemDeclarations.isKindOf(ArrayedCollection), {
-					itemDeclarations  = VTMOrderedIdentityDictionary.with( *itemDeclarations );
+					itemDeclarations = VTMOrderedIdentityDictionary.with(
+						*itemDeclarations
+					);
 				});
 				component.addItemsFromItemDeclarations(itemDeclarations);
 			});
@@ -204,7 +207,6 @@ VTMContext : VTMElement {
 	executeWithPrototypes{arg selector ...args;
 		var funcList, nextProto, result;
 		//Make a function stack of the proto functions
-		// "EVAL STACK FUNCS: sel: % args: %".format(selector, args).postln;
 		nextProto = envir;
 		while({nextProto.notNil}, {
 			if(nextProto.includesKey(selector), {
@@ -222,7 +224,7 @@ VTMContext : VTMElement {
 	}
 
 	update{arg theChanged, whatChanged, theChanger ...args;
-		// "[%] Update: %".format(this.name, [theChanged, whatChanged, theChanger, args]).postln;
+		// "[%] Update: %".format(this.name, [theChanged, whatChanged, theChanger, args]).debug;
 	}
 
 	enableOSC {

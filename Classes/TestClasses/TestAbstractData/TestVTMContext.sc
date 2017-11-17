@@ -292,7 +292,6 @@ TestVTMContext : TestVTMElement {
 		//check that the param path was built with the context path
 		parameterDeclaration.do({arg item;
 			var pathShouldBe;
-			// item[\name].postln;
 			pathShouldBe = "%/%".format(context.fullPath, item[\name]).asSymbol;
 			this.assertEquals(
 				pathShouldBe,
@@ -566,7 +565,7 @@ TestVTMContext : TestVTMElement {
 	//		var wasRun = false, itself, theArgs;
 	//		var testArgs = [11,22,\hello];
 	//		var testDesc = IdentityDictionary[\testObj -> 33];
-	//		var testDef = IdentityDictionary[\bongo -> 8383, \brexit -> {|context ...args|"So you wanna leave?".postln; wasRun = true; theArgs = args; itself = context;}];
+	//		var testDef = IdentityDictionary[\bongo -> 8383, \brexit -> {|context ...args|"So you wanna leave?".debug; wasRun = true; theArgs = args; itself = context;}];
 	//		var context = VTMContext.new('myRoot', testDef, testDesc);
 	//
 	//		context.execute(\brexit, *testArgs);

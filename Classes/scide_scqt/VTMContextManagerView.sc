@@ -21,13 +21,13 @@ VTMContextManagerView : VTMContextView {
 			treeView.clear;
 			context.children.do({arg child;
 				treeView.addItem([child.name]);
-				"updateing children: %".format(child.name).postln;
+				//"updateing children: %".format(child.name).debug;
 			});
 		}.defer;
 	}
 
 	update{arg theChanged, whatChanged, toValue ...args;
-		// "[%] Update: %".format(this.name, [theChanged, whatChanged, theChanger, args]).postln;
+		// "[%] Update: %".format(this.name, [theChanged, whatChanged, theChanger, args]).debug;
 		if(theChanged === context, {
 			if(this.children.includes(theChanged), {
 				switch(whatChanged,

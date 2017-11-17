@@ -30,7 +30,6 @@ VTMNamedList {
 			});
 			res;
 		}).flatten;
-		// "Items before construction; %".format(items).postln;
 		^this.new(items);
 	}
 

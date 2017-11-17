@@ -77,7 +77,7 @@ VTMParameterView : View {
 				//if alt key is pressed when pressing down the view, the parameter setting window
 				//for this ibjet will open.
 				if(mod == 524288, {
-					"Opening parameter attributes window: %".format(parameter.path).postln;
+					"Opening parameter attributes window: %".format(parameter.path).debug;
 					result = true;
 				});
 				result;
@@ -150,7 +150,7 @@ VTMParameterView : View {
 
 	//pull style update
 	update{arg theChanged, whatChanged, whoChangedIt, toValue;
-		//"Dependant update: % % % %".format(theChanged, whatChanged, whoChangedIt, toValue).postln;
+		//"Dependant update: % % % %".format(theChanged, whatChanged, whoChangedIt, toValue).debug;
 		if(theChanged == parameter, {//only update the view if the parameter changed
 			switch(whatChanged,
 				\enabled, { this.enabled_(parameter.enabled); },

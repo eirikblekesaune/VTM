@@ -283,7 +283,7 @@ TestVTMValueParameter : TestVTMParameter {
 				// 	item,
 				// 	param.perform(item), param.perform(item).class,
 				// 	testAttributes[item], testAttributes[item].class
-				// ).postln;
+				// ).debug;
 				this.assertEquals(
 					param.perform(item), testAttributes[item],
 					"Parameter set % through attributes [%]".format(item, class.name)

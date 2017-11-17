@@ -84,7 +84,6 @@ VTMContextParameterManager : VTMAbstractDataManager {
 			result = result.addAll(presetList.names);
 		});
 		^result;
-		// ^result;
 	}
 
 	getPreset{arg presetName;
@@ -94,7 +93,7 @@ VTMContextParameterManager : VTMAbstractDataManager {
 	addPreset{arg data, presetName, slot;
 		//if this is the first preset to be added we have to create
 		//a presetList first
-		"Adding preset slot %[%]:\n\t%".format(presetName, slot, data).postln;
+		"Adding preset slot %[%]:\n\t%".format(presetName, slot, data).debug;
 		if(presetList.isNil, {
 			presetList = VTMNamedList.new;
 		});
@@ -107,7 +106,7 @@ VTMContextParameterManager : VTMAbstractDataManager {
 		if(presetList.notNil, {
 			removedPreset = presetList.removeItem(presetName);
 			if(removedPreset.notNil, {
-				"Context: % - removed preset '%'".format(this.fullPath, presetName).postln;
+				"Context: % - removed preset '%'".format(this.fullPath, presetName).debug;
 			});
 		}, {
 			"Context: % - no presets to remove".format(this.fullPath).warn

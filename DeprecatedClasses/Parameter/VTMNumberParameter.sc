@@ -116,7 +116,7 @@ VTMNumberParameter : VTMValueParameter {
 					this.valueAction_(targetValue);
 					thisThread.stop;
 				});
-				// "Setting '%' ramped value: %".format(this.fullPath, val).postln;
+				// "Setting '%' ramped value: %".format(this.fullPath, val).debug;
 				this.valueAction_(val);
 				0.05.wait;
 				val = stream.next;
@@ -200,22 +200,22 @@ VTMNumberParameter : VTMValueParameter {
 		result = val;
 		switch(this.clipmode,
 			\none, {
-				// "NONE CLIPPING".postln;
+				// "NONE CLIPPING".debug;
 			},
 			\low, {
-				// "LOW CLIPPING".postln;
+				// "LOW CLIPPING".debug;
 				if(minVal.notNil and: {val < this.minVal}, {
 					result = val.max(this.minVal);
 				});
 			},
 			\high, {
-				// "HIGH CLIPPING".postln;
+				// "HIGH CLIPPING".debug;
 				if(maxVal.notNil and: {val > this.maxVal}, {
 					result = val.min(this.maxVal);
 				});
 			},
 			\both, {
-				// "BOTH CLIPPING".postln;
+				// "BOTH CLIPPING".debug;
 				if(minVal.notNil and: {val < this.minVal}, {
 					result = val.max(this.minVal);
 				}, {

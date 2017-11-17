@@ -49,7 +49,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 				if(hostnames.detect({arg item;
 					item == this.name;
 				}).notNil, {
-					"Remote VTM activation from: %".format(addr).postln;
+					//"Remote VTM activation from: %".format(addr).debug;
 					this.activate(doDiscovery: true);
 				})
 			}, '/activate', recvPort: this.class.discoveryBroadcastPort);
@@ -64,17 +64,16 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 				var senderHostname, senderAddr, registered = false;
 				senderHostname = jsonData['hostname'].asSymbol;
 				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
-				// "We got a discovery message: % %".format(senderHostname, senderAddr).postln;
 
 				if(localNetworks.any({arg item; item.addr == senderAddr;}), {
-					// "IT WAS LOCAL, ignoring it!".postln;
+					// "IT WAS LOCAL, ignoring it!".debug;
 				}, {
 					//a remote network node sent discovery
 					var isAlreadyRegistered;
 					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
 					if(isAlreadyRegistered.not, {
 						var newNetworkNode;
-						"Registering new network node: %".format([senderHostname, senderAddr]).postln;
+						//"Registering new network node: %".format([senderHostname, senderAddr]).debug;
 						newNetworkNode = VTMRemoteNetworkNode(
 							senderHostname,
 							(

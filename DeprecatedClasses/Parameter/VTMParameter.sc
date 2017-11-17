@@ -83,7 +83,7 @@ VTMParameter {
 				this.path = attributes[\path];
 			});
 			if(attributes.includesKey(\action), {
-				// "Setting action from attributes: %".format(attributes[\action]).postln;
+				// "Setting action from attributes: %".format(attributes[\action]).debug;
 				this.action_(attributes[\action]);
 			});
 			if(attributes.includesKey(\enabled), {

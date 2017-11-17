@@ -106,9 +106,9 @@ VTMListParameter : VTMCollectionParameter {
 		var result;
 		desc.do({arg item, i;
 			if(item.isKindOf(Association), {
-				// "Parsing association: %".format(item).postln;
+				// "Parsing association: %".format(item).debug;
 				if(item.key.isArray and: {item.isString.not}, {
-					// "Expanding association key: %".format(item).postln;
+					// "Expanding association key: %".format(item).debug;
 					item.key.do({arg jtem, j;
 						var jDesc = ();
 						item.value.keysValuesDo({arg ke, va;
