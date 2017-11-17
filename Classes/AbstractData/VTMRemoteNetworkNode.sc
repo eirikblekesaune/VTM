@@ -8,12 +8,12 @@ VTMRemoteNetworkNode : VTMElement {
 	}
 
 	initRemoteNetworkNode{
-		addr = NetAddr.newFromIPString(this.get(\addr));
+		addr = NetAddr.newFromIPString(this.get(\ipString));
 	}
 
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll(VTMOrderedIdentityDictionary[
-			\addr -> (type: \string, optional: false),
+			\ipString -> (type: \string, optional: false),
 			\mac -> (type: \string, optional: false)
 		]);
 	}

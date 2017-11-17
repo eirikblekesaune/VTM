@@ -12,7 +12,6 @@ VTM{
 		}, {
 			systemConfiguration = IdentityDictionary.new;
 		});
-
 	}
 
 	*local{

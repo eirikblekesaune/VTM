@@ -9,8 +9,8 @@ TestVTMAbstractData : VTMUnitTest {
 			VTMSignal,
 			//Elements
 			VTMMapping,
-//			VTMDefinitionLibrary,
-//			VTMRemoteNetworkNode,
+			VTMDefinitionLibrary,
+			VTMRemoteNetworkNode,
 //			VTMApplication,
 //			VTMCue,
 //			VTMHardwareDevice,

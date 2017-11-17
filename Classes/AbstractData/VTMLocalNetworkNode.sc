@@ -21,7 +21,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 	*initClass{
 		Class.initClassTree(VTMAbstractData);
 		Class.initClassTree(VTMNetworkNodeManager);
-		//singleton = super.new.initLocalNetworkNode;
+		singleton = super.new.initLocalNetworkNode;
 	}
 
 	*new{
@@ -63,7 +63,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 				var jsonData = VTMJSON.parse(msg[1]).changeScalarValuesToDataTypes;
 				var senderHostname, senderAddr, registered = false;
 				senderHostname = jsonData['hostname'].asSymbol;
-				senderAddr = NetAddr.newFromIPString(jsonData['addr'].asString);
+				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
 				// "We got a discovery message: % %".format(senderHostname, senderAddr).postln;
 
 				if(localNetworks.any({arg item; item.addr == senderAddr;}), {
@@ -78,7 +78,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 						newNetworkNode = VTMRemoteNetworkNode(
 							senderHostname,
 							(
-								addr: jsonData['addr'].asString,
+								ipString: jsonData['ipString'].asString,
 								mac: jsonData['mac'].asString
 							),
 							networkNodeManager
@@ -268,7 +268,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 
 			data = (
 				hostname: this.hostname,
-				addr: network.addr.generateIPString,
+				ipString: network.addr.generateIPString,
 				mac: network.mac
 			);
 
