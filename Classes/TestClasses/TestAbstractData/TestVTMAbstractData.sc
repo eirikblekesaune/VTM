@@ -42,7 +42,6 @@ TestVTMAbstractData : VTMUnitTest {
 		var result = VTMParameters[];
 		class = object.class;
 		testClass = this.findTestClass(class);
-
 		//omit name
 		object.description.keysValuesDo({arg attrKey, attrVal;
 			//"Object attr '%' - %".format(attrKey, attrVal).debug;
@@ -62,7 +61,6 @@ TestVTMAbstractData : VTMUnitTest {
 		var result;
 		var managerClass;
 		managerClass = this.findTestedClass.managerClass;
-
 		result = managerClass.new();
 		^result;
 	}
@@ -89,7 +87,6 @@ TestVTMAbstractData : VTMUnitTest {
 			obj = class.new(
 				testName,
 				testParameters
-				//managerObj
 			);
 
 			// //check if name initialized
@@ -107,15 +104,36 @@ TestVTMAbstractData : VTMUnitTest {
 			);
 
 			obj.free;
+
+			//Trying to do with manager
+			obj = class.new(
+				testName,
+				testParameters,
+				managerObj
+			);
+
+			// //check if name initialized
+			this.assertEquals(
+				obj.name,
+				testName,
+				"[%] - init 'name' correctly".format(class)
+			 );
 			//
-			// //the manager object must be identical
-			// this.assert(
-			// 	obj.manager === managerObj,
-			// 	"[%] - init 'manager' correctly".format(class)
-			// );
-			//
-			//obj.free;
-			// managerObj.free;
+			// //check parameters equal
+			this.assertEquals(
+				obj.parameters,
+				testParameters,
+				"[%] - init 'parameters' correctly".format(class)
+			);
+
+			//the manager object must be identical
+			this.assert(
+				obj.manager === managerObj,
+				"[%] - init 'manager' correctly".format(class)
+			);
+
+			obj.free;
+			managerObj.free;
 		});
 	}
 /*

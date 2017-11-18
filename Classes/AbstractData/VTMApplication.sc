@@ -4,7 +4,7 @@ VTMApplication : VTMContext {
 	var <hardwareDevices;
 	var <libraries;
 
-	*managerClass{ ^VTMLocalNetworkNode; }
+	*managerClass{ ^VTMApplicationManager; }
 
 	*new{arg name, declaration, manager, definition;
 		^super.new(name, declaration, manager, definition).initApplication;
