@@ -80,9 +80,9 @@ VTMAbstractData {
 
 	free{
 		this.disableOSC;
+		this.changed(\freed);
 		this.releaseDependants;
 		this.release;
-		manager.freeItem(name);
 		parameters = nil;
 		manager = nil;
 	}
@@ -115,7 +115,7 @@ VTMAbstractData {
 		^VTMOrderedIdentityDictionary[
 			\name -> (type: \string, optional: true),
 			\path -> (type: \string, optional: true)
-	   	];
+		];
 	}
 
 	parameters{

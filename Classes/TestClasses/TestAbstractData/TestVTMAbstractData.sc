@@ -11,12 +11,14 @@ TestVTMAbstractData : VTMUnitTest {
 			VTMMapping,
 			VTMDefinitionLibrary,
 			VTMRemoteNetworkNode,
+			//Contexts
 			VTMApplication,
-//			VTMCue,
-//			VTMHardwareDevice,
-//			VTMScore,
-//			VTMModule,
-//			VTMScene
+			//ComposableContexts
+			VTMCue,
+			VTMHardwareDevice,
+			VTMScore,
+			VTMModule,
+			VTMScene
 		];
 	}
 
@@ -82,25 +84,29 @@ TestVTMAbstractData : VTMUnitTest {
 
 			testParameters = testClass.makeRandomParameters;
 			//"Making with these parameters: %".format(testParameters).debug;
+			
+			//Testing without manager
 			obj = class.new(
 				testName,
 				testParameters
 				//managerObj
 			);
-			//
+
 			// //check if name initialized
-			// this.assertEquals(
-			// 	obj.name,
-			// 	testName,
-			// 	"[%] - init 'name' correctly".format(class)
-			// );
+			this.assertEquals(
+				obj.name,
+				testName,
+				"[%] - init 'name' correctly".format(class)
+			 );
 			//
 			// //check parameters equal
-			// this.assertEquals(
-			// 	obj.parameters,
-			// 	testParameters,
-			// 	"[%] - init 'parameters' correctly".format(class)
-			// );
+			this.assertEquals(
+				obj.parameters,
+				testParameters,
+				"[%] - init 'parameters' correctly".format(class)
+			);
+
+			obj.free;
 			//
 			// //the manager object must be identical
 			// this.assert(

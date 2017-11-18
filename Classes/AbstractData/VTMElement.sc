@@ -48,7 +48,7 @@ VTMElement : VTMAbstractData {
 	}
 
 	free{
-		this.components.do(_.free);
+		this.components.select(_.notNil).do(_.free);
 		super.free;
 	}
 
@@ -145,19 +145,19 @@ VTMElement : VTMAbstractData {
 	}
 
 	removeAllForwardings{
-		this.components.do({arg comp;
+		this.components.select(_.notNil).do({arg comp;
 			comp.removeAllForwarding;
 		});
 	}
 
 	enableForwarding{
-		this.components.do({arg comp;
+		this.components.select(_.notNil).do({arg comp;
 			comp.enableForwarding;
 		});
 	}
 
 	disableForwarding{
-		this.components.do({arg comp;
+		this.components.select(_.notNil).do({arg comp;
 			comp.disableForwarding;
 		});
 	}

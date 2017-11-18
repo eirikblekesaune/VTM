@@ -76,7 +76,7 @@ VTMContext : VTMElement {
 	}
 
 	prInitComponentsWithContextDefinition{
-//		this.components.do({arg component;
+//		this.components.select(_.notNil).do({arg component;
 //			var compName = component.name;
 //			if(envir.includesKey(compName), {
 //				var newItem, itemDeclarations;
@@ -121,7 +121,7 @@ VTMContext : VTMElement {
 			if(envir.includesKey(\prepare), {
 				this.execute(\prepare, cond);
 			});
-			//this.components.do({arg it; it.prepare(cond)});
+			//this.components.select(_.notNil).do({arg it; it.prepare(cond)});
 			//this.enableOSC;
 			this.prChangeState(\didPrepare);
 			action.value(this);
@@ -229,11 +229,13 @@ VTMContext : VTMElement {
 
 	enableOSC {
 		super.enableOSC();
-		this.components.do(_.enableOSC());
+		this.components.select(_.notNil).do(_.enableOSC());
 	}
 
 	disableOSC {
-		this.components.do(_.disableOSC());
+		this.components.select(_.notNil).do({arg item;
+			item.disableOSC();
+		});
 		super.disableOSC();
 	}
 

@@ -151,4 +151,7 @@ VTMAbstractDataManager {
 		});
 	}
 
+	update{arg ...args;
+		"IPDATE: %".format(args).postln;
+	}
 }
