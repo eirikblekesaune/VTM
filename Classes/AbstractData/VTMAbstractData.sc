@@ -28,6 +28,7 @@ VTMAbstractData {
 		this.prInitParameters;
 		if(manager.notNil, {
 			manager.addItem(this);
+			this.addDependant(manager);
 		});
 	}
 

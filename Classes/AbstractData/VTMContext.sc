@@ -31,6 +31,10 @@ VTMContext : VTMElement {
 			//def = someInstanceOfDefinitionLibrary.makeDefinition(
 			//   declaration[\definition]); //returns a ContextDefinition obj.
 		});
+		//If no manager defined, use the local network node as manager.
+		//TODO?: Will there be problems when a class is listed as manager
+		//for multiple type of objects, in the case of Context/LocalNetworkNode?
+		manager = manager ? VTM.local.findManagerForContextClass(this);
 		def = definition ? def;
 		^super.new(name, declaration, manager).initContext(def, prototypes);
 	}
@@ -135,7 +139,6 @@ VTMContext : VTMElement {
 		super.free;
 		forkIfNeeded{
 			var cond = condition ?? {Condition.new};
-
 			if(envir.includesKey(\free), {
 				this.execute(\free, cond);
 			});
@@ -144,7 +147,6 @@ VTMContext : VTMElement {
 			definition = nil;
 		};
 	}
-
 
 	//	//Determine if this is a root context, i.e. having no parent.
 	//	isRoot{

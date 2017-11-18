@@ -84,6 +84,7 @@ TestVTMAbstractData : VTMUnitTest {
 			//"Making with these parameters: %".format(testParameters).debug;
 			
 			//Testing without manager
+			testName = VTMUnitTest.makeRandomSymbol;
 			obj = class.new(
 				testName,
 				testParameters
@@ -117,7 +118,7 @@ TestVTMAbstractData : VTMUnitTest {
 				obj.name,
 				testName,
 				"[%] - init 'name' correctly".format(class)
-			 );
+			);
 			//
 			// //check parameters equal
 			this.assertEquals(
@@ -128,11 +129,17 @@ TestVTMAbstractData : VTMUnitTest {
 
 			//the manager object must be identical
 			this.assert(
-				obj.manager === managerObj,
+				obj.manager.notNil and: { obj.manager === managerObj},
 				"[%] - init 'manager' correctly".format(class)
 			);
 
 			obj.free;
+
+			//Should now be removed from the manager
+			this.assert(
+				managerObj.hasItemNamed(obj.name).not,
+				"Manager reomved the freed object."
+			);
 			managerObj.free;
 		});
 	}

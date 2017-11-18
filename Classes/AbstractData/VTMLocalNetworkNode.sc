@@ -246,9 +246,6 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 				"No find local network method for Windows yet!".warn;
 			}
 		);
-
-
-
 	}
 
 	name{

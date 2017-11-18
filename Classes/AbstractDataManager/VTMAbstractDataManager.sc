@@ -35,6 +35,10 @@ VTMAbstractDataManager {
 		});
 	}
 
+	removeItem{arg itemName;
+		items.removeAt(itemName);
+	}
+
 	freeItem{arg itemName;
 		if(this.hasItemNamed(itemName), {
 			var removedItem;
@@ -151,7 +155,15 @@ VTMAbstractDataManager {
 		});
 	}
 
-	update{arg ...args;
-		"IPDATE: %".format(args).postln;
+	update{arg theChanged, whatChanged ...more;
+		if(theChanged.isKindOf(this.class.dataClass) and: {
+			items.includes(theChanged)
+		}, {
+			switch(whatChanged,
+				\freed, {
+					this.removeItem(theChanged.name);
+				}
+			);
+		});
 	}
 }
