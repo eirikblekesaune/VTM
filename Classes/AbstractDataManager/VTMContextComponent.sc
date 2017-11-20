@@ -1,4 +1,4 @@
-VTMContextComponent : VTMElementComponent {
+VTMContextComponent : VTMAbstractDataManager {
 	var <context;
 
 	*new{arg itemDeclarations, context;

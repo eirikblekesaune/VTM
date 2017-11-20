@@ -4,8 +4,8 @@ VTMAttributeManager : VTMElementComponent {
 	*dataClass{ ^VTMAttribute; }
 	name{ ^\attributes; }
 
-	*new{arg itemDeclarations;
-		^super.new(itemDeclarations).initAttributeManager;
+	*new{arg itemDeclarations, element;
+		^super.new(itemDeclarations, element).initAttributeManager;
 	}
 
 	initAttributeManager{

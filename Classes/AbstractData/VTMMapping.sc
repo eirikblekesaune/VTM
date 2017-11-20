@@ -1,4 +1,4 @@
-VTMMapping : VTMElement {
+VTMMapping : VTMValueElement {
 	var source;
 	var destination;
 	*managerClass{ ^VTMMappingManager; }
@@ -35,10 +35,6 @@ VTMMapping : VTMElement {
 			}
 		);
 		super.enable;
-	}
-
-	disable{
-		super.disable;
 	}
 
 	*parameterDescriptions{

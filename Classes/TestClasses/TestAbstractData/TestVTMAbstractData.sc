@@ -143,7 +143,7 @@ TestVTMAbstractData : VTMUnitTest {
 			managerObj.free;
 		});
 	}
-/*
+
 	test_parametersNil{
 		var obj, testParameters, managerObj;
 		this.class.classesForTesting.do({arg class;
@@ -172,7 +172,7 @@ TestVTMAbstractData : VTMUnitTest {
 
 		});
 	}
-
+/*
 	test_DefaultParameters{
 
 	}

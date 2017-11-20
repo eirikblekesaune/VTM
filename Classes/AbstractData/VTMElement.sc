@@ -3,6 +3,7 @@ VTMElement : VTMAbstractData {
 	var commands;
 	var returns;
 	var signals;
+	var mappings;
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initElement;
@@ -13,6 +14,7 @@ VTMElement : VTMAbstractData {
 //		this.prInitSignals;
 //		this.prInitReturns;
 //		this.prInitCommands;
+		this.prInitMappings;
 
 		//TODO: register with LocalNetworkNode singleton.
 	}
@@ -43,8 +45,13 @@ VTMElement : VTMAbstractData {
 		commands = VTMCommandManager(itemDeclarations);
 	}
 
+	prInitMappings{
+		var itemDeclarations = this.class.mappingDescriptions.deepCopy;
+		commands = VTMMappingManager(itemDeclarations);
+	}
+
 	components{
-		^[attributes, returns, signals, commands];
+		^[attributes, returns, signals, commands, mappings];
 	}
 
 	free{
@@ -56,6 +63,7 @@ VTMElement : VTMAbstractData {
 	*commandDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 	*returnDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 	*signalDescriptions{ ^VTMOrderedIdentityDictionary[]; }
+	*mappingDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 
 	description{
 		var result = super.description;
@@ -63,7 +71,8 @@ VTMElement : VTMAbstractData {
 			\attributes -> this.class.attributeDescriptions,
 			\commands -> this.class.commandDescriptions,
 			\signals -> this.class.signalDescriptions,
-			\returns -> this.class.returnDescriptions
+			\returns -> this.class.returnDescriptions,
+			\mappings -> this.class.mappingDescriptions
 		]);
 		^result;
 	}
@@ -126,6 +135,10 @@ VTMElement : VTMAbstractData {
 
 	signals{
 		^signals.names;
+	}
+
+	mappings {
+		^mappings.names;
 	}
 
 	addForwarding{arg key, compName, itemName,  addr, path, vtmJson = false, mapFunc;

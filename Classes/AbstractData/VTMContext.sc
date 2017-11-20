@@ -7,7 +7,6 @@ VTMContext : VTMElement {
 	var <state;
 	var stateChangeCallbacks;
 	var cues;
-	var mappings;
 	var scores;
 	var condition;
 
@@ -54,7 +53,6 @@ VTMContext : VTMElement {
 		condition = Condition.new;
 		this.prChangeState(\loadedDefinition);
 		this.prInitCues;
-		this.prInitMappings;
 		this.prInitScores;
 		this.prInitComponentsWithContextDefinition;
 		this.prChangeState(\didInitialize);
@@ -67,11 +65,6 @@ VTMContext : VTMElement {
 	prInitCues{
 		var itemDeclarations = this.class.cueDescriptions.deepCopy;
 		cues = VTMCueManager(itemDeclarations, this);
-	}
-
-	prInitMappings{
-		var itemDeclarations = this.class.mappingDescriptions.deepCopy;
-		mappings = VTMMappingManager(itemDeclarations, this);
 	}
 
 	prInitScores{
@@ -110,7 +103,7 @@ VTMContext : VTMElement {
 	}
 
 	components{
-		^super.components ++ [cues, mappings, scores];
+		^super.components ++ [cues, scores];
 	}
 
 	//The context that calls prepare can issue a condition to use for handling
@@ -262,7 +255,6 @@ VTMContext : VTMElement {
 	}
 
 	*cueDescriptions{  ^VTMOrderedIdentityDictionary[]; }
-	*mappingDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 	*scoreDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 
 	*parameterDescriptions{
@@ -299,10 +291,6 @@ VTMContext : VTMElement {
 
 	cues {
 		^cues.names;
-	}
-
-	mappings {
-		^mappings.names;
 	}
 
 	scores {
