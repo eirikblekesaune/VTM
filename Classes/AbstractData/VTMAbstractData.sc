@@ -119,6 +119,18 @@ VTMAbstractData {
 		];
 	}
 
+	*mandatoryParameters{
+		var result = [];
+		this.parameterDescriptions.keysValuesDo({arg key, desc;
+			if(desc.includesKey(\optional) and: {
+				desc[\optional].not
+			}, {
+				result = result.add(key);
+			});
+		});
+		^result;
+	}
+
 	parameters{
 		^parameters.as(VTMParameters);
 	}
