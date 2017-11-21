@@ -49,12 +49,7 @@ TestVTMAbstractData : VTMUnitTest {
 	}
 
 	*makeRandomParameter{arg key, params;
-		var result;
-		result = switch(key,
-			\name, {this.makeRandomSymbol},
-			\path, {this.makeRandomPath}
-		);
-		^result;
+		^nil;
 	}
 
 	*makeRandomManagerObject{
@@ -65,7 +60,26 @@ TestVTMAbstractData : VTMUnitTest {
 		^result;
 	}
 
-	test_initAbstractDataParameters{
+	test_noNameShouldError{
+		var obj;
+		//Should throw error when no name is given.
+		this.class.classesForTesting.do({arg class;
+			try{
+				obj = class.new(nil);
+				this.failed(thisMethod,
+					"[%] - Did not throw error when no name was given"
+					.format(class)
+				);
+			} {
+				this.passed(thisMethod,
+					"[%] - Threw error when no name was given"
+					.format(class);
+				);
+			};
+		});
+	}
+
+	test_init{
 		var obj, testParameters, managerObj;
 		this.class.classesForTesting.do({arg class;
 			var testClass = VTMUnitTest.findTestClass(class);
@@ -95,18 +109,12 @@ TestVTMAbstractData : VTMUnitTest {
 				obj.name,
 				testName,
 				"[%] - init 'name' correctly".format(class)
-			 );
-			//
-			// //check parameters equal
-			this.assertEquals(
-				obj.parameters,
-				testParameters,
-				"[%] - init 'parameters' correctly".format(class)
 			);
 
 			obj.free;
 
 			//Trying to do with manager
+			testParameters = testClass.makeRandomParameters;
 			obj = class.new(
 				testName,
 				testParameters,
@@ -118,13 +126,6 @@ TestVTMAbstractData : VTMUnitTest {
 				obj.name,
 				testName,
 				"[%] - init 'name' correctly".format(class)
-			);
-			//
-			// //check parameters equal
-			this.assertEquals(
-				obj.parameters,
-				testParameters,
-				"[%] - init 'parameters' correctly".format(class)
 			);
 
 			//the manager object must be identical
@@ -144,87 +145,6 @@ TestVTMAbstractData : VTMUnitTest {
 		});
 	}
 
-	test_parametersNil{
-		var obj, testParameters, managerObj;
-		this.class.classesForTesting.do({arg class;
-			var testClass = VTMUnitTest.findTestClass(class);
-			var testName = VTMUnitTest.makeRandomSymbol;
-			var managerClass = class.managerClass;
-
-			managerObj = managerClass.new;
-
-			testParameters = nil;
-			obj = class.new(
-				testName,
-				testParameters,
-				managerObj
-			);
-
-			//Parameters should be empty VTMParameters
-			this.assertEquals(
-				obj.parameters,
-				VTMParameters[],
-				"[%] - init nil 'parameters' to empty array".format(class)
-			);
-
-			obj.free;
-			managerObj.free;
-
-		});
-	}
-/*
-	test_DefaultParameters{
-
-	}
-
-	test_ParametersGet{
-		var obj;
-		this.class.classesForTesting.do({arg class;
-			var testClass = VTMUnitTest.findTestClass(class);
-			var testName = VTMUnitTest.makeRandomSymbol;
-			var appendString;
-
-			//Should work with both initlialized uninitialized(nil) parameters.
-			[
-				[testClass.makeRandomParameters,	"[pre-initialized parameters]"],
-				[nil,	"[parameters init to nil]"],
-			].do({arg items, i;
-				var testParameters, appendString;
-				#testParameters, appendString = items;
-				//All classes should implement get methods for
-				//every Parameters.
-				testParameters = nil;
-				obj = class.new(
-					testName,
-					testParameters
-				);
-
-				class.parameterKeys.do({arg paramKey;
-					var testVal, oldVal;
-					//does it respond to getters for every parameters?
-					this.assert(
-						obj.respondsTo(paramKey),//test getter
-						"[%] - responded to parameters getter '%'".format(
-							class, paramKey) ++ appendString
-					);
-					//check if test class has implemented random generation method for it
-					try{
-						testVal = testClass.makeRandomParameter(paramKey);
-					} {|err|
-						this.failed(thisMethod,
-							Error("[%] - Error making random parameters value for '%'".format(class, paramKey)).throw;
-						);
-					};
-					this.assert(
-						testVal.notNil,
-						"[%] - test class generated non-nil random value for attr '%'".format(
-							class, paramKey) ++ appendString
-					);
-
-				});
-				obj.free;
-			});
-		});
-	}
-	*/
+	//Testing parameters may have to be done on class by class basis
+	//for the moment.
 }

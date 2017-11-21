@@ -11,9 +11,9 @@ VTMElement : VTMAbstractData {
 
 	initElement{
 		this.prInitAttributes;
-//		this.prInitSignals;
-//		this.prInitReturns;
-//		this.prInitCommands;
+		this.prInitSignals;
+		this.prInitReturns;
+		this.prInitCommands;
 		this.prInitMappings;
 
 		//TODO: register with LocalNetworkNode singleton.

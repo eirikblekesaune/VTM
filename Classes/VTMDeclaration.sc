@@ -2,9 +2,6 @@ VTMDeclaration : VTMOrderedIdentityDictionary {
 
 	*newFrom{arg what;
 		if(what.notNil, {
-			if(what.isKindOf(Dictionary).not, {
-				Error("Declaration must be a type of Dictionary").throw;
-			});
 			if(what.isEmpty, {
 				^super.newFrom(what);
 			}, {

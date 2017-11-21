@@ -1,7 +1,6 @@
 TestVTMElement : TestVTMAbstractData {
 	*classesForTesting{
 		^[
-			VTMMapping,
 			VTMDefinitionLibrary,
 			VTMCommand,
 			VTMRemoteNetworkNode,

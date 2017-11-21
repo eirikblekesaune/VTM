@@ -25,6 +25,8 @@ VTMValue {
 		^this.class.type;
 	}
 
+
+	*none{arg properties; ^this.makeFromType(thisMethod.name, properties); }
 	*string{arg properties; ^this.makeFromType(thisMethod.name, properties); }
 	*boolean{arg properties; ^this.makeFromType(thisMethod.name, properties); }
 	*timecode{arg properties; ^this.makeFromType(thisMethod.name, properties); }

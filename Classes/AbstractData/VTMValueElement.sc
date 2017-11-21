@@ -28,7 +28,7 @@ VTMValueElement : VTMAbstractData {
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll(
 			VTMOrderedIdentityDictionary[
-				\type -> (type: \string, optional: true)
+				\type -> (type: \string, optional: true, defaultValue: \none)
 			]
 		);
 	}
