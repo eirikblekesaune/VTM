@@ -74,14 +74,14 @@ VTMAbstractData {
 					});
 				});
 				tempVal.value = declaration[key];
-				if(tempVal.value != declaration[key], {
-					("%[%] - Parameter value was changed by value object:".format(
-					name, this.class)	++
-					"\n\tfrom: '%'[%] \n\tto: '%'[%]".format(
-						declaration[key], declaration[key].class,
-						tempVal.value, tempVal.value.class
-					)).warn;
-				});
+//				if(tempVal.value != declaration[key], {
+//					("%[%] - Parameter value was changed by value object:".format(
+//					name, this.class)	++
+//					"\n\tfrom: '%'[%] \n\tto: '%'[%]".format(
+//						declaration[key], declaration[key].class,
+//						tempVal.value, tempVal.value.class
+//					)).warn;
+//				});
 				paramDecl.put(key, tempVal.value);
 			}, {
 				var optional;
