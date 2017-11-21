@@ -1,7 +1,6 @@
 VTMAbstractData {
 	var <name;
 	var <manager;
-	var path;
 	var parameters;
 	var oscInterface;
 	var declaration;
@@ -34,7 +33,6 @@ VTMAbstractData {
 		manager = manager_;
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
 		declaration.put(\name, name);
-		path = declaration[\path];
 		this.prInitParameters;
 		if(manager.notNil, {
 			manager.addItem(this);
@@ -144,8 +142,7 @@ VTMAbstractData {
 
 	*parameterDescriptions{
 		^VTMOrderedIdentityDictionary[
-			\name -> (type: \string, optional: false),
-			\path -> (type: \string, optional: true)
+			\name -> (type: \string, optional: false)
 		]; 
 	} 
 
@@ -191,20 +188,15 @@ VTMAbstractData {
 		^(this.path ++ this.leadingSeparator ++ this.name).asSymbol;
 	}
 
-	path{
-		if(manager.isNil, {
-			^path;
-		}, {
-			^manager.fullPath;
-		});
+	isUnmanaged{
+		^manager.isNil;
 	}
 
-	path_{arg newPath;
-		path = newPath;
-		//rebuild OSC responders if they are running
-		if(oscInterface.enabled, {
-			this.disableOSC;
-			this.enableOSC;
+	path{
+		if(manager.isNil, {
+			^'';
+		}, {
+			^manager.fullPath;
 		});
 	}
 

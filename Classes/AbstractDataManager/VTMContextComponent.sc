@@ -1,25 +1,19 @@
 VTMContextComponent : VTMAbstractDataManager {
-	var <context;
 
-	*new{arg itemDeclarations, context;
-		^super.new(itemDeclarations).initContextComponent(context);
-	}
-
-	initContextComponent{arg context_;
-		context = context_;
+	context{
+		^parent;
 	}
 
 	free{
 		super.free;
-		context = nil;
 	}
 
 	path{
-		if(context.notNil, {
-			if(context.isKindOf(VTMContext), {
-				^context.fullPath;
+		if(this.context.notNil, {
+			if(this.context.isKindOf(VTMContext), {
+				^this.context.fullPath;
 			}, {
-				"/%".format(context).asSymbol;
+				"/%".format(this.context).asSymbol;
 			});
 		});
 		^'/';
@@ -40,11 +34,11 @@ VTMContextComponent : VTMAbstractDataManager {
 				//If this object is in a context we bind the item action
 				//to the context environment so that environment variables
 				//can be used inside the defined action.
-				if(context.notNil, {
-					itemAction = context.prContextualizeFunction(itemAction);
+				if(this.context.notNil, {
+					itemAction = this.context.prContextualizeFunction(itemAction);
 				});
 				newItem.action_({arg item;
-					itemAction.value(newItem, context);
+					itemAction.value(newItem, this.context);
 				});
 			});
 			this.addItem(newItem);

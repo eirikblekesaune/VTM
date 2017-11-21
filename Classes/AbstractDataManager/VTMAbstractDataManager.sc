@@ -2,19 +2,21 @@ VTMAbstractDataManager {
 	var items;
 	var oscInterface;
 	var itemDeclarations;
+	var <parent;
 
 	*dataClass{
 		^this.subclassResponsibility(thisMethod);
 	}
 
 	//% itemDeclarations : VTMOrderedIdentityDictionary
-	*new{arg itemDeclarations;
-		^super.new.initAbstractDataManager(itemDeclarations);
+	*new{arg itemDeclarations, parent;
+		^super.new.initAbstractDataManager(itemDeclarations, parent);
 	}
 
 	//% itemDeclarations : VTMOrderedIdentityDictionary
-	initAbstractDataManager{arg itemDeclarations_;
+	initAbstractDataManager{arg itemDeclarations_, parent_;
 		itemDeclarations = itemDeclarations_;
+		parent = parent_;
 		items = VTMOrderedIdentityDictionary.new;
 		if(itemDeclarations.notNil, {
 			this.addItemsFromItemDeclarations(itemDeclarations);

@@ -12,6 +12,17 @@ TestVTMElement : TestVTMAbstractData {
 		];
 	}
 
+	*makeRandomDeclaration{arg params;
+		var result;
+		result = super.makeRandomDeclaration(params);
+		result.putAll(this.makeRandomAttributes(params));
+		^result;
+	}
+
+	*makeRandomAttributes{arg params;
+		^VTMOrderedIdentityDictionary.new;
+	}
+
 	test_DerivedPath{
 		var obj, testDeclaration, managerObj;
 		this.class.classesForTesting.do({arg class;
@@ -22,7 +33,7 @@ TestVTMElement : TestVTMAbstractData {
 
 			managerObj = managerClass.new;
 
-			testDeclaration = nil;
+			testDeclaration = testClass.makeRandomParameters;
 			obj = class.new(
 				testName,
 				testDeclaration,
@@ -41,16 +52,6 @@ TestVTMElement : TestVTMAbstractData {
 				"[%] - path is the same as manager full path".format(class)
 			);
 
-			//Should not be able to change the path when managed element object.
-			testPath = "/%".format(this.class.makeRandomString);
-			obj.path = testPath;
-			this.assertEquals(
-				obj.path, managerObj.fullPath,
-				"[%] - path is unchanged in managed element object".format(class)
-			);
-			this.assert(obj.hasDerivedPath,
-				"[%] - still has derived path".format(class)
-			);
 			this.assertEquals(
 				obj.fullPath,
 				"%%%".format(
@@ -59,59 +60,9 @@ TestVTMElement : TestVTMAbstractData {
 				).asSymbol,
 				"[%] - fullPath is correct".format(class);
 			);
-
 			obj.free;
 			managerObj.free;
-
 		});
-
-	}
-
-	test_ManualPath{
-		var obj, testDeclaration;
-		this.class.classesForTesting.do({arg class;
-			var testClass = VTMUnitTest.findTestClass(class);
-			var testName = VTMUnitTest.makeRandomSymbol;
-			var testPath = "/%".format(this.class.makeRandomString);
-
-			obj = class.new(
-				testName,
-				testDeclaration
-			);
-			//should be nil
-			this.assert(obj.path.isNil,
-				"[%] - path init to nil".format(class)
-			);
-			this.assert(obj.hasDerivedPath.not,
-				"[%] - has not derived path".format(class)
-			);
-
-			obj.path = testPath;
-			this.assertEquals(
-				obj.path, testPath.asSymbol,
-				"[%] - set path and returned it as symbol".format(class)
-			);
-			this.assert(obj.hasDerivedPath.not,
-				"[%] - still has non-derived path".format(class)
-			);
-			this.assertEquals(
-				obj.fullPath, "%%%".format(testPath, obj.leadingSeparator, obj.name).asSymbol,
-				"[%] - fullPath is correct".format(class);
-			);
-
-			//change path with nonleading slash path arg
-			//using 'g' as non-leading separator char here
-			testPath = "g%".format(this.class.makeRandomString);
-			obj.path = testPath;
-
-			//should force leading separator
-			this.assertEquals(
-				obj.path, "/%".format(testPath).asSymbol,
-				"[%] - Changed and forced leading slash to set path".format(class)
-			);
-			obj.free;
-		});
-
 	}
 
 	//Test OSC communication with components

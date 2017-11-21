@@ -48,6 +48,10 @@ TestVTMAbstractData : VTMUnitTest {
 		});
 	}
 
+	*makeRandomDeclaration{arg params;
+		^this.makeRandomParameters(params);
+	}
+
 	*makeRandomParameter{arg key, params;
 		^nil;
 	}

@@ -1,3 +1,6 @@
+/*
+An Element is an object that has components.
+*/
 VTMElement : VTMAbstractData {
 	var attributes;
 	var commands;

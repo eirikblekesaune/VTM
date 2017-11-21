@@ -59,7 +59,7 @@ VTMContext : VTMElement {
 	}
 
 	isUnmanaged{
-		^manager.context === VTM.local;
+		^manager.parent === VTM.local;
 	}
 
 	prInitCues{
