@@ -12,25 +12,6 @@ TestVTMElement : TestVTMAbstractData {
 		];
 	}
 
-	test_initElement{
-		var obj;
-		//should error if created without name
-		this.class.classesForTesting.do({arg class;
-			try {
-				obj = class.new(name: nil, declaration: nil, manager: nil);
-				this.failed(thisMethod,
-					"[%] - Should have thrown error when created without 'name'".format(class)
-				);
-				obj.free;
-			} {|err|
-				//TODO: add error type check here when VTMError classes are implemented
-				this.passed(thisMethod,
-					"[%] - Threw error when created without 'name'".format(class)
-				);
-			};
-		});
-	}
-
 	test_DerivedPath{
 		var obj, testDeclaration, managerObj;
 		this.class.classesForTesting.do({arg class;
@@ -133,6 +114,7 @@ TestVTMElement : TestVTMAbstractData {
 
 	}
 
+	//Test OSC communication with components
 	test_ParameterOSC{}
 
 	test_AttributeOSC{
@@ -189,5 +171,9 @@ TestVTMElement : TestVTMAbstractData {
 
 	test_CommandOSC{}
 
-	test_ReturnQueryOSC{}
+	test_ReturnOSC{}
+
+	test_SignalOSC{}
+
+
 }
