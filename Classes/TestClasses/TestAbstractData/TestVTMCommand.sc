@@ -1,2 +1,0 @@
-TestVTMCommand : TestVTMValueElement {
-}

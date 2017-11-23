@@ -1,3 +1,0 @@
-TestVTMReturn : TestVTMValueElement {
-
-}

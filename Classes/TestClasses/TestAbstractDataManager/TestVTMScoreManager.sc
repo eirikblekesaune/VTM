@@ -1,3 +1,0 @@
-TestVTMScoreManager : TestVTMComposableContextManager {
-
-}

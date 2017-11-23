@@ -1,1 +1,0 @@
-TestVTMScene : TestVTMComposableContext {}

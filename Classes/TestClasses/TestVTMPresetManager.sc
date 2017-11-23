@@ -1,3 +1,0 @@
-TestVTMPresetManager : TestVTMNamedList {
-
-}

@@ -1,1 +1,0 @@
-TestVTMComposableContext : TestVTMContext {}

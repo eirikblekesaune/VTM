@@ -1,1 +1,0 @@
-TestVTMModuleProxy : UnitTest {}

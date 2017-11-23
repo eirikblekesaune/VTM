@@ -1,2 +1,0 @@
-TestVTMSignal : TestVTMValueElement {
-}

@@ -1,2 +1,0 @@
-TestVTMDefinitionLibraryManager : TestVTMAbstractDataManager {
-}

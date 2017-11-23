@@ -1,3 +1,0 @@
-TestVTMMappingManager : TestVTMAbstractDataManager {
-
-}

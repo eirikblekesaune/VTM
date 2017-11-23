@@ -1,3 +1,0 @@
-TestVTMCueManager : TestVTMAbstractDataManager {
-
-}
