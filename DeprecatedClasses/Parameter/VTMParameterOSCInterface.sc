@@ -1,2 +1,0 @@
-VTMParameterOSCInterface : VTMOSCInterface {
-}
