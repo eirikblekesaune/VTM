@@ -1,14 +1,17 @@
 VTMContextDefinition {
+	var <name;
 	var definition;
 	var context;
 
-	*new{arg env, context;
-		^super.new.initContextDefinition(env, context);
+	*new{arg name, env, context;
+		^super.new.initContextDefinition(name, env, context);
 	}
 
-	initContextDefinition{arg env_, context_;
+	initContextDefinition{arg name_, env_, context_;
+		name = name_;
 		context = context_;
 		definition = Environment[
+			\name -> name,
 			\parameters -> VTMOrderedIdentityDictionary.new,
 			\attributes -> VTMOrderedIdentityDictionary.new,
 			\commands -> VTMOrderedIdentityDictionary.new,

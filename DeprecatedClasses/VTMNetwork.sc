@@ -22,7 +22,7 @@ VTMNetwork : VTMContext {
 		NetAddr("255.255.255.255", this.class.defaultPort).sendMsg(
 			'/?',
 			this.name,
-			this.addr.generateIPString
+			this.addr.makeIPString
 		);
 	}
 
@@ -30,7 +30,7 @@ VTMNetwork : VTMContext {
 		//When the network instance is freed we notify the other applications about what is happening.
 		// "Application proxies: %".format(this.applicationProxies).debug;
 		this.applicationProxies.do({arg item;
-			item.sendMsg('/applicationQuitting', this.name, this.addr.generateIPString);
+			item.sendMsg('/applicationQuitting', this.name, this.addr.makeIPString);
 		});
 		oscResponders.do(_.free);
 		super.free;
@@ -54,7 +54,7 @@ VTMNetwork : VTMContext {
 					remoteAddr.sendMsg(
 						"/%!".format(remoteName).asSymbol,
 						this.name,
-						this.addr.generateIPString
+						this.addr.makeIPString
 					);
 				});
 			}, '/?'),

@@ -8,7 +8,7 @@ TestVTMRemoteNetworkNode : TestVTMElement {
 				NetAddr(
 					VTM.local.localNetworks[0].ip,
 					NetAddr.localAddr.port
-				).generateIPString
+				).makeIPString
 			},
 			\mac, { VTM.local.localNetworks[0].mac; }
 		);

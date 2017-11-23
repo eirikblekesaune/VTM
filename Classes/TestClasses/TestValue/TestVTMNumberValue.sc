@@ -7,9 +7,9 @@ TestVTMNumberValue : TestVTMValue {
 		];
 	}
 
-	*makeRandomAttribute{arg key, params;
+	*makeRandomProperty{arg key, params;
 		var result;
-		result = super.makeRandomAttribute(key, params);
+		result = super.makeRandomProperty(key, params);
 		if(result.isNil, {
 			switch(key,
 				\minVal, { result = this.makeRandomValue(params); },
@@ -116,7 +116,7 @@ TestVTMNumberValue : TestVTMValue {
 				valueObj.stepsize, testValue, "NumberValue stepsize was set"
 			);
 			//SetGet 'clipmode'
-			testValue = testClass.makeRandomAttribute(\clipmode);
+			testValue = testClass.makeRandomProperty(\clipmode);
 			valueObj.clipmode = testValue;
 			this.assertEquals(
 				valueObj.clipmode, testValue.asSymbol, "NumberValue clipmode was set"

@@ -6,7 +6,7 @@
 		^this.new(hostname, port);
 	}
 
-	generateIPString{
+	makeIPString{
 		^"%:%".format(this.hostname, this.port);
 	}
 }

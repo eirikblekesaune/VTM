@@ -54,7 +54,7 @@ VTMJSON : JSON {
 			++ "]";
 		});
 		// if(obj.isKindOf(NetAddr), {
-		// 	^"<netaddr> %".format(obj.generateIPString);
+		// 	^"<netaddr> %".format(obj.makeIPString);
 		// });
 
 		// obj.asDictionary -> key value all of its members

@@ -25,29 +25,6 @@ TestVTMContext : TestVTMElement {
 		^context;
 	}
 
-	test_missingNameError{
-		var context;
-		//Should fail if not named
-		try{
-			context = VTMContext();
-			this.failed(thisMethod,
-				"Context did not throw error correctly when name not defined."
-			);
-		} {|err|
-			if(err.what == "Context must have name", {
-				this.passed(thisMethod,
-					"Context threw error correctly when name not defined."
-				);
-			}, {
-				this.failed(thisMethod,
-					"Context threw wrong error when name not defined: \n\t%".format(
-						err.errorString
-					)
-				);
-			})
-		};
-	}
-
 	test_DefaultConstruction{
 		var context, testName;
 		//construct without definition and declaration
@@ -124,32 +101,6 @@ TestVTMContext : TestVTMElement {
 		context = VTMContext(testName, definition, declaration);
 		context.free;
 	}
-
-	test_ForceLeadingSlashInPath{
-		var context, testPath, testName;
-		var definition, declaration;
-		testName = this.class.makeRandomString.asSymbol;
-		testPath = 'pathWithout/leadingSlash';
-		declaration = (
-			path: testPath
-		);
-		context = VTMContext(testName, declaration: declaration);
-		//should add missing leading slash
-		this.assertEquals(
-			context.path,
-			"/%".format(testPath).asSymbol,
-			"Context forcibly added missing leading slash to path"
-		);
-		//should also work with full path
-
-		this.assertEquals(
-			context.fullPath,
-			"/%/%".format(testPath, testName).asSymbol,
-			"Context forcibly added missing leading slash to fullPath"
-		);
-	}
-
-	test_DerivePathFromParentContext{}
 
 	test_DefinitionInitAndPrepareRunFreeAndStateChange{
 		var context, testCondition = Condition.new;

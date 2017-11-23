@@ -8,7 +8,7 @@ TestVTMAbstractDataManager : VTMUnitTest {
 	//settings: minItems, maxItems
 	//if declaration are defined the settings are overriden, and the
 	//declaration array size defines the number of data item declaration
-	//that are generated.
+	//that are made.
 
 	*makeRandomDeclaration{arg settings ...args;
 		var result;

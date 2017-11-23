@@ -14,8 +14,8 @@ TestVTMValueParameter : TestVTMParameter {
 		];
 	}
 
-	*generateRandomAttributes{arg description;
-		var result = super.generateRandomAttributes(description);
+	*makeRandomAttributes{arg description;
+		var result = super.makeRandomAttributes(description);
 		^result;
 	}
 
@@ -260,7 +260,7 @@ TestVTMValueParameter : TestVTMParameter {
 			var param;
 			var testAttributes, wasRun = false;
 			testClass = this.class.testclassForType( class.type );
-			testAttributes = testClass.generateRandomAttributes(
+			testAttributes = testClass.makeRandomAttributes(
 				[
 					\value,
 					\defaultValue,
@@ -306,7 +306,7 @@ TestVTMValueParameter : TestVTMParameter {
 	// 		var param;
 	// 		var testAttributes, testAttributes;
 	// 		testClass = this.class.testclassForType( class.type );
-	// 		testAttributes = testClass.generateRandomAttributes(
+	// 		testAttributes = testClass.makeRandomAttributes(
 	// 			[
 	// 				\value,
 	// 				\defaultValue,
@@ -343,7 +343,7 @@ TestVTMValueParameter : TestVTMParameter {
 			var testEnum;
 			var testAttributes;
 			testClass = this.class.testclassForType( class.type );
-			testAttributes = testClass.generateRandomAttributes(
+			testAttributes = testClass.makeRandomAttributes(
 				[
 					\value,
 					\defaultValue,

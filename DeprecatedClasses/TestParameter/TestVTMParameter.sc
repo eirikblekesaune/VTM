@@ -22,7 +22,7 @@ TestVTMParameter : VTMUnitTest {
 		^this.testClasses.collect(_.type);
 	}
 
-	*generateRandomAttributes{arg description;
+	*makeRandomAttributes{arg description;
 		var result = IdentityDictionary.new;
 		if(description.notNil, {
 			description.do({arg item;
@@ -98,7 +98,7 @@ TestVTMParameter : VTMUnitTest {
 		testClass = "Test%".format(class.name).asSymbol.asClass;
 		attrKeys = class.attributeKeys;
 		attrKeys.add(\type -> type);
-		result = testClass.generateRandomAttributes(attrKeys);
+		result = testClass.makeRandomAttributes(attrKeys);
 		^result;
 	}
 
