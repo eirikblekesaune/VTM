@@ -18,7 +18,7 @@ VTMValue {
 	}
 
 	*type{
-		\none;
+		this.subclassResponsibility(thisMethod);
 	}
 
 	type{
@@ -190,7 +190,7 @@ VTMValue {
 		^result;
 	}
 
-	//Attribute getters
+	//Property getters
 	enabled{ ^this.get(\enabled) ? true; }
 	enabled_{arg val; this.set(\enabled, val); }
 
