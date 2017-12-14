@@ -7,6 +7,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 	var discoveryReplyResponder;
 	var remoteActivateResponder;
 	var <networkNodeManager;
+	var <library;
 
 	//global data managers for unnamed contexts
 	var <applicationManager;
@@ -21,6 +22,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 	*initClass{
 		Class.initClassTree(VTMAbstractData);
 		Class.initClassTree(VTMNetworkNodeManager);
+		Class.initClassTree(VTMDefinitionLibrary);
 		singleton = super.new.initLocalNetworkNode;
 	}
 
@@ -107,6 +109,10 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 
 	applications{
 		^applicationManager.applications;
+	}
+
+	modules{
+		^moduleHost.items;
 	}
 
 	findLocalNetworks{

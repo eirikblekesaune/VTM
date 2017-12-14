@@ -1,3 +1,4 @@
+~type = 'Module';
 ~prototypes = ['AudioSource'];
 ~prepare = {arg module, condition;
 	~casper = {arg val;
@@ -14,7 +15,7 @@
 	fork{1.0.wait; condition.unhang};
 	condition.hang;
 };
-~parameters = [
+~attributes = [
 	(
 		name: \freq,
 		type: \decimal,

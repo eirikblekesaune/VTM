@@ -42,4 +42,8 @@ VTM{
 	}
 
 	*vtmPath{ ^PathName(PathName(this.filenameSymbol.asString).parentPath).parentPath; }
+
+	*loadLibrary{arg folderPath;
+
+	}
 }

@@ -9,6 +9,7 @@ VTMContext : VTMElement {
 	var cues;
 	var scores;
 	var condition;
+	var library;
 
 	classvar <viewClassSymbol = 'VTMContextView';
 
@@ -39,7 +40,14 @@ VTMContext : VTMElement {
 	}
 
 	initContext{arg definition_;
+		var def;
+		if(definition_.isKindOf(Symbol), {
+			def = manager.findDefinition(definition_);
+		}, {
+			def = definition_;
+		});
 		stateChangeCallbacks = IdentityDictionary.new;
+
 		if(definition_.notNil, {
 			//TODO: Make this into a .newFrom or .makeFrom so
 			//that definition could be both an Environemnt and
@@ -49,13 +57,13 @@ VTMContext : VTMElement {
 			//TODO: make empty ContextDefinition if not defined.
 			definition = VTMContextDefinition.new(nil, this);
 		});
-		envir = definition.makeEnvir;
-		condition = Condition.new;
-		this.prChangeState(\loadedDefinition);
-		this.prInitCues;
-		this.prInitScores;
-		this.prInitComponentsWithContextDefinition;
-		this.prChangeState(\didInitialize);
+//		envir = definition.makeEnvir;
+//		condition = Condition.new;
+//		this.prChangeState(\loadedDefinition);
+//		this.prInitCues;
+//		this.prInitScores;
+//		this.prInitComponentsWithContextDefinition;
+//		this.prChangeState(\didInitialize);
 	}
 
 	isUnmanaged{

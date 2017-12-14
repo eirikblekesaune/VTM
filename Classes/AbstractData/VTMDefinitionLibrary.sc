@@ -1,34 +1,53 @@
-VTMDefinitionLibrary : VTMElement {
-	var definitions; 
+VTMDefinitionLibrary {
+	var <definitions; 
+	var <folderPaths;
+	classvar <global;//the library that are defined in the class files folder.
+	classvar <system;//the libraries loaded from the config file (~/.vtm.conf.yaml)
 
-	*managerClass{ ^VTMDefinitionLibraryManager; }
+	*initClass{
+		var sysDefPaths;
+		Class.initClassTree(VTM);
+		//TODO: Read and init global library
+		global = this.new( "%/Definitions".format(VTM.vtmPath));
 
-	*new{arg name, declaration, manager;
-		^super.new(name, declaration, manager).initDefinitionLibrary;
+		//TODO: Read and init system libraries
+		if(VTM.systemConfiguration.includesKey('definitionPaths'), {
+			sysDefPaths = VTM.systemConfiguration.at('definitionPaths');
+			sysDefPaths.do({arg sysDefPath;
+				system = system.add(
+					this.new(sysDefPath);
+				);
+			});
+		})
 	}
 
-	initDefinitionLibrary{
-		definitions = this.readLibrary(this.get(\folderPath));
+	*new{arg folderPath;
+		^super.new.initDefinitionLibrary(folderPath);
 	}
 
-	*parameterDescriptions{
-		^super.parameterDescriptions.putAll(
-			VTMOrderedIdentityDictionary[
-				\folderPath -> (type: \string, optional: false),
-				\includedPaths -> (type: \array, itemType: \string),
-				\excludedPaths -> (type: \array, itemType: \string)
-			]
-		);
+	initDefinitionLibrary{arg folderPath;
+		definitions = this.readLibrary(folderPath.standardizePath);
 	}
 
-	*returnDescriptions{
-		^super.returnDescriptions.putAll(
-		   VTMOrderedIdentityDictionary[
-			   \hasDefinition -> (type: \boolean)
-		   ]
-	   );
-	}
+	findDefinition{arg defName;
+		var result;
+		if(definitions.isEmpty, {
+			var lib;
+			//First try the system libraries.
+			lib = system.detect({arg item;
+				item.includesKey(defName);
+			});
 
+			if(lib.notNil, {
+				result = lib[defName];
+			}, {
+				//Then lastly try the global library
+				result = this.class.global[defName];
+			});
+		});
+		^result.deepCopy;
+	}
+	
 	readLibrary{arg folderPath;
 		var result = VTMOrderedIdentityDictionary.new;
 		var readEntry;

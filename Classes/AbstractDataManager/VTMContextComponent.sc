@@ -46,6 +46,7 @@ VTMContextComponent : VTMAbstractDataManager {
 	}
 
 	addItem{arg newItem;
+		"%:addItem: %".format(this.fullPath, newItem).debug;
 		if(newItem.isKindOf(this.class.dataClass), {//check arg type
 			var newItemName = newItem.name;
 			//If the manager has already registered a context of this name then
