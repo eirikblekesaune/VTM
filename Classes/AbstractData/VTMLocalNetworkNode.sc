@@ -1,5 +1,5 @@
 //a Singleton class that communicates with the network and manages Applications
-VTMLocalNetworkNode : VTMAbstractDataManager {
+VTMLocalNetworkNode {
 	classvar <singleton;
 	classvar <discoveryBroadcastPort = 57500;
 	var <hostname;
@@ -270,7 +270,7 @@ VTMLocalNetworkNode : VTMAbstractDataManager {
 
 			data = (
 				hostname: this.hostname,
-				ipString: network.addr.generateIPString,
+				ipString: network.addr.makeIPString,
 				mac: network.mac
 			);
 
