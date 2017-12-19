@@ -14,49 +14,36 @@ VTMContext : VTMElement {
 	classvar <viewClassSymbol = 'VTMContextView';
 
 	*new{arg name, declaration, manager, definition, prototypes;
-		var def;
-		/*
-		The definition can either be specified in the declaration as a symbol, 
-		or can be defined in sclang code using the definition argument for this 
-		constructor. The definition environment in the declaration argument
-		takes presedence over the definition named in the declaration.
-		This makes it easier to temporary override context defitnitions in case
-		they need to be worked on or modified on the spot.
-		*/
-		if(declaration.notNil and: {declaration.includesKey(\definition)}, {
-			//TODO: Load definition from DefinitionLibrary here.
-			//TODO: Throw error if context defintion file not found.
-			//TODO: Make the ContextDefinition environment and add it to the def
-			//variable.
-			//def = someInstanceOfDefinitionLibrary.makeDefinition(
-			//   declaration[\definition]); //returns a ContextDefinition obj.
-		});
+		var defArg, loadedContextDefinition;
 		//If no manager defined, use the local network node as manager.
 		//TODO?: Will there be problems when a class is listed as manager
 		//for multiple type of objects, in the case of Context/LocalNetworkNode?
 		manager = manager ? VTM.local.findManagerForContextClass(this);
-		def = definition ? def;
-		^super.new(name, declaration, manager).initContext(def, prototypes);
+
+		//The definition argument takes presedence over the definition named in
+		//the declaration.
+		//This makes it easier to temporary override context defitnitions in case
+		//they need to be worked on or modified on the spot.
+		if(declaration.notNil and: {declaration.includesKey(\definition)}, {
+			defArg = declaration[\definition];
+		});
+		
+		//The definition arg can either be a Symbol or an Environment.
+		//If a Symbol is used it will try to find the named definition from
+		//the manager library.
+		//If it is an Environment it will make an unamed ContextDefinition from
+		//the Enviroment instance.
+		defArg = definition ? defArg;
+		//loadedContextDefinition = manager.findContextDefinition(defArg);
+		^super.new(name, declaration, manager).initContext(
+			loadedContextDefinition, prototypes);
 	}
 
+	//definition arg must be an instance of VTMContextDefinition
 	initContext{arg definition_;
-		var def;
-		if(definition_.isKindOf(Symbol), {
-			def = manager.findDefinition(definition_);
-		}, {
-			def = definition_;
-		});
+		definition = definition_;
 		stateChangeCallbacks = IdentityDictionary.new;
 
-		if(definition_.notNil, {
-			//TODO: Make this into a .newFrom or .makeFrom so
-			//that definition could be both an Environemnt and
-			//a ContextDefinition.
-			definition = VTMContextDefinition.new(definition_, this);
-		}, {
-			//TODO: make empty ContextDefinition if not defined.
-			definition = VTMContextDefinition.new(nil, this);
-		});
 		envir = definition.makeEnvir;
 //		condition = Condition.new;
 //		this.prChangeState(\loadedDefinition);

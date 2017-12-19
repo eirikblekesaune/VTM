@@ -1,15 +1,13 @@
 VTMContextDefinition {
 	var <name;
 	var definition;
-	var context;
 
-	*new{arg name, env, context;
-		^super.new.initContextDefinition(name, env, context);
+	*new{arg env, name;
+		^super.new.initContextDefinition(env, name);
 	}
 
-	initContextDefinition{arg name_, env_, context_;
+	initContextDefinition{arg env_, name_;
 		name = name_;
-		context = context_;
 		definition = Environment[
 			\name -> name,
 			\parameters -> VTMOrderedIdentityDictionary.new,
@@ -51,8 +49,10 @@ VTMContextDefinition {
 //		});
 	}
 	
-	makeEnvir{
-		^definition.deepCopy.put(\self, context);
+	makeEnvir{arg context;
+		var result;
+		result = definition.deepCopy.put(\self, context);
+		^result;
 	}
 
 	parameters{
