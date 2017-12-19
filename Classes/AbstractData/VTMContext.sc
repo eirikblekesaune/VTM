@@ -57,7 +57,7 @@ VTMContext : VTMElement {
 			//TODO: make empty ContextDefinition if not defined.
 			definition = VTMContextDefinition.new(nil, this);
 		});
-//		envir = definition.makeEnvir;
+		envir = definition.makeEnvir;
 //		condition = Condition.new;
 //		this.prChangeState(\loadedDefinition);
 //		this.prInitCues;
