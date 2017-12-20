@@ -34,7 +34,32 @@ VTMContext : VTMElement {
 		//If it is an Environment it will make an unamed ContextDefinition from
 		//the Enviroment instance.
 		defArg = definition ? defArg;
-		//loadedContextDefinition = manager.findContextDefinition(defArg);
+
+		//If no definition was declared use an empty Environment for this.
+		if(defArg.isNil, {
+			defArg = Environment.new;
+		});
+
+		//If the definition is an Environment, either by defaut or fraom arg,
+		//make a new ContextDefinition from that.
+		case
+		{defArg.isKindOf(Environment)} {
+
+			loadedContextDefinition = VTMContextDefinition(defArg);
+		}
+		{defArg.isKindOf(PathName)} {
+			"BBB".postln;
+			loadedContextDefinition = VTMContextDefinition.loadFromFile(defArg.fullPath);
+			"CCC".postln;
+		}
+		{ //otherwise try to find the ContextDefinition from the managers definition
+			//library.
+			loadedContextDefinition = manager.findContextDefinition(defArg);
+		};
+
+		if(loadedContextDefinition.isNil, {
+			Error("Failed to make ContextDefinition for '%'".format(name)).throw;
+		});
 		^super.new(name, declaration, manager).initContext(
 			loadedContextDefinition, prototypes);
 	}

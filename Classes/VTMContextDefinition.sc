@@ -1,33 +1,61 @@
 VTMContextDefinition {
 	var <name;
 	var definition;
+	var pathName;
 
-	*new{arg env, name;
-		^super.new.initContextDefinition(env, name);
+	*new{arg env, name, filepath;
+		^super.new.initContextDefinition(env, name, filepath);
 	}
 
-	initContextDefinition{arg env_, name_;
+	*loadFromFile{arg filepath;
+		var pathName = PathName(filepath);
+		var definitionName = pathName.fileName.findRegexp("(.+)_definition.scd$")[1][1].asSymbol;
+		var loadedEnvir;
+		try{
+			"filepath to load: %".format(pathName.fullPath).debug;
+			if(File.exists(pathName.fullPath).not, {
+				Error(
+					"Definifion file not found at path: '%'".format(pathName.fullPath)
+				).throw;
+			});
+			loadedEnvir = File.loadEnvirFromFile(pathName.fullPath);
+			if(loadedEnvir.isNil, {
+				Error("Could not load environment from definition file: '%'".format(
+					pathName.fullPath
+				)).throw;
+			}, {
+				^this.new(loadedEnvir, definitionName, filepath);
+			});
+		} {|err|
+			"Could not compile definition file: '%'".format(pathName).warn;
+			err.throw;
+		};
+	}
+
+	initContextDefinition{arg env_, name_, filepath_;
 		name = name_;
-		definition = Environment[
-			\name -> name,
-			\parameters -> VTMOrderedIdentityDictionary.new,
-			\attributes -> VTMOrderedIdentityDictionary.new,
-			\commands -> VTMOrderedIdentityDictionary.new,
-			\presets -> VTMOrderedIdentityDictionary.new,
-			\returns -> VTMOrderedIdentityDictionary.new,
-			\signals -> VTMOrderedIdentityDictionary.new,
-			\cues -> VTMOrderedIdentityDictionary.new,
-			\mappings -> VTMOrderedIdentityDictionary.new,
-			\scores -> VTMOrderedIdentityDictionary.new
-		];
+		definition = env_.deepCopy;
+		pathName = PathName(filepath_);
+		//		definition = Environment[
+		//			\name -> name,
+		//			\parameters -> VTMOrderedIdentityDictionary.new,
+		//			\attributes -> VTMOrderedIdentityDictionary.new,
+		//			\commands -> VTMOrderedIdentityDictionary.new,
+		//			\presets -> VTMOrderedIdentityDictionary.new,
+		//			\returns -> VTMOrderedIdentityDictionary.new,
+		//			\signals -> VTMOrderedIdentityDictionary.new,
+		//			\cues -> VTMOrderedIdentityDictionary.new,
+		//			\mappings -> VTMOrderedIdentityDictionary.new,
+		//			\scores -> VTMOrderedIdentityDictionary.new
+		//];
 		"ContextDefinition:% - init".format(name).debug;
-//		if(env_.notNil, {
-//			var envToLoad = env_.deepCopy;
-//			//Turn any arrays of Associations into OrderedIdentityDictionaries
-//			//Get the names of the components our context consists of.
-//			definition.keys.do({arg compName;
-//				if(envToLoad.includesKey(compName), {
-//					var itemDeclarations;
+		//		if(env_.notNil, {
+		//			var envToLoad = env_.deepCopy;
+		//			//Turn any arrays of Associations into OrderedIdentityDictionaries
+		//			//Get the names of the components our context consists of.
+		//			definition.keys.do({arg compName;
+		//				if(envToLoad.includesKey(compName), {
+		//					var itemDeclarations;
 //					//Remove the itemDeclarations for this component key
 //					//so that we can add the remaing ones after changes has been made.
 //					itemDeclarations = envToLoad.removeAt(compName);
@@ -53,6 +81,10 @@ VTMContextDefinition {
 		var result;
 		result = definition.deepCopy.put(\self, context);
 		^result;
+	}
+
+	filepath{
+		^pathName.fullPath;
 	}
 
 	parameters{
