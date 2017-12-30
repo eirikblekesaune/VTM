@@ -44,13 +44,11 @@ VTMContext : VTMElement {
 		//make a new ContextDefinition from that.
 		case
 		{defArg.isKindOf(Environment)} {
-
 			loadedContextDefinition = VTMContextDefinition(defArg);
 		}
 		{defArg.isKindOf(PathName)} {
-			"BBB".postln;
-			loadedContextDefinition = VTMContextDefinition.loadFromFile(defArg.fullPath);
-			"CCC".postln;
+			loadedContextDefinition = VTMContextDefinition.loadFromFile(
+				defArg.fullPath);
 		}
 		{ //otherwise try to find the ContextDefinition from the managers definition
 			//library.
@@ -70,7 +68,7 @@ VTMContext : VTMElement {
 		stateChangeCallbacks = IdentityDictionary.new;
 
 		envir = definition.makeEnvir;
-//		condition = Condition.new;
+		condition = Condition.new;
 //		this.prChangeState(\loadedDefinition);
 //		this.prInitCues;
 //		this.prInitScores;
