@@ -1,54 +1,57 @@
 VTMDefinitionLibrary {
 	var <definitions; 
 	var <folderPaths;
-	classvar <global;//the library that are defined in the class files folder.
-	classvar <system;//the libraries loaded from the config file (~/.vtm.conf.yaml)
+	classvar <global;//the definitions that are defined in the class files folder.
+	classvar <system;//the definitions loaded from the config file (~/.vtm.conf.yaml)
+	classvar <systemPaths;
 
 	*initClass{
 		var sysDefPaths;
 		Class.initClassTree(VTM);
+		Class.initClassTree(VTMOrderedIdentityDictionary);
 		//TODO: Read and init global library
-		global = this.new( "%/Definitions".format(VTM.vtmPath));
+		global = this.readLibrary(["%Definitions".format(VTM.vtmPath)]);
 
 		//TODO: Read and init system libraries
 		if(VTM.systemConfiguration.includesKey('definitionPaths'), {
 			sysDefPaths = VTM.systemConfiguration.at('definitionPaths');
-			sysDefPaths.do({arg sysDefPath;
-				system = system.add(
-					this.new(sysDefPath);
-				);
-			});
-		})
+			sysDefPaths = sysDefPaths.collect(_.standardizePath);
+			systemPaths = sysDefPaths;
+			system = this.readLibrary(systemPaths);
+		});
 	}
 
-	*new{arg folderPath;
-		^super.new.initDefinitionLibrary(folderPath);
+	*new{arg folderPaths;
+		^super.new.initDefinitionLibrary(folderPaths);
 	}
 
-	initDefinitionLibrary{arg folderPath;
-		definitions = this.readLibrary(folderPath.standardizePath);
+	initDefinitionLibrary{arg folderPaths_;
+		folderPaths = folderPaths_;
+		if(folderPaths.isString, {
+			folderPaths = [folderPaths];
+		});
+		folderPaths = folderPaths.asArray;
+		definitions = this.class.readLibrary(folderPaths);
 	}
 
 	findDefinition{arg defName;
 		var result;
-		if(definitions.isEmpty, {
-			var lib;
-			//First try the system libraries.
-			lib = system.detect({arg item;
-				item.includesKey(defName);
-			});
+		var lib;
+		//First try the system libraries.
+		lib = system.detect({arg item;
+			item.includesKey(defName);
+		});
 
-			if(lib.notNil, {
-				result = lib[defName];
-			}, {
-				//Then lastly try the global library
-				result = this.class.global[defName];
-			});
+		if(lib.notNil, {
+			result = lib[defName];
+		}, {
+			//Then lastly try the global library
+			result = this.class.global[defName];
 		});
 		^result.deepCopy;
 	}
 	
-	readLibrary{arg folderPath;
+	*readLibrary{arg folderPaths;
 		var result = VTMOrderedIdentityDictionary.new;
 		var readEntry;
 		readEntry = {arg entryPathName, res;
@@ -56,8 +59,9 @@ VTMDefinitionLibrary {
 			{entryPathName.isFile} {
 				var defEnvir;
 				if(".+_definition.scd$".matchRegexp(entryPathName.fileName), {
-					var definitionName = entryPathName.fileName.findRegexp("(.+)_definition.scd$")[1][1].asSymbol;
 					var loadedEnvir;
+					var definitionName = entryPathName.fileName.findRegexp(
+						"(.+)_definition.scd$")[1][1].asSymbol;
 					try{
 						loadedEnvir = File.loadEnvirFromFile(entryPathName.fullPath);
 						if(loadedEnvir.isNil, {
@@ -78,14 +82,15 @@ VTMDefinitionLibrary {
 				});
 			};
 		};
-		if(File.exists(folderPath), {
-			PathName(folderPath).entries.do({arg entry;
-				readEntry.value(entry, result);
+		folderPaths.do{arg folderPath;
+			if(File.exists(folderPath), {
+				PathName(folderPath).entries.do({arg entry;
+					readEntry.value(entry, result);
+				});
+			}, {
+				Error("Did not find library folder: '%'".format(folderPath).postln;).throw;
 			});
-		}, {
-			Error("Did not find library folder: '%'".format(folderPath).postln;).throw;
-		});
-
+		};
 		^result;
 	}
 }
