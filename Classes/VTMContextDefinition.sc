@@ -35,7 +35,9 @@ VTMContextDefinition {
 	initContextDefinition{arg env_, name_, filepath_;
 		name = name_;
 		definition = env_.deepCopy;
-		pathName = PathName(filepath_);
+		if(filepath_.notNil, {
+			pathName = PathName(filepath_);
+		});
 		//		definition = Environment[
 		//			\name -> name,
 		//			\parameters -> VTMOrderedIdentityDictionary.new,
