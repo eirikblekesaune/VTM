@@ -36,15 +36,12 @@ VTMDefinitionLibrary {
 
 	findDefinition{arg defName;
 		var result;
-		var lib;
-		//First try the system libraries.
-		lib = system.detect({arg item;
-			item.includesKey(defName);
-		});
+		result = definitions[defName];
 
-		if(lib.notNil, {
-			result = lib[defName];
-		}, {
+		if(result.isNil, {
+			result = this.class.system[defName];
+		});
+		if(result.isNil, {
 			//Then lastly try the global library
 			result = this.class.global[defName];
 		});
