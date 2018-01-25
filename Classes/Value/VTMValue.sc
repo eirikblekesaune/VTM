@@ -2,7 +2,7 @@ VTMValue {
 	var enum;
 	var <>action;
 	var <selectedEnum;
-	var scheduler;
+	var scheduler;//TEMP setter
 	var properties;
 
 	*prDefaultValueForType{
