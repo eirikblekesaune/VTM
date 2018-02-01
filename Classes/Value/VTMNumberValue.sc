@@ -29,13 +29,20 @@ VTMNumberValue : VTMValue {
 				this.stepsize = properties[\stepsize];
 			});
 		});
+		scheduler = Routine.new({});
 	}
 
+	stopRamp{
+		scheduler.stop;
+	}
 
+	isRamping{
+		^scheduler.notNil
+	}
 
 	ramp{arg targetValue, time, curve = \lin;
-		if(scheduler.isPlaying, {
-			scheduler.stop;
+		if(this.isRamping, {
+			this.stopRamp;
 		});
 		scheduler = fork{
 			var stream, val;
