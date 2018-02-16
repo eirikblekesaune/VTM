@@ -1,8 +1,8 @@
 VTMValueView : VTMView {
-	var parameter;//the VTParameter instance
-	var labelView, outlineView;
+	var valueObj;//the VTMValue instance
+	var <label;
+	var labelView, outlineView, valueView, backgroundView;
 	var settings;
-	var <labelMode = \name;
 	var <color;
 	var <units = 1;
 	classvar <unitWidth = 150, <unitHeight = 25;
@@ -13,26 +13,26 @@ VTMValueView : VTMView {
 		^Size(unitWidth, unitHeight * units);
 	}
 
-	*new{arg parent, bounds, parameter, settings;
+	*new{arg parent, bounds, valueObj, settings;
 		var viewBounds;
 		viewBounds = bounds ?? { this.prCalculateSize(1).asRect; };
-		^super.new( parent: parent, bounds: viewBounds ).initParameterView(parameter, settings);
+		^super.new( parent: parent, bounds: viewBounds ).initValueView(valueObj, settings);
 	}
 
-	initParameterView{arg parameter_, settings_;
-		if(parameter_.isNil, {VTError("VTParameterView - needs parameter").throw;});
-		parameter = parameter_;
-		parameter.addDependant(this);
+	initValueView{arg valueObj_, settings_;
+		if(valueObj_.isNil, {VTError("VTMValueView - needs valueObj").throw;});
+		valueObj = valueObj_;
+		valueObj.addDependant(this);
 
 		settings = settings_ ? ();
 
 		this.addAction(
 			{arg v,x,y,mod;
 				var result = false;
-				//if alt key is pressed when pressing down the view, the parameter setting window
+				//if alt key is pressed when pressing down the view, the valueObj setting window
 				//for this ibjet will open.
 				if(mod == 524288, {
-					"Opening parameter settings window: %".format(parameter.path).postln;
+					"Opening valueObj settings window: %".format(valueObj).postln;
 					result = true;
 				});
 				result;
@@ -42,6 +42,9 @@ VTMValueView : VTMView {
 
 		//This is needed to set the fixedSize
 		this.bounds_(this.bounds);
+		this.layout_(
+
+		);
 	}
 
 	prAddAltClickInterceptor{arg argView;
@@ -49,17 +52,19 @@ VTMValueView : VTMView {
 		argView.addAction( {arg v,x,y,mod; mod != 524288 }, \mouseDownAction);
 	}
 
-	close{
-		action = nil;
-		parameter = nil;
-		parameter.removeDependant(this);
+	prMakeValueView{
+		^StaticText().font_(this.font);
 	}
 
-	labelMode_{arg newMode;
-		if([\name, \path].includesEqual(newMode), {
-			labelMode = newMode;
-			this.refreshLabel;
-		});
+	close{
+		action = nil;
+		valueObj = nil;
+		valueObj.removeDependant(this);
+	}
+
+	label_{arg str;
+		label = str;
+		this.refreshLabel;
 	}
 
 	drawBackground{
@@ -87,10 +92,12 @@ VTMValueView : VTMView {
 		this.refreshLabel;
 	}
 
+	drawValue{
+
+	}
+
 	refreshLabel{
-		var label = parameter.perform(labelMode) ++ ":";//FIXME proper margin setting in Layout code
-		settings[\labelPrepend] !? {label = settings[\labelPrepend] ++ label; };
-		{labelView.string_(label).toolTip_("% [%]".format(label, this.type))}.defer;
+		{labelView.string_(label).toolTip_("% [%]".format(label, valueObj.type))}.defer;
 	}
 
 	bounds_{arg argBounds;
@@ -99,14 +106,19 @@ VTMValueView : VTMView {
 		this.drawBackground;
 	}
 
+	//the view value
+	value_{arg val;
+		//this needs to be implemented in subclasses
+		this.subclassResponsibility(thisMethod);
+	}
+
 	//pull style update
 	update{arg theChanged, whatChanged, whoChangedIt, toValue;
 		//"Dependant update: % % % %".format(theChanged, whatChanged, whoChangedIt, toValue).postln;
-		if(theChanged == parameter, {//only update the view if the parameter changed
+		if(theChanged == valueObj, {//only update the view if the valueObj changed
 			switch(whatChanged,
-				\enabled, { this.enabled_(parameter.enabled); },
-				\path, { this.refreshLabel; },
-				\name, { this.refreshLabel; }
+				\enabled, { this.enabled_(valueObj.enabled); },
+				\value, { this.value_(valueObj.value); }
 			);
 			this.refresh;
 		});
