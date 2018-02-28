@@ -160,10 +160,13 @@ VTMAbstractData {
 		^result;
 	}
 
-	description{
+	description{arg includeDeclaration = false;
 		var result = VTMOrderedIdentityDictionary[
 			\parameters -> this.class.parameterDescriptions,
 		];
+		if(includeDeclaration, {
+			result.put(\declaration, this.declaration);
+		});
 		^result;
 	}
 
