@@ -175,15 +175,21 @@ VTMValue {
 		^properties[key];
 	}
 
-	properties{arg includeDefaultValues = true;
-		var result = properties.deepCopy;
+	properties{arg includeDefaultValues = true, includeType = true;
+		var result = properties.class.new;
+		var propKeys;
+		propKeys = result.keys;
 		if(includeDefaultValues, {
-			this.class.propertyKeys.do({arg attrKey;
-				var attrVal = this.perform(attrKey);
-				//don't use the ones that are nil
-				if(attrVal.notNil, {
-					result.put(attrKey, attrVal);
-				});
+			propKeys = this.class.propertyKeys;
+		});
+		if(includeType, {
+			propKeys = propKeys.add(\type);
+		});
+		propKeys.do({arg attrKey;
+			var attrVal = this.perform(attrKey);
+			//don't use the ones that are nil
+			if(attrVal.notNil, {
+				result.put(attrKey, attrVal.deepCopy);
 			});
 		});
 
@@ -219,4 +225,15 @@ VTMValue {
 	restrictValueToEnum{ ^this.get(\restrictValueToEnum) ? false; }
 	restrictValueToEnum_{arg val; this.set(\restrictValueToEnum, val); }
 
+
+	//views
+	*getViewClass{
+		^'VTMValueView'.asClass;
+	}
+
+	makeView{arg parent, bounds, definition, settings;
+		var viewClass = this.class.getViewClass;
+		//override class if defined in settings.
+		^viewClass.new(parent, bounds, this, definition, settings);
+	}
 }

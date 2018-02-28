@@ -13,10 +13,11 @@ VTMValueView : VTMView {
 		^Size(unitWidth, unitHeight * units);
 	}
 
-	*new{arg parent, bounds, valueObj, settings;
+	*new{arg parent, bounds, valueObj, definition, settings;
 		var viewBounds;
 		viewBounds = bounds ?? { this.prCalculateSize(1).asRect; };
-		^super.new( parent: parent, bounds: viewBounds ).initValueView(valueObj, settings);
+		^super.new( parent: parent, bounds: viewBounds ).initValueView(
+			valueObj, settings);
 	}
 
 	initValueView{arg valueObj_, settings_;
@@ -26,40 +27,60 @@ VTMValueView : VTMView {
 
 		settings = settings_ ? ();
 
-		this.addAction(
-			{arg v,x,y,mod;
-				var result = false;
-				//if alt key is pressed when pressing down the view, the valueObj setting window
-				//for this ibjet will open.
-				if(mod == 524288, {
-					"Opening valueObj settings window: %".format(valueObj).postln;
-					result = true;
-				});
-				result;
-			},
-			\mouseDownAction
-		);
-
 		//This is needed to set the fixedSize
 		this.bounds_(this.bounds);
-		this.layout_(
-
-		);
+		backgroundView = this.prMakeBackgroundView;
+		valueView = this.prMakeValueView;
+		this.label = settings[\label] ? "";
+		this.updateValue;
+		this.refreshLabel;
+		this.deleteOnClose_(true);
+		this.addAction({arg ...args;
+			this.action = nil;
+			valueObj.removeDependant(this);
+		}, \onClose);
 	}
 
-	prAddAltClickInterceptor{arg argView;
-		//if alt key is pressed when pressing down the view, the action will be propagated to the next view
-		argView.addAction( {arg v,x,y,mod; mod != 524288 }, \mouseDownAction);
+	prMakeBackgroundView{
+		var bView = View.new(this, this.bounds);
+		outlineView !? {outlineView.clearDrawing; outlineView.remove;};
+		outlineView = UserView(bView, bView.bounds).canFocus_(false);
+		outlineView.drawFunc = {|uview|
+			Pen.use {
+				Pen.addRoundedRect(uview.bounds.insetBy(1,1), 5, 5);
+				Pen.strokeColor_(settings[\outlineColor] ? Color.black);
+				Pen.width_(settings[\outlineWidth] ? 2);
+				Pen.fillColor_(
+					settings.atFail(\color, {Color.cyan.alpha_(0.0)})
+				);
+				Pen.draw(3);//draw both stroke and fill
+			}
+		};
+		// labelView !? {labelView.remove;};
+		labelView = StaticText(bView,
+			this.class.prCalculateSize(1).asRect.insetAll(labelOffset, 0, 0, 0)
+		)
+		.stringColor_(settings[\stringColor] ? this.class.stringColor)
+		.font_(settings[\font] ? this.class.font.bold_(true).italic_(true))
+		.acceptsMouse_(false)
+		.focusColor_(Color.white.alpha_(0.0))
+		.background_(Color.white.alpha_(0.0))
+		.canFocus_(false);
+		^bView;
 	}
 
 	prMakeValueView{
-		^StaticText().font_(this.font);
-	}
-
-	close{
-		action = nil;
-		valueObj = nil;
-		valueObj.removeDependant(this);
+		^TextField(this,
+			this.bounds.insetAll(0, 0, 5, 0)//inset for nice things
+		)
+		.font_(Font("Menlo", 9))
+		.setBoth_(true)
+		.align_(\right)
+		.object_(valueObj.value)
+		.background_(Color.white.alpha_(0.0))
+		.action_({arg v;
+			valueObj.valueAction_(v.string);
+		});
 	}
 
 	label_{arg str;
@@ -67,58 +88,34 @@ VTMValueView : VTMView {
 		this.refreshLabel;
 	}
 
-	drawBackground{
-		outlineView !? {outlineView.clearDrawing; outlineView.remove;};
-		outlineView = UserView(this, this.bounds).canFocus_(false);
-		outlineView.drawFunc = {|uview|
-			Pen.use {
-				Pen.addRoundedRect(uview.bounds.insetBy(1,1), 5, 5);
-				Pen.strokeColor_(settings[\outlineColor] ? Color.black);
-				Pen.width_(settings[\outlineWidth] ? 2);
-				Pen.fillColor_(settings.atFail(\color, {Color.cyan.alpha_(0.0)}));
-				Pen.draw(3);//draw both stroke and fill
-			}
-		};
-		labelView !? {labelView.remove;};
-		labelView = StaticText(this, this.class.prCalculateSize(1).asRect.insetAll(labelOffset, 0, 0, 0))
-		.stringColor_(settings[\stringColor] ? this.class.stringColor)
-		.font_(settings[\font] ? this.class.font.bold_(true).italic_(true))
-		.acceptsMouse_(false)
-		.focusColor_(Color.white.alpha_(0.0))
-		.background_(Color.white.alpha_(0.0))
-		.canFocus_(false);
-		this.prAddAltClickInterceptor(labelView);
-		this.prAddAltClickInterceptor(outlineView);
-		this.refreshLabel;
-	}
-
-	drawValue{
-
-	}
-
 	refreshLabel{
-		{labelView.string_(label).toolTip_("% [%]".format(label, valueObj.type))}.defer;
+		{
+			labelView.string_(label)
+			.toolTip_("% [%]".format(label, valueObj.type))
+		}.defer;
 	}
 
 	bounds_{arg argBounds;
 		this.fixedSize_(argBounds.size);
 		super.bounds_(argBounds);
-		this.drawBackground;
 	}
 
-	//the view value
-	value_{arg val;
-		//this needs to be implemented in subclasses
-		this.subclassResponsibility(thisMethod);
+	updateValue{
+		{
+			valueView.object_(valueObj.value);
+		}.defer;
 	}
 
 	//pull style update
 	update{arg theChanged, whatChanged, whoChangedIt, toValue;
-		//"Dependant update: % % % %".format(theChanged, whatChanged, whoChangedIt, toValue).postln;
-		if(theChanged == valueObj, {//only update the view if the valueObj changed
+		"Dependant update: % % % %".format(
+		theChanged, whatChanged, whoChangedIt, toValue).postln;
+
+		//only update the view if the valueObj changed
+		if(theChanged === valueObj, {
 			switch(whatChanged,
 				\enabled, { this.enabled_(valueObj.enabled); },
-				\value, { this.value_(valueObj.value); }
+				\value, { this.updateValue; }
 			);
 			this.refresh;
 		});
@@ -127,4 +124,5 @@ VTMValueView : VTMView {
 	*font{^Font("Menlo", 10).bold_(true);}
 	*stringColor{^Color.black}
 	*elementColor{^Color.white.alpha_(0.0)}
+
 }
