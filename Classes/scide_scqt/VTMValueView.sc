@@ -27,8 +27,6 @@ VTMValueView : VTMView {
 
 		settings = settings_ ? ();
 
-		//This is needed to set the fixedSize
-		this.bounds_(this.bounds);
 		backgroundView = this.prMakeBackgroundView;
 		valueView = this.prMakeValueView;
 		this.label = settings[\label] ? "";
@@ -108,8 +106,8 @@ VTMValueView : VTMView {
 
 	//pull style update
 	update{arg theChanged, whatChanged, whoChangedIt, toValue;
-		"Dependant update: % % % %".format(
-		theChanged, whatChanged, whoChangedIt, toValue).postln;
+		// "Dependant update: % % % %".format(
+		// theChanged, whatChanged, whoChangedIt, toValue).postln;
 
 		//only update the view if the valueObj changed
 		if(theChanged === valueObj, {
@@ -117,7 +115,7 @@ VTMValueView : VTMView {
 				\enabled, { this.enabled_(valueObj.enabled); },
 				\value, { this.updateValue; }
 			);
-			this.refresh;
+			{this.refresh;}.defer;
 		});
 	}
 

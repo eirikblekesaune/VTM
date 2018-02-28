@@ -5,7 +5,9 @@ VTMAbstractData {
 	var oscInterface;
 	var declaration;
 
-	classvar viewClassSymbol = \VTMAbstractDataView;
+	*viewClass{
+		^\VTMAbstractDataView.asClass;
+	}
 
 	*managerClass{
 		^this.subclassResponsibility(thisMethod);
@@ -143,8 +145,8 @@ VTMAbstractData {
 	*parameterDescriptions{
 		^VTMOrderedIdentityDictionary[
 			\name -> (type: \string, optional: false)
-		]; 
-	} 
+		];
+	}
 
 	*mandatoryParameters{
 		var result = [];
@@ -164,7 +166,7 @@ VTMAbstractData {
 		];
 		^result;
 	}
-	
+
 	parameters{
 		^parameters.copy;
 	}
@@ -173,15 +175,10 @@ VTMAbstractData {
 		this.subclassResponsibility(thisMethod);
 	}
 
-	makeView{arg parent, bounds, definition, settings;
-		var viewClass = this.class.viewClassSymbol.asClass;
+	makeView{arg parent, bounds, viewDef, settings;
+		var viewClass = this.class.viewClass;
 		//override class if defined in settings.
-		if(settings.notNil, {
-			if(settings.includesKey(\viewClass), {
-				viewClass = settings[\viewClass];
-			});
-		});
-		^viewClass.new(parent, bounds, definition, settings, this);
+		^viewClass.new(parent, bounds, this, viewDef, settings);
 	}
 
 	fullPath{

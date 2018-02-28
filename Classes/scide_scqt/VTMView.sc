@@ -13,6 +13,10 @@ VTMView : View {
 	initVTMView{arg definition_, settings_;
 		settings = settings_;
 		definition = definition_;
+
+		//This is needed to set the fixedSize
+		this.bounds_(this.bounds);
+
 	}
 
 }

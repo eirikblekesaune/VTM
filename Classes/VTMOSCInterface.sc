@@ -30,19 +30,34 @@ VTMOSCInterface {
 	}
 
 	makeResponderFromParent {
+		var compliantPath;
 
 		responder = OSCFunc({|msg, time, addr, recvport|
 			var path = msg[0];
 			msg = msg.drop(1);
-			//debug(format("OSC Message received at %, on port %, addressed to: %, with value: %", time, recvport, path, msg));
+			// debug(
+				// format(
+					// "OSC Message received at %, on port %, addressed to: %, with value: %", time, recvport, path, msg));
+
+			//this is a temporary hack that will be removed.
+			parent.valueAction_(*msg);
+			/////////
+
+
+
 		}, parent.fullPath, recvPort: NetAddr.localAddr.port());
 
-		compliant_responder = OSCFunc({|msg, time, addr, recvport|
-			var path = msg[0];
-			msg = msg.drop(1);
-			//debug(format("OSC Message received at %, on port %, addressed to: %, with value: %", time, recvport, path, msg));
-		}, VTMOSCInterface.makeOSCPathCompliant(parent.fullPath.asString()),
-		recvPort: NetAddr.localAddr.port());
+		//make compliant responder if path is not compliant with OSC standard
+		compliantPath = this.class.makeOSCPathCompliant(parent.fullPath.asString());
+		compliantPath = compliantPath.asSymbol;
+		if(compliantPath != parent.fullPath, {
+			compliant_responder = OSCFunc({|msg, time, addr, recvport|
+				var path = msg[0];
+				msg = msg.drop(1);
+					// debug(format("OSC Message received at %, on port %, addressed to: %, with value: %", time, recvport, path, msg));
+			}, VTMOSCInterface.makeOSCPathCompliant(parent.fullPath.asString()),
+			recvPort: NetAddr.localAddr.port());
+		});
 	}
 
 	enable {

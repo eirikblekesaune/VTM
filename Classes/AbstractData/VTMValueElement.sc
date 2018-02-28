@@ -1,7 +1,11 @@
 VTMValueElement : VTMAbstractData {
-	var valueObj;
+	var <valueObj;
 	var forwardings;
 	var forwarder;
+
+	*viewClass{
+		^\VTMValueElementView.asClass;
+	}
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initValueElement;
@@ -121,5 +125,12 @@ VTMValueElement : VTMAbstractData {
 				});
 			});
 		});
+	}
+
+	makeView{arg parent, bounds, viewDef, settings;
+		var viewSettings;
+		viewSettings = settings ?? {()};
+		viewSettings.put(\label, this.name);
+		^valueObj.makeView(parent, bounds, viewDef, viewSettings);
 	}
 }
