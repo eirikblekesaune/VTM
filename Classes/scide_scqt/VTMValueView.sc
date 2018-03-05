@@ -3,20 +3,12 @@ VTMValueView : VTMView {
 	var <label;
 	var labelView, outlineView, valueView, backgroundView;
 	var settings;
-	var <color;
-	var <units = 1;
-	classvar <unitWidth = 150, <unitHeight = 25;
+
 	classvar <labelOffset = 5;
 	classvar <viewTypeToClassMappings;
 
-	*prCalculateSize{arg units;
-		^Size(unitWidth, unitHeight * units);
-	}
-
 	*new{arg parent, bounds, valueObj, definition, settings;
-		var viewBounds;
-		viewBounds = bounds ?? { this.prCalculateSize(1).asRect; };
-		^super.new( parent: parent, bounds: viewBounds ).initValueView(
+		^super.new( parent, bounds).initValueView(
 			valueObj, settings);
 	}
 
