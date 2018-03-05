@@ -18,6 +18,10 @@ VTM{
 		^VTMLocalNetworkNode.singleton;
 	}
 
+	*nodes{
+		^List[this.local].addAll(this.local.networkNodeManager.items);
+	}
+
 	*sendMsg{arg hostname, port, path ...data;
 		this.local.sendMsg(hostname, port, path, *data);
 	}
