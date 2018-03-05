@@ -33,19 +33,23 @@ VTMAbstractDataManager {
 
 	addItem{arg newItem;
 		if(newItem.isKindOf(this.class.dataClass), {//check arg type
+			this.changed(\items);
 			items.put(newItem.name, newItem);
 		});
 	}
 
 	removeItem{arg itemName;
+		var removedItem;
 		items.removeAt(itemName);
+		this.changed(\items);
+		^removedItem;
 	}
 
 	freeItem{arg itemName;
 		if(this.hasItemNamed(itemName), {
 			var removedItem;
 			items[itemName].disable;//dissable actions and messages
-			removedItem = items.removeAt(itemName);
+			removedItem = this.removeItem(itemName);
 			removedItem.free;
 		});
 	}
@@ -66,7 +70,10 @@ VTMAbstractDataManager {
 
 	free{
 		this.disableOSC;
-		items.do(_.free);
+		this.names.do({arg itemName;
+			this.freeItem(itemName);
+		});
+		this.changed(\freed);
 	}
 
 	names{
@@ -167,5 +174,11 @@ VTMAbstractDataManager {
 				}
 			);
 		});
+	}
+
+	makeView{arg parent, bounds, viewDef, settings;
+		^'VTMAbstractDataManagerView'.asClass.new(
+			parent, bounds, viewDef, settings, this
+		);
 	}
 }
