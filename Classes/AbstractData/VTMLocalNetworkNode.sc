@@ -75,7 +75,7 @@ VTMLocalNetworkNode {
 					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
 					if(isAlreadyRegistered.not, {
 						var newNetworkNode;
-						//"Registering new network node: %".format([senderHostname, senderAddr]).debug;
+						"Registering new network node: %".format([senderHostname, senderAddr]).debug;
 						newNetworkNode = VTMRemoteNetworkNode(
 							senderHostname,
 							(
