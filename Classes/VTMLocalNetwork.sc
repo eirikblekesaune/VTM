@@ -8,6 +8,7 @@ VTMLocalNetwork{
 	var <hostname;
 
 	var <addr; //this computer netaddr instance
+	var <netmaskAddr;
 	var <broadcastAddr;
 
 	*new{arg ip, broadcast, mac, netmask, hostname;
@@ -16,6 +17,7 @@ VTMLocalNetwork{
 
 	init{
 		addr = NetAddr(ip, this.port);
+		netmaskAddr = NetAddr(netmask, this.port);
 		broadcastAddr = NetAddr(broadcast, VTMLocalNetworkNode.discoveryBroadcastPort);
 	}
 
@@ -34,4 +36,12 @@ VTMLocalNetwork{
 		^NetAddr.localAddr.port;
 	}
 
+	//check if another ip is a part of this subnet
+	isIPPartOfSubnet{arg otherIP;
+		var result;
+		var lanmask = netmaskAddr.addr.bitNot.bitOr(addr.addr);
+		result = lanmask.bitOr(NetAddr(otherIP).addr);
+		result = result == lanmask;
+		^result;
+	}
 }
