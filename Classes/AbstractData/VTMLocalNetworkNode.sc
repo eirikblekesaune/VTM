@@ -68,7 +68,7 @@ VTMLocalNetworkNode {
 				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
 
 				if(localNetworks.any({arg item; item.addr == senderAddr;}), {
-					// "IT WAS LOCAL, ignoring it!".debug;
+					"IT WAS LOCALHOST, ignoring it!".debug;
 				}, {
 					//a remote network node sent discovery
 					var isAlreadyRegistered;
@@ -162,7 +162,7 @@ VTMLocalNetworkNode {
 
 				//separate the addresses
 				entries.collect({arg item;
-					var ip, bcast, mac;
+					var ip, bcast, mac, netmask;
 					var inetLine, hwLine;
 					#inetLine, hwLine = item;
 
@@ -171,10 +171,14 @@ VTMLocalNetworkNode {
 					bcast = bcast !? {bcast[1][1];};
 					mac = hwLine.findRegexp("ether (.+)");
 					mac = mac !? {mac[1][1]};
+					netmask = inetLine.findRegexp("netmask (.+?)\\s");
+					netmask = netmask !? {netmask[1][1].interpret.asIPString;};
 					(
 						ip: ip.stripWhiteSpace,
 						broadcast: bcast.stripWhiteSpace,
-						mac: mac.stripWhiteSpace
+						mac: mac.stripWhiteSpace,
+						hostname: this.hostname,
+						netmask: netmask
 					)
 				}).collect({arg item;
 					localNetworks = localNetworks.add(VTMLocalNetwork.performWithEnvir(\new, item));
@@ -225,10 +229,11 @@ VTMLocalNetworkNode {
 					};
 					if(inetLine.notNil, {
 						var regx;
-						regx = inetLine.findRegexp("addr:(.+) Bcast:(.+) .+");
+						regx = inetLine.findRegexp("addr:(.+) Bcast:(.+) Mask:(.+)");
 						if(regx.notEmpty, {
 							entryData.put(\ip, regx[1][1].stripWhiteSpace);
 							entryData.put(\broadcast, regx[2][1].stripWhiteSpace);
+							entryData.put(\netmask, regx[3][1].stripWhiteSpace);
 						}, {
 							"Could not parse inet line for %\n\t%".format(
 								entry.first, inetLine
@@ -238,6 +243,7 @@ VTMLocalNetworkNode {
 						"Did not find IP and broadcast for %".format(
 							String.newFrom(entry.flat)).warn;
 					});
+					result.put(\hostname, this.hostname);
 					result = result.add(entryData);
 				};
 				if(result.notNil, {
@@ -268,11 +274,7 @@ VTMLocalNetworkNode {
 		localNetworks.do({arg network;
 			var data, targetAddr;
 
-			data = (
-				hostname: this.hostname,
-				ipString: network.addr.makeIPString,
-				mac: network.mac
-			);
+			data = network.getDiscoveryData;
 
 			// if the method argument is nil, the message is broadcasted
 

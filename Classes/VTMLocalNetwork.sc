@@ -1,17 +1,37 @@
 //Represents a local area network
+
 VTMLocalNetwork{
-	var <ip;
+	var <ip; //the IP for this computer
 	var <broadcast;
-	var <mac;
-	var <addr;
+	var <mac; //this computers network mac addr
+	var <netmask;
+	var <hostname;
+
+	var <addr; //this computer netaddr instance
 	var <broadcastAddr;
 
-	*new{arg ip, broadcast, mac;
-		^super.newCopyArgs(ip, broadcast, mac).init;
+	*new{arg ip, broadcast, mac, netmask, hostname;
+		^super.newCopyArgs(ip, broadcast, mac, netmask, hostname).init;
 	}
 
 	init{
-		addr = NetAddr(ip, NetAddr.localAddr.port);
+		addr = NetAddr(ip, this.port);
 		broadcastAddr = NetAddr(broadcast, VTMLocalNetworkNode.discoveryBroadcastPort);
 	}
+
+	getDiscoveryData{
+		var result;
+		result = (
+			hostname: hostname,
+			ipString: addr.makeIPString,
+			mac: mac,
+			port: this.port
+		);
+		^result;
+	}
+
+	port{
+		^NetAddr.localAddr.port;
+	}
+
 }
