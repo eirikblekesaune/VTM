@@ -9,7 +9,10 @@ VTMRemoteNetworkNode : VTMElement {
 	}
 
 	initRemoteNetworkNode{arg localNetwork;
-		localNetworks = [localNetwork];
+		localNetworks = [];
+		if(localNetwork.notNil, {
+			localNetworks = localNetworks.add(localNetwork);
+		});
 		addr = NetAddr.newFromIPString(this.get(\ipString));
 	}
 
@@ -33,5 +36,16 @@ VTMRemoteNetworkNode : VTMElement {
 
 	discover{
 		VTM.local.discover(addr.hostname);
+	}
+
+	debugString{
+		var result = super.debugString;
+		result = result ++ "'localNetworks':\n";
+		if(localNetworks.notNil and: {localNetworks.notEmpty}, {
+			localNetworks.do({arg item;
+				result = result ++ item.getDiscoveryData.makeTreeString(3);
+			});
+		});
+		^result;
 	}
 }

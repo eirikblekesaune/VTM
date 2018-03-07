@@ -64,8 +64,14 @@ VTMLocalNetworkNode {
 			discoveryReplyResponder = OSCFunc({arg msg, time, resp, addr;
 				var jsonData = VTMJSON.parse(msg[1]).changeScalarValuesToDataTypes;
 				var senderHostname, senderAddr, registered = false;
+				var localNetwork;
 				senderHostname = jsonData['hostname'].asSymbol;
 				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
+				//find which network the node is sending on
+
+				localNetwork = localNetworks.detect({arg net;
+					net.isIPPartOfSubnet(senderAddr.ip);
+				});
 
 				//Check if it the local computer that sent it.
 				if(senderAddr.isLocal, {
@@ -83,7 +89,8 @@ VTMLocalNetworkNode {
 								ipString: jsonData['ipString'].asString,
 								mac: jsonData['mac'].asString
 							),
-							networkNodeManager
+							networkNodeManager,
+							localNetwork
 						);
 						newNetworkNode.discover;
 					});
