@@ -104,7 +104,7 @@ VTMLocalNetworkNode {
 						});
 					});
 					this.sendMsg(
-						senderHostname,
+						senderAddr.hostname,
 						this.class.discoveryBroadcastPort,
 						'/discovery/reply',
 						localNetwork.getDiscoveryData
