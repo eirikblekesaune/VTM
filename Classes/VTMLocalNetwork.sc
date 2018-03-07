@@ -44,4 +44,14 @@ VTMLocalNetwork{
 		result = result == lanmask;
 		^result;
 	}
+
+	=={arg obj;
+		^this.hash == obj.hash;
+	}
+
+	hash{
+		^this.instVarHash(#[
+			\ip, \broadcast, \mac, \netmask, \hostname
+		])
+	}
 }

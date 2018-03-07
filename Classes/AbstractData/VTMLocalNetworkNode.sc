@@ -4,6 +4,7 @@ VTMLocalNetworkNode {
 	classvar <discoveryBroadcastPort = 57500;
 	var <hostname;
 	var <localNetworks;
+	var discoveryResponder;
 	var discoveryReplyResponder;
 	var remoteActivateResponder;
 	var <networkNodeManager;
@@ -60,8 +61,8 @@ VTMLocalNetworkNode {
 
 	activate{arg doDiscovery = false, remoteNetworkNodesToActivate;
 
-		if(discoveryReplyResponder.isNil, {
-			discoveryReplyResponder = OSCFunc({arg msg, time, resp, addr;
+		if(discoveryResponder.isNil, {
+			discoveryResponder = OSCFunc({arg msg, time, resp, addr;
 				var jsonData = VTMJSON.parse(msg[1]).changeScalarValuesToDataTypes;
 				var senderHostname, senderAddr, registered = false;
 				var localNetwork;
@@ -74,9 +75,7 @@ VTMLocalNetworkNode {
 				});
 
 				//Check if it the local computer that sent it.
-				if(senderAddr.isLocal, {
-					"IT WAS LOCALHOST, ignoring it!".debug;
-				}, {
+				if(senderAddr.isLocal.not, {
 					//a remote network node sent discovery
 					var isAlreadyRegistered;
 					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
@@ -93,10 +92,81 @@ VTMLocalNetworkNode {
 							localNetwork
 						);
 						newNetworkNode.discover;
+					}, {
+						var networkNode = networkNodeManager[senderHostname];
+						//Check if it sent on a different local network
+						"Already registered: %".format(senderHostname).postln;
+						"\tSending on local network: %\n\t".format(localNetwork.getDiscoveryData).post;
+						networkNode.localNetworks.collect(_.getDiscoveryData).postln;
+						if(networkNode.hasLocalNetwork(localNetwork).not, {
+							//add the new local network to the remote network node
+							"Will add new local network".postln;
+							networkNode.addLocalNetwork(localNetwork);
+						});
 					});
+					this.sendMsg(
+						senderHostname,
+						this.class.discoveryBroadcastPort,
+						'/discovery/reply',
+						localNetwork.getDiscoveryData
+					);
+				}, {
+					"IT WAS LOCALHOST, ignoring it!".debug;
 				});
 			}, '/discovery', recvPort: this.class.discoveryBroadcastPort);
 		});
+
+		if(discoveryReplyResponder.isNil, {
+			discoveryReplyResponder = OSCFunc({arg msg, time, addr, port;
+				var jsonData = VTMJSON.parse(msg[1]).changeScalarValuesToDataTypes;
+				var senderHostname, senderAddr, registered = false;
+				var localNetwork;
+				senderHostname = jsonData['hostname'].asSymbol;
+				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
+				//find which network the node is sending on
+
+				localNetwork = localNetworks.detect({arg net;
+					net.isIPPartOfSubnet(senderAddr.ip);
+				});
+
+				//Check if it the local computer that sent it.
+				if(senderAddr.isLocal.not, {
+					//a remote network node sent discovery
+					var isAlreadyRegistered;
+					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
+					if(isAlreadyRegistered.not, {
+						var newNetworkNode;
+						"Registering new network node: %".format([senderHostname, senderAddr]).debug;
+						newNetworkNode = VTMRemoteNetworkNode(
+							senderHostname,
+							(
+								ipString: jsonData['ipString'].asString,
+								mac: jsonData['mac'].asString
+							),
+							networkNodeManager,
+							localNetwork
+						);
+						newNetworkNode.discover;
+					}, {
+						var networkNode = networkNodeManager[senderHostname];
+						//Check if it sent on a different local network
+						"Already registered: %".format(senderHostname).postln;
+						"\tSending on local network: %\n\t".format(localNetwork.getDiscoveryData).post;
+						networkNode.localNetworks.collect(_.getDiscoveryData).postln;
+						if(networkNode.hasLocalNetwork(localNetwork).not, {
+							//add the new local network to the remote network node
+							"Will add new local network".postln;
+							networkNode.addLocalNetwork(localNetwork);
+						});
+					});
+				}, {
+					"IT WAS LOCALHOST, ignoring it!".debug;
+				});
+			}, '/discovery/reply', recvPort: this.class.discoveryBroadcastPort);
+		});
+
+
+
 		active = true;
 		if(remoteNetworkNodesToActivate.notNil, {
 			this.activateRemoteNetworkNodes(remoteNetworkNodesToActivate);
@@ -111,7 +181,7 @@ VTMLocalNetworkNode {
 	}
 
 	deactivate{
-		discoveryReplyResponder !? {discoveryReplyResponder.free;};
+		discoveryResponder !? {discoveryResponder.free;};
 		active = false;
 	}
 
@@ -295,6 +365,7 @@ VTMLocalNetworkNode {
 				targetAddr = NetAddr(targetHostname, this.class.discoveryBroadcastPort);
 			});
 
+			"Sending discovery on %".format(data).postln;
 			this.sendMsg(
 				targetAddr.hostname, targetAddr.port, '/discovery', data
 			);

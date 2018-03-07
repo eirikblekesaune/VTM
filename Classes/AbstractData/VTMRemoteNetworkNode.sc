@@ -51,4 +51,10 @@ VTMRemoteNetworkNode : VTMElement {
 		});
 		^result;
 	}
+
+	hasLocalNetwork{arg lan;
+		var result;
+		result = localNetworks.includes(lan);
+		^result;
+	}
 }
