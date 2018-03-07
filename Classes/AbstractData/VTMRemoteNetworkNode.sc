@@ -1,14 +1,23 @@
 VTMRemoteNetworkNode : VTMElement {
 	var <addr;
+	var <localNetworks;
 
 	*managerClass{ ^VTMNetworkNodeManager; }
 
-	*new{arg name, declaration, manager;
-		^super.new(name, declaration, manager).initRemoteNetworkNode;
+	*new{arg name, declaration, manager, localNetwork;
+		^super.new(name, declaration, manager).initRemoteNetworkNode(localNetwork);
 	}
 
-	initRemoteNetworkNode{
+	initRemoteNetworkNode{arg localNetwork;
+		localNetworks = [localNetwork];
 		addr = NetAddr.newFromIPString(this.get(\ipString));
+	}
+
+
+	//when a computer is available both on WIFI and Cable LAN
+	//we add the second one with this method.
+	addLocalNetwork{arg localNetwork;
+		localNetworks = localNetworks.add(localNetwork);
 	}
 
 	*parameterDescriptions{
