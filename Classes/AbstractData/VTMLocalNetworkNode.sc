@@ -91,7 +91,6 @@ VTMLocalNetworkNode {
 							networkNodeManager,
 							localNetwork
 						);
-						newNetworkNode.discover;
 					}, {
 						var networkNode = networkNodeManager[senderHostname];
 						//Check if it sent on a different local network
