@@ -67,7 +67,8 @@ VTMLocalNetworkNode {
 				senderHostname = jsonData['hostname'].asSymbol;
 				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
 
-				if(localNetworks.any({arg item; item.addr == senderAddr;}), {
+				//Check if it the local computer that sent it.
+				if(senderAddr.isLocal, {
 					"IT WAS LOCALHOST, ignoring it!".debug;
 				}, {
 					//a remote network node sent discovery
