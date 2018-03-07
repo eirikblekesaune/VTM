@@ -45,7 +45,7 @@ VTMRemoteNetworkNode : VTMElement {
 			result = result ++ "\t\t[\n";
 			localNetworks.do({arg item, i;
 				result = result ++ item.getDiscoveryData.makeTreeString(5);
-				result = result ++ "\t\t,\n";
+				result = result ++ "\t\t\t,\n";
 			});
 			result = result ++ "\t\t]\n";
 		});
