@@ -2,18 +2,13 @@ VTMAbstractDataView : VTMView {
 	var dataObj;
 	var definition;
 
-	*new{arg parent, bounds, dataObj, definition, settings;
-		^super.new(parent, bounds).initAbstractDataView(
-			dataObj, definition, settings);
+	*new{arg parent, bounds, definition, settings, dataObj;
+		^super.new(parent, bounds, definition, settings).initAbstractDataView(
+			dataObj
+		);
 	}
 
-	initAbstractDataView{arg dataObj_, definition_, settings_;
+	initAbstractDataView{arg dataObj_;
 		dataObj = dataObj_;
-		definition = definition_;
-		if(settings_.notNil, {
-			settings = VTMOrderedIdentityDictionary.newFrom(settings_);
-		}, {
-			settings = VTMOrderedIdentityDictionary.new;
-		});
 	}
 }

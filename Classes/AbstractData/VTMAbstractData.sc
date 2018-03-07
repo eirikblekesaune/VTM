@@ -178,12 +178,6 @@ VTMAbstractData {
 		this.subclassResponsibility(thisMethod);
 	}
 
-	makeView{arg parent, bounds, viewDef, settings;
-		var viewClass = this.class.viewClass;
-		//override class if defined in settings.
-		^viewClass.new(parent, bounds, this, viewDef, settings);
-	}
-
 	fullPath{
 		^(this.path ++ this.leadingSeparator ++ this.name).asSymbol;
 	}
@@ -224,6 +218,13 @@ VTMAbstractData {
 	oscEnabled {
 		^oscInterface.notNil();
 	}
+
+	makeView{arg parent, bounds, viewDef, settings;
+		var viewClass = this.class.viewClass;
+		//override class if defined in settings.
+		^viewClass.new(parent, bounds, viewDef, settings, this);
+	}
+
 
 	debugString{
 		var result;
