@@ -224,4 +224,12 @@ VTMAbstractData {
 	oscEnabled {
 		^oscInterface.notNil();
 	}
+
+	debugString{
+		var result;
+		result = "\n'%' [%]\n".format(this.name, this.class);
+		result = result ++ "\t'fullPath': %\n".format(this.fullPath);
+		result = result ++ "\t'description':\n %".format(this.description.makeTreeString(3));
+		^result;
+	}
 }

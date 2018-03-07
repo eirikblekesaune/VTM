@@ -44,4 +44,23 @@
 		^d;
 	}
 
+
+	makeTreeString { arg depth = 0;
+		var result;
+		var func = { |key, val|
+			result = result ++ "%: \n".padLeft(depth + 3, "\t").format(key.cs);
+			if (val.isKindOf(Dictionary).not) {
+				if(val.notNil, {
+					result = result ++ "% \n".padLeft(depth + 4, "\t").format(val.cs ? "nil".cs);
+				});
+			} {
+				if(val.isEmpty.not, {
+					result = result ++ val.makeTreeString(depth + 1);
+				});
+			};
+		};
+		this.keysValuesDo(func);
+		^result;
+	}
+
 }

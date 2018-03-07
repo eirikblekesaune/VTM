@@ -16,8 +16,12 @@ VTMAbstractDataManagerView : VTMView {
 			this,
 			Rect(0, 0, this.bounds.width, this.class.unitHeight)
 		)
+		.maxHeight_(this.class.unitHeight)
 		.string_(managerObj.name)
-		.background_(Color.cyan.alpha_(0.1));
+		.background_(Color.cyan.alpha_(0.1))
+		.mouseDownAction_({
+			managerObj.debugString.postln;
+		});
 
 		itemsView = View()
 		.background_(Color.yellow.alpha_(0.1));
@@ -45,7 +49,8 @@ VTMAbstractDataManagerView : VTMView {
 					[
 						StaticText().string_(item.name)
 						.maxHeight_(this.class.unitHeight)
-						.background_(Color.green.alpha_(0.7)),
+						.background_(Color.green.alpha_(0.7))
+						.mouseDownAction_({item.debugString.postln;}),
 						\align, \topLeft
 					];
 				})

@@ -181,4 +181,11 @@ VTMAbstractDataManager {
 			parent, bounds, viewDef, settings, this
 		);
 	}
+
+	debugString{
+		var result;
+		result = "\n% [%]\n".format(this.name, this.class);
+		result = result ++ "\tpath: %\n".format(this.fullPath);
+		^result;
+	}
 }
