@@ -40,11 +40,14 @@ VTMRemoteNetworkNode : VTMElement {
 
 	debugString{
 		var result = super.debugString;
-		result = result ++ "'localNetworks':\n";
+		result = result ++ "\t'localNetworks':\n";
 		if(localNetworks.notNil and: {localNetworks.notEmpty}, {
-			localNetworks.do({arg item;
-				result = result ++ item.getDiscoveryData.makeTreeString(3);
+			result = result ++ "\t\t[\n";
+			localNetworks.do({arg item, i;
+				result = result ++ item.getDiscoveryData.makeTreeString(5);
+				result = result ++ "\t\t,\n";
 			});
+			result = result ++ "\t\t]\n";
 		});
 		^result;
 	}
