@@ -199,6 +199,14 @@ VTMLocalNetworkNode {
 		//Notify shutdown to other nodes
 		ShutDown.add({
 			"Shutting down VTM".postln;
+			[
+				shutdownResponder,
+				discoveryReplyResponder,
+				discoveryResponder,
+				remoteActivateResponder
+			].do({arg resp; resp.clear; resp.free;});
+
+
 			localNetworks.do({arg localNetwork;
 				this.sendMsg(
 					localNetwork.broadcast,
@@ -207,6 +215,7 @@ VTMLocalNetworkNode {
 					localNetwork.getDiscoveryData
 				);
 			});
+
 		});
 
 
