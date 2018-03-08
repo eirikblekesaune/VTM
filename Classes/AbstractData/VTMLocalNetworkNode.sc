@@ -7,6 +7,8 @@ VTMLocalNetworkNode {
 	var discoveryResponder;
 	var discoveryReplyResponder;
 	var remoteActivateResponder;
+	var shutdownResponder;
+
 	var <networkNodeManager;
 	var <library;
 
@@ -57,6 +59,7 @@ VTMLocalNetworkNode {
 				})
 			}, '/activate', recvPort: this.class.discoveryBroadcastPort);
 		});
+
 	}
 
 	activate{arg doDiscovery = false, remoteNetworkNodesToActivate;
@@ -68,8 +71,8 @@ VTMLocalNetworkNode {
 				var localNetwork;
 				senderHostname = jsonData['hostname'].asSymbol;
 				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
-				//find which network the node is sending on
 
+				//find which network the node is sending on
 				localNetwork = localNetworks.detect({arg net;
 					net.isIPPartOfSubnet(senderAddr.ip);
 				});
@@ -163,6 +166,49 @@ VTMLocalNetworkNode {
 				});
 			}, '/discovery/reply', recvPort: this.class.discoveryBroadcastPort);
 		});
+
+		if(shutdownResponder.isNil, {
+			shutdownResponder = OSCFunc({arg msg, time, addr, port;
+				var jsonData = VTMJSON.parse(msg[1]).changeScalarValuesToDataTypes;
+				var senderHostname, senderAddr, registered = false;
+				var localNetwork;
+				senderHostname = jsonData['hostname'].asSymbol;
+				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
+				//find which network the node is sending on
+
+				localNetwork = localNetworks.detect({arg net;
+					net.isIPPartOfSubnet(senderAddr.ip);
+				});
+				//Check if it the local computer that sent it.
+				if(senderAddr.isLocal.not, {
+					//a remote network node broadcasted shutdown
+					var isAlreadyRegistered;
+					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
+					if(isAlreadyRegistered, {
+						var networkNode = networkNodeManager[senderHostname];
+						networkNode.free;
+						"Freed remote network node: %".format(senderHostname).postln;
+					});
+				}, {
+					"IT WAS LOCALHOST, ignoring it!".debug;
+				});
+
+			}, '/shutdown', recvPort: this.class.discoveryBroadcastPort);
+		});
+
+		//Notify shutdown to other nodes
+		ShutDown.add({
+			"Shutting down VTM".postln;
+			localNetworks.do({arg localNetwork;
+				this.sendMsg(
+					localNetwork.broadcast,
+					this.class.discoveryBroadcastPort,
+					'/shutdown',
+					localNetwork.getDiscoveryData
+				);
+			});
+		});
+
 
 
 
