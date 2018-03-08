@@ -169,14 +169,12 @@ VTMLocalNetworkNode {
 
 		if(shutdownResponder.isNil, {
 			shutdownResponder = OSCFunc({arg msg, time, addr, port;
-				var senderHostname = msg[1];
-
+				var senderHostname;
+				senderHostname = VTMJSON.parseYAMLValue(msg[1].asString);
 				//Check if it the local computer that sent it.
 				if(addr.isLocal.not, {
 					//a remote network node notifued shutdown
-					var isAlreadyRegistered;
-					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
-					if(isAlreadyRegistered, {
+					if(networkNodeManager.hasItemNamed(senderHostname), {
 						var networkNode = networkNodeManager[senderHostname];
 						networkNode.free;
 						"Freed remote network node: %".format(senderHostname).postln;
@@ -207,6 +205,8 @@ VTMLocalNetworkNode {
 					hostname
 				);
 			});
+
+
 
 		});
 
