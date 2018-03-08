@@ -172,6 +172,7 @@ VTMLocalNetworkNode {
 				var senderHostname;
 				senderHostname = VTMJSON.parseYAMLValue(msg[1].asString);
 				//Check if it the local computer that sent it.
+				"Got shutdown msg from : '%'".format(senderHostname).postln;
 				if(addr.isLocal.not, {
 					//a remote network node notifued shutdown
 					if(networkNodeManager.hasItemNamed(senderHostname), {
