@@ -61,8 +61,8 @@ VTMAbstractDataManagerView : VTMView {
 
 	//pull style update
 	update{arg theChanged, whatChanged, whoChangedIt, toValue;
-		"Dependant update: % % % %".format(
-			theChanged, whatChanged, whoChangedIt, toValue).postln;
+		// "Dependant update: % % % %".format(
+		// theChanged, whatChanged, whoChangedIt, toValue).postln;
 
 		//only update the view if the valueObj changed
 		if(theChanged === managerObj, {

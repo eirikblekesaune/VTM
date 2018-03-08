@@ -84,7 +84,9 @@ VTMLocalNetworkNode {
 					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
 					if(isAlreadyRegistered.not, {
 						var newNetworkNode;
-						"Registering new network node: %".format([senderHostname, senderAddr]).debug;
+						"Registering new network node:".postln;
+						"\tname: '%'".format(senderHostname).postln;
+						"\taddr: '%'".format(senderAddr).postln;
 						newNetworkNode = VTMRemoteNetworkNode(
 							senderHostname,
 							(
@@ -97,12 +99,8 @@ VTMLocalNetworkNode {
 					}, {
 						var networkNode = networkNodeManager[senderHostname];
 						//Check if it sent on a different local network
-						"Already registered: %".format(senderHostname).postln;
-						"\tSending on local network: %\n\t".format(localNetwork.getDiscoveryData).post;
-						networkNode.localNetworks.collect(_.getDiscoveryData).postln;
 						if(networkNode.hasLocalNetwork(localNetwork).not, {
 							//add the new local network to the remote network node
-							"Will add new local network".postln;
 							networkNode.addLocalNetwork(localNetwork);
 						});
 					});
@@ -112,8 +110,6 @@ VTMLocalNetworkNode {
 						'/discovery/reply',
 						localNetwork.getDiscoveryData
 					);
-				}, {
-					"IT WAS LOCALHOST, ignoring it!".debug;
 				});
 			}, '/discovery', recvPort: this.class.discoveryBroadcastPort);
 		});
@@ -138,7 +134,9 @@ VTMLocalNetworkNode {
 					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
 					if(isAlreadyRegistered.not, {
 						var newNetworkNode;
-						"Registering new network node: %".format([senderHostname, senderAddr]).debug;
+						"Registering new network node:".postln;
+						"\tname: '%'".format(senderHostname).postln;
+						"\taddr: '%'".format(senderAddr).postln;
 						newNetworkNode = VTMRemoteNetworkNode(
 							senderHostname,
 							(
@@ -152,17 +150,11 @@ VTMLocalNetworkNode {
 					}, {
 						var networkNode = networkNodeManager[senderHostname];
 						//Check if it sent on a different local network
-						"Already registered: %".format(senderHostname).postln;
-						"\tSending on local network: %\n\t".format(localNetwork.getDiscoveryData).post;
-						networkNode.localNetworks.collect(_.getDiscoveryData).postln;
 						if(networkNode.hasLocalNetwork(localNetwork).not, {
 							//add the new local network to the remote network node
-							"Will add new local network".postln;
 							networkNode.addLocalNetwork(localNetwork);
 						});
 					});
-				}, {
-					"IT WAS LOCALHOST, ignoring it!".debug;
 				});
 			}, '/discovery/reply', recvPort: this.class.discoveryBroadcastPort);
 		});
@@ -172,16 +164,13 @@ VTMLocalNetworkNode {
 				var senderHostname;
 				senderHostname = VTMJSON.parseYAMLValue(msg[1].asString);
 				//Check if it the local computer that sent it.
-				"Got shutdown msg from : '%'".format(senderHostname).postln;
 				if(addr.isLocal.not, {
 					//a remote network node notifued shutdown
 					if(networkNodeManager.hasItemNamed(senderHostname), {
 						var networkNode = networkNodeManager[senderHostname];
 						networkNode.free;
-						"Freed remote network node: %".format(senderHostname).postln;
+						"Remote network node: '%' sent '/shutdown'".format(senderHostname).postln;
 					});
-				}, {
-					"IT WAS LOCALHOST, ignoring it!".debug;
 				});
 			}, '/shutdown', recvPort: this.class.discoveryBroadcastPort);
 		});
@@ -196,15 +185,9 @@ VTMLocalNetworkNode {
 				remoteActivateResponder
 			].do({arg resp; resp.clear; resp.free;});
 
-
-			"Sending '/shutdown' to these items: %".format(networkNodeManager.items).debug;
 			networkNodeManager.items.do({arg remoteNetworkNode;
-				"Sending to addr.hostname: '%' \n\tname: '%'".format(
-					remoteNetworkNode.addr.hostname,
-					remoteNetworkNode.name
-				).postln;
 				this.sendMsg(
-					remoteNetworkNode.addr.hostname,
+					remoteNetworkNode.addr.hostname.asString,
 					this.class.discoveryBroadcastPort,
 					'/shutdown',
 					hostname
@@ -413,7 +396,6 @@ VTMLocalNetworkNode {
 				targetAddr = NetAddr(targetHostname, this.class.discoveryBroadcastPort);
 			});
 
-			"Sending discovery on %".format(data).postln;
 			this.sendMsg(
 				targetAddr.hostname, targetAddr.port, '/discovery', data
 			);
