@@ -169,19 +169,11 @@ VTMLocalNetworkNode {
 
 		if(shutdownResponder.isNil, {
 			shutdownResponder = OSCFunc({arg msg, time, addr, port;
-				var jsonData = VTMJSON.parse(msg[1]).changeScalarValuesToDataTypes;
-				var senderHostname, senderAddr, registered = false;
-				var localNetwork;
-				senderHostname = jsonData['hostname'].asSymbol;
-				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
-				//find which network the node is sending on
+				var senderHostname = msg[1];
 
-				localNetwork = localNetworks.detect({arg net;
-					net.isIPPartOfSubnet(senderAddr.ip);
-				});
 				//Check if it the local computer that sent it.
-				if(senderAddr.isLocal.not, {
-					//a remote network node broadcasted shutdown
+				if(addr.isLocal.not, {
+					//a remote network node notifued shutdown
 					var isAlreadyRegistered;
 					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
 					if(isAlreadyRegistered, {
@@ -207,12 +199,12 @@ VTMLocalNetworkNode {
 			].do({arg resp; resp.clear; resp.free;});
 
 
-			localNetworks.do({arg localNetwork;
+			networkNodeManager.items.do({arg remoteNetworkNode;
 				this.sendMsg(
-					localNetwork.broadcast,
+					remoteNetworkNode.addr.hostname,
 					this.class.discoveryBroadcastPort,
 					'/shutdown',
-					localNetwork.getDiscoveryData
+					hostname
 				);
 			});
 
