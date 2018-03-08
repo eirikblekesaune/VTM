@@ -183,7 +183,6 @@ VTMLocalNetworkNode {
 				}, {
 					"IT WAS LOCALHOST, ignoring it!".debug;
 				});
-
 			}, '/shutdown', recvPort: this.class.discoveryBroadcastPort);
 		});
 
@@ -198,7 +197,12 @@ VTMLocalNetworkNode {
 			].do({arg resp; resp.clear; resp.free;});
 
 
+			"Sending '/shutdown' to these items: %".format(networkNodeManager.items).debug;
 			networkNodeManager.items.do({arg remoteNetworkNode;
+				"Sending to addr.hostname: '%' \n\tname: '%'".format(
+					remoteNetworkNode.addr.hostname,
+					remoteNetworkNode.name
+				).postln;
 				this.sendMsg(
 					remoteNetworkNode.addr.hostname,
 					this.class.discoveryBroadcastPort,
@@ -206,13 +210,7 @@ VTMLocalNetworkNode {
 					hostname
 				);
 			});
-
-
-
 		});
-
-
-
 
 		active = true;
 		if(remoteNetworkNodesToActivate.notNil, {
@@ -229,6 +227,9 @@ VTMLocalNetworkNode {
 
 	deactivate{
 		discoveryResponder !? {discoveryResponder.free;};
+		discoveryReplyResponder !? {discoveryReplyResponder.free;};
+		shutdownResponder !? {shutdownResponder.free;};
+		remoteActivateResponder !? {remoteActivateResponder.free;};
 		active = false;
 	}
 
