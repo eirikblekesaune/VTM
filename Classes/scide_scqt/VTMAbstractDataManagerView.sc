@@ -7,10 +7,6 @@ VTMAbstractDataManagerView : VTMView {
 			VLayout(
 				*model.items.collect({arg item;
 					[
-						/*StaticText().string_(item.name)
-						.maxHeight_(this.class.unitHeight)
-						.background_(Color.green.alpha_(0.7))
-						.mouseDownAction_({item.debugString.postln;}),*/
 						item.makeView,
 						\align,
 						\topLeft
