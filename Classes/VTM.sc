@@ -56,12 +56,6 @@ VTM{
 		result = Window("VTM", bounds).layout_(
 			HLayout(
 				this.local.makeView(parent, bounds, viewDef, settings)
-				// [
-				// 	this.local.networkNodeManager.makeView(
-				// 		bounds: Rect(0,0, 200, 300)
-				// 	).fixedSize_(Size(200, 300)),
-				// 	\align: \topLeft
-				// ]
 			)
 		);
 		^result;
