@@ -50,7 +50,8 @@ VTMView : View {
 		.background_(this.background)
 		.mouseDownAction_({
 			model.debugString.postln;
-		});
+		})
+		.font_(this.font);
 
 		^result;
 	}
