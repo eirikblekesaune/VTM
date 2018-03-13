@@ -1,21 +1,21 @@
 VTMValueElementView : VTMAbstractDataView {
 	var valueView;
-	*new{arg parent, bounds, dataObj, definition, settings;
-		var result;
-		result = super.new(parent, bounds, dataObj, definition, settings);
-		result.initValueElementView();
-		^result;
-	}
 
-	initValueElementView{
-		valueView = dataObj.valueObj.makeView(
+	prMakeValueView{
+		var result;
+		result = model.valueObj.makeView(
 			this, this.bounds,
 			definition: definition,
 			settings: (
-				label: dataObj.name
+				label: model.name
 			)
 		);
-		this.layout = VLayout(
+		^result;
+	}
+
+	prMakeLayout{
+		valueView = this.prMakeValueView;
+		^VLayout(
 			valueView
 		);
 	}

@@ -55,7 +55,7 @@ VTM{
 		var result;
 		result = Window.new("VTM").layout_(
 			HLayout(
-				this.local.networkNodeManager.makeView()
+				this.local.networkNodeManager.makeView
 			)
 		);
 		^result;
