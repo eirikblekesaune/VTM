@@ -51,11 +51,11 @@ VTM{
 
 	}
 
-	*makeView{
+	*makeView{arg parent, bounds, viewDef, settings;
 		var result;
-		result = Window("VTM").layout_(
+		result = Window("VTM", bounds).layout_(
 			HLayout(
-				this.local.makeView
+				this.local.makeView(parent, bounds, viewDef, settings)
 				// [
 				// 	this.local.networkNodeManager.makeView(
 				// 		bounds: Rect(0,0, 200, 300)
