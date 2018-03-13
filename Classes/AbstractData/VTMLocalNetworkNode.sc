@@ -9,7 +9,6 @@ VTMLocalNetworkNode {
 	var remoteActivateResponder;
 	var shutdownResponder;
 
-	var <networkNodeManager;
 	var <library;
 
 	//global data managers for unnamed contexts
@@ -18,6 +17,7 @@ VTMLocalNetworkNode {
 	var <moduleHost;
 	var <sceneOwner;
 	var <scoreManager;
+	var <networkNodeManager;
 
 	var <active = false;
 
@@ -426,6 +426,12 @@ VTMLocalNetworkNode {
 		{class.isKindOf(VTMScore.class) } {managerObj =  scoreManager; }
 		{class.isKindOf(VTMApplication.class) } {managerObj =  applicationManager; };
 		^managerObj;
+	}
+
+	makeView{arg parent, bounds, viewDef, settings;
+		var viewClass = 'VTMLocalNetworkNodeView'.asClass;
+		//override class if defined in settings.
+		^viewClass.new(parent, bounds, viewDef, settings, this);
 	}
 }
 

@@ -2,6 +2,7 @@ VTMAbstractDataManagerView : VTMView {
 	var itemsView;
 
 	rebuildItemsView{
+		"Rebuilding view: model.items: %".format(model).postln;
 		itemsView.children.do(_.remove);
 		itemsView.layout_(
 			VLayout(

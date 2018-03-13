@@ -33,8 +33,8 @@ VTMAbstractDataManager {
 
 	addItem{arg newItem;
 		if(newItem.isKindOf(this.class.dataClass), {//check arg type
-			this.changed(\items);
 			items.put(newItem.name, newItem);
+			this.changed(\items);
 		});
 	}
 

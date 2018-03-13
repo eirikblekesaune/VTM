@@ -55,12 +55,13 @@ VTM{
 		var result;
 		result = Window("VTM").layout_(
 			HLayout(
-				[
-					this.local.networkNodeManager.makeView(
-						bounds: Rect(0,0, 200, 300)
-					).fixedSize_(Size(200, 300)),
-					\align: \topLeft
-				]
+				this.local.makeView
+				// [
+				// 	this.local.networkNodeManager.makeView(
+				// 		bounds: Rect(0,0, 200, 300)
+				// 	).fixedSize_(Size(200, 300)),
+				// 	\align: \topLeft
+				// ]
 			)
 		);
 		^result;
