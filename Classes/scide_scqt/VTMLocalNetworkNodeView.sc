@@ -7,7 +7,8 @@ VTMLocalNetworkNodeView : VTMView{
 			model.moduleHost.makeView,
 			model.sceneOwner.makeView,
 			model.scoreManager.makeView,
-			model.networkNodeManager.makeView
+			model.networkNodeManager.makeView,
+			nil
 		);
 	}
 }
