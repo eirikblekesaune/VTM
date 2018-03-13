@@ -1,8 +1,10 @@
 VTMAbstractDataManagerView : VTMView {
 	var itemsView;
+	var showItems = false;
+	var showItemsButton;
+	var showNumItemsLabel;
 
 	rebuildItemsView{
-		"Rebuilding view: model.items: %".format(model).postln;
 		itemsView.children.do(_.remove);
 		itemsView.layout_(
 			VLayout(
@@ -20,11 +22,36 @@ VTMAbstractDataManagerView : VTMView {
 	prMakeLayout{
 		labelView = this.prMakeLabelView();
 		itemsView = this.prMakeItemsView();
+		showItemsButton = Button()
+		.states_([
+			["[+]", Color.black, Color.white.alpha_(0.1)],
+			["[—]", Color.black, Color.white.alpha_(0.1)]
+		])
+		.value_(showItems.asInt)
+		.action_({arg butt; this.showItems_(butt.value.booleanValue); })
+		.font_(this.font.size_(12))
+		.background_(labelView.background)
+		.fixedSize_(Size(15,15))
+		.canFocus_(false);
 		this.rebuildItemsView();
 		^VLayout(
-			labelView,
-			itemsView
+			View().layout_(
+				HLayout(
+					[labelView, \align: \left],
+					[showItemsButton, \align: \right]
+				).spacing_(0).margins_(0)
+			)
+			.maxHeight_(15)
+			.background_(labelView.background),
+			itemsView.visible_(showItems)
 		);
+	}
+
+	showItems_{arg bool;
+		showItems = bool;
+		{
+			itemsView.visible = showItems;
+		}.defer;
 	}
 
 	prMakeItemsView{
