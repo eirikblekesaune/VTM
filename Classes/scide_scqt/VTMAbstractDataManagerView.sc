@@ -11,8 +11,8 @@ VTMAbstractDataManagerView : VTMView {
 						\align,
 						\topLeft
 					];
-				})
-			).spacing_(2).margins_(0)
+				}).add(nil)
+			).spacing_(2).margins_(2)
 		);
 	}
 
@@ -22,7 +22,7 @@ VTMAbstractDataManagerView : VTMView {
 		this.rebuildItemsView();
 		^VLayout(
 			labelView,
-			itemsView;
+			itemsView
 		);
 	}
 

@@ -30,7 +30,7 @@ VTMView : View {
 		model = model_;
 		model.addDependant(this);
 
-		this.layout_( this.prMakeLayout );
+		this.layout_( this.prMakeLayout.spacing_(2).margins_([5, 2]) );
 		//This is needed to set the fixedSize
 		this.bounds_(this.bounds);
 
