@@ -4,6 +4,13 @@ VTMAbstractDataManagerView : VTMView {
 	var showItemsButton;
 	var showNumItemsLabel;
 
+	showItems_{arg bool;
+		showItems = bool;
+		{
+			itemsView.visible = showItems;
+		}.defer;
+	}
+
 	rebuildItemsView{
 		itemsView.children.do(_.remove);
 		itemsView.layout_(
@@ -20,7 +27,7 @@ VTMAbstractDataManagerView : VTMView {
 		showNumItemsLabel.string_(model.numItems);
 	}
 
-	prMakeLayout{
+	prMakeChildViews{
 		labelView = this.prMakeLabelView();
 		itemsView = this.prMakeItemsView();
 		showItemsButton = Button()
@@ -40,6 +47,9 @@ VTMAbstractDataManagerView : VTMView {
 		.font_(this.font.italic_(true))
 		.fixedSize_(Size(15,15));
 		this.rebuildItemsView();
+	}
+
+	prMakeLayout{
 		^VLayout(
 			View().layout_(
 				HLayout(
@@ -55,12 +65,6 @@ VTMAbstractDataManagerView : VTMView {
 		);
 	}
 
-	showItems_{arg bool;
-		showItems = bool;
-		{
-			itemsView.visible = showItems;
-		}.defer;
-	}
 
 	prMakeItemsView{
 		var result;

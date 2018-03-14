@@ -30,6 +30,8 @@ VTMView : View {
 		model = model_;
 		model.addDependant(this);
 
+		this.prMakeChildViews;
+
 		this.layout_( this.prMakeLayout.spacing_(2).margins_([5, 2]) );
 		//This is needed to set the fixedSize
 		this.bounds_(this.bounds);
@@ -37,6 +39,10 @@ VTMView : View {
 		this.addAction({arg ...args;
 			model.removeDependant(this);
 		}, \onClose);
+	}
+
+	prMakeChildViews{
+		labelView = this.prMakeLabelView;
 	}
 
 	prMakeLabelView{
@@ -58,7 +64,7 @@ VTMView : View {
 
 	prMakeLayout{
 		^VLayout(
-			this.prMakeLabelView
+			labelView
 		)
 	}
 }
