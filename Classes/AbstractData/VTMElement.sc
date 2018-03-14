@@ -50,11 +50,15 @@ VTMElement : VTMAbstractData {
 
 	prInitMappings{
 		var itemDeclarations = this.class.mappingDescriptions.deepCopy;
-		commands = VTMMappingManager(itemDeclarations);
+		mappings = VTMMappingManager(itemDeclarations);
 	}
 
 	components{
 		^[attributes, returns, signals, commands, mappings];
+	}
+
+	numComponents{
+		^this.components.size;
 	}
 
 	free{
@@ -145,7 +149,7 @@ VTMElement : VTMAbstractData {
 	}
 
 	addForwarding{arg key, compName, itemName,  addr, path, vtmJson = false, mapFunc;
-		var comp = switch(compName, 
+		var comp = switch(compName,
 			\attributes, {attributes},
 			\returns, {returns}
 		);
@@ -153,7 +157,7 @@ VTMElement : VTMAbstractData {
 	}
 
 	removeForwarding{arg key, compName, itemName;
-		var comp = switch(compName, 
+		var comp = switch(compName,
 			\attributes, {attributes},
 			\returns, {returns}
 		);
@@ -177,5 +181,10 @@ VTMElement : VTMAbstractData {
 			comp.disableForwarding;
 		});
 	}
+
+	*viewClass{
+		^\VTMElementView.asClass;
+	}
+
 }
 
