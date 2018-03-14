@@ -62,6 +62,10 @@ VTMAbstractDataManager {
 		^items.values;
 	}
 
+	numItems{
+		^items.size;
+	}
+
 	at{arg key;
 		^items.at(key);
 	}

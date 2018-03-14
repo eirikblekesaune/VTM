@@ -17,6 +17,7 @@ VTMAbstractDataManagerView : VTMView {
 				}).add(nil)
 			).spacing_(2).margins_(2)
 		);
+		showNumItemsLabel.string_(model.numItems);
 	}
 
 	prMakeLayout{
@@ -29,17 +30,24 @@ VTMAbstractDataManagerView : VTMView {
 		])
 		.value_(showItems.asInt)
 		.action_({arg butt; this.showItems_(butt.value.booleanValue); })
-		.font_(this.font.size_(12))
+		.font_(this.font)
 		.background_(labelView.background)
 		.fixedSize_(Size(15,15))
 		.canFocus_(false);
+
+		showNumItemsLabel = StaticText()
+		.string_(model.numItems)
+		.font_(this.font.italic_(true))
+		.fixedSize_(Size(15,15));
 		this.rebuildItemsView();
 		^VLayout(
 			View().layout_(
 				HLayout(
 					[labelView, \align: \left],
+					nil,
+					[showNumItemsLabel, \align: \right],
 					[showItemsButton, \align: \right]
-				).spacing_(0).margins_(0)
+				).spacing_(0).margins_(1)
 			)
 			.maxHeight_(15)
 			.background_(labelView.background),
