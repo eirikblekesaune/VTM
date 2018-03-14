@@ -234,6 +234,6 @@ VTMValue {
 	makeView{arg parent, bounds, definition, settings;
 		var viewClass = this.class.getViewClass;
 		//override class if defined in settings.
-		^viewClass.new(parent, bounds, this, definition, settings);
+		^viewClass.new(parent, bounds, definition, settings, this);
 	}
 }
