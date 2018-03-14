@@ -43,10 +43,10 @@ VTMAbstractDataManagerView : VTMView {
 		^VLayout(
 			View().layout_(
 				HLayout(
+					[showItemsButton, \align: \left],
 					[labelView, \align: \left],
 					nil,
-					[showNumItemsLabel, \align: \right],
-					[showItemsButton, \align: \right]
+					[showNumItemsLabel, \align: \right]
 				).spacing_(0).margins_(1)
 			)
 			.maxHeight_(15)
