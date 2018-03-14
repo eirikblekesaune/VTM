@@ -45,14 +45,15 @@ VTMView : View {
 		labelView = this.prMakeLabelView;
 	}
 
-	prMakeLabelView{
+	prMakeLabelView{arg str;
 		var result;
+		var labelStr = str ?? {model.name};
 		result = StaticText(
 			this,
 			Rect(0, 0, this.bounds.width, this.class.unitHeight)
 		)
 		.maxHeight_(this.class.unitHeight)
-		.string_(model.name)
+		.string_(labelStr)
 		.background_(this.background)
 		.mouseDownAction_({
 			model.debugString.postln;
