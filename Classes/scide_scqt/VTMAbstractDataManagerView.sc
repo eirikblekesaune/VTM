@@ -41,7 +41,6 @@ VTMAbstractDataManagerView : VTMView {
 		.background_(labelView.background)
 		.fixedSize_(Size(15,15))
 		.canFocus_(false);
-
 		showNumItemsLabel = StaticText()
 		.string_(model.numItems)
 		.font_(this.font.italic_(true))

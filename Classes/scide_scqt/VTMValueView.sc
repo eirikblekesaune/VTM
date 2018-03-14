@@ -1,34 +1,35 @@
 VTMValueView : VTMView {
-	var valueObj;//the VTMValue instance
-	var <label;
-	var labelView, outlineView, valueView, backgroundView;
-	var settings;
+	var outlineView;
+	var valueView;
+	var backgroundView;
 
 	classvar <labelOffset = 5;
 	classvar <viewTypeToClassMappings;
 
-	*new{arg parent, bounds, valueObj, definition, settings;
-		^super.new( parent, bounds).initValueView(
-			valueObj, settings);
-	}
 
-	initValueView{arg valueObj_, settings_;
-		if(valueObj_.isNil, {VTError("VTMValueView - needs valueObj").throw;});
-		valueObj = valueObj_;
-		valueObj.addDependant(this);
+	init{arg definition_, settings_, model_;
+		super.init(definition_, settings_, model_);
 
-		settings = settings_ ? ();
-
-		backgroundView = this.prMakeBackgroundView;
-		valueView = this.prMakeValueView;
-		this.label = settings[\label] ? "";
 		this.updateValue;
 		this.refreshLabel;
 		this.deleteOnClose_(true);
 		this.addAction({arg ...args;
 			this.action = nil;
-			valueObj.removeDependant(this);
 		}, \onClose);
+	}
+
+
+	prMakeLayout{
+		^VLayout(
+			backgroundView,
+			valueView
+		);
+	}
+
+	prMakeChildViews{
+		labelView = this.prMakeLabelView(this.label);
+		backgroundView = this.prMakeBackgroundView;
+		valueView = this.prMakeValueView;
 	}
 
 	prMakeBackgroundView{
@@ -46,16 +47,6 @@ VTMValueView : VTMView {
 				Pen.draw(3);//draw both stroke and fill
 			}
 		};
-		// labelView !? {labelView.remove;};
-		labelView = StaticText(bView,
-			this.class.prCalculateSize(1).asRect.insetAll(labelOffset, 0, 0, 0)
-		)
-		.stringColor_(settings[\stringColor] ? this.class.stringColor)
-		.font_(settings[\font] ? this.class.font.bold_(true).italic_(true))
-		.acceptsMouse_(false)
-		.focusColor_(Color.white.alpha_(0.0))
-		.background_(Color.white.alpha_(0.0))
-		.canFocus_(false);
 		^bView;
 	}
 
@@ -63,25 +54,32 @@ VTMValueView : VTMView {
 		^TextField(this,
 			this.bounds.insetAll(0, 0, 5, 0)//inset for nice things
 		)
-		.font_(Font("Menlo", 9))
+		.font_(this.font)
 		.setBoth_(true)
 		.align_(\right)
-		.object_(valueObj.value)
+		.object_(model.value)
 		.background_(Color.white.alpha_(0.0))
 		.action_({arg v;
-			valueObj.valueAction_(v.string);
+			model.valueAction_(v.string);
 		});
 	}
 
+	label{
+		if(settings.notNil and: {settings.includesKey(\label)}, {
+			^settings['label'];
+		});
+		^"";
+	}
+
 	label_{arg str;
-		label = str;
+		settings[\label] = str;
 		this.refreshLabel;
 	}
 
 	refreshLabel{
 		{
-			labelView.string_(label)
-			.toolTip_("% [%]".format(label, valueObj.type))
+			labelView.string_(this.label)
+			.toolTip_("% [%]".format(this.label, model.type))
 		}.defer;
 	}
 
@@ -92,7 +90,7 @@ VTMValueView : VTMView {
 
 	updateValue{
 		{
-			valueView.object_(valueObj.value);
+			valueView.object_(model.value);
 		}.defer;
 	}
 
@@ -101,18 +99,16 @@ VTMValueView : VTMView {
 		// "Dependant update: % % % %".format(
 		// theChanged, whatChanged, whoChangedIt, toValue).postln;
 
-		//only update the view if the valueObj changed
-		if(theChanged === valueObj, {
+		//only update the view if the model changed
+		if(theChanged === model, {
 			switch(whatChanged,
-				\enabled, { this.enabled_(valueObj.enabled); },
-				\value, { this.updateValue; }
+				\enabled, { this.enabled_(model.enabled); },
+				\value, { this.updateValue; },
+				{
+					super.update(theChanged, whatChanged, whoChangedIt, toValue)
+				}
 			);
 			{this.refresh;}.defer;
 		});
 	}
-
-	*font{^Font("Menlo", 10).bold_(true);}
-	*stringColor{^Color.black}
-	*elementColor{^Color.white.alpha_(0.0)}
-
 }

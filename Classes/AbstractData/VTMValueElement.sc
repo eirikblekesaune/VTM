@@ -128,9 +128,6 @@ VTMValueElement : VTMAbstractData {
 	}
 
 	makeView{arg parent, bounds, viewDef, settings;
-		var viewSettings;
-		viewSettings = settings ?? {()};
-		viewSettings.put(\label, this.name);
-		^valueObj.makeView(parent, bounds, viewDef, viewSettings);
+		^this.class.viewClass.new(parent, bounds, viewDef, settings, this);
 	}
 }
