@@ -1,5 +1,2 @@
-VTMElementComponent : VTMAbstractDataManager{
-	element{
-		^parent;
-	}
+VTMComponent : VTMAbstractDataManager{
 }

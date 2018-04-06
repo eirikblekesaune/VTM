@@ -1,4 +1,4 @@
-VTMSignalManager : VTMElementComponent {
+VTMSignalManager : VTMComponent {
 	name{ ^\signals; }
 	*dataClass{ ^VTMSignal; }
 

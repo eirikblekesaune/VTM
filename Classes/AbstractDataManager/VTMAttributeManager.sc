@@ -1,4 +1,4 @@
-VTMAttributeManager : VTMElementComponent {
+VTMAttributeManager : VTMComponent {
 	var presets;
 
 	*dataClass{ ^VTMAttribute; }

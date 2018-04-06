@@ -1,4 +1,4 @@
-VTMMappingManager : VTMElementComponent {
+VTMMappingManager : VTMComponent {
 	*dataClass{ ^VTMMapping; }
 	name{ ^\mappings; }
 }
