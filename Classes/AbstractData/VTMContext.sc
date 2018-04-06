@@ -11,9 +11,7 @@ VTMContext : VTMElement {
 	var condition;
 	var library;
 
-	classvar <viewClassSymbol = 'VTMContextView';
-
-	*new{arg name, declaration, manager, definition, prototypes;
+	*new{arg name, declaration, manager, definition;
 		var defArg, loadedContextDefinition;
 		//If no manager defined, use the local network node as manager.
 		//TODO?: Will there be problems when a class is listed as manager
@@ -27,7 +25,7 @@ VTMContext : VTMElement {
 		if(declaration.notNil and: {declaration.includesKey(\definition)}, {
 			defArg = declaration[\definition];
 		});
-		
+
 		//The definition arg can either be a Symbol or an Environment.
 		//If a Symbol is used it will try to find the named definition from
 		//the manager library.
@@ -59,7 +57,7 @@ VTMContext : VTMElement {
 			Error("Failed to make ContextDefinition for '%'".format(name)).throw;
 		});
 		^super.new(name, declaration, manager).initContext(
-			loadedContextDefinition, prototypes);
+			loadedContextDefinition);
 	}
 
 	//definition arg must be an instance of VTMContextDefinition
@@ -120,9 +118,9 @@ VTMContext : VTMElement {
 		});
 	}
 
-	components{
-		^super.components ++ [cues, scores];
-	}
+	// components{
+	// 	^super.components ++ [cues, scores];
+	// }
 
 	//The context that calls prepare can issue a condition to use for handling
 	//asynchronous events. If no condition is passed as argument the context will

@@ -36,6 +36,10 @@ VTMAbstractData {
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
 		declaration.put(\name, name);
 		this.prInitParameters;
+		this.prInitManager;
+	}
+
+	prInitManager{
 		if(manager.notNil, {
 			manager.addItem(this);
 			this.addDependant(manager);

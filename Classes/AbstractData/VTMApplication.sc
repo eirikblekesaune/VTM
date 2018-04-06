@@ -2,7 +2,7 @@ VTMApplication : VTMContext {
 	var <scenes;
 	var <modules;
 	var <hardwareDevices;
-	var <library;
+	var <libraries;
 
 	*managerClass{ ^VTMApplicationManager; }
 
@@ -11,18 +11,20 @@ VTMApplication : VTMContext {
 	}
 
 	initApplication{
-		var compItems;
-		if(declaration.includesKey(\definitionPaths), {
-			compItems = declaration[\definitionPaths];
-		});
-//		libraries = VTMDefinitionLibraryManager.new(compItems, this);
+		// var compItems;
+		// if(declaration.includesKey(\definitionPaths), {
+		// 	compItems = declaration[\definitionPaths];
+		// });
+		// libraries = VTMDefinitionLibraryManager.new(compItems, this);
+		// libraries = VTMDefinitionLibraryManager.new(compItems, this);
 //		compItems = nil;
 //
-//		hardwareDevices = VTMHardwareSetup(nil, this);
-//		modules = VTMModuleHost(nil, this);
-//		scenes = VTMSceneOwner(nil, this);
+		hardwareDevices = VTMHardwareSetup(nil, this);
+		modules = VTMModuleHost(nil, this);
+		scenes = VTMSceneOwner(nil, this);
 	}
 
-	components{
-		^super.components ++ [hardwareDevices, modules, scenes, library]; }
+	// components{
+	// 	^super.components;// ++ [hardwareDevices, modules, scenes/*, library*/];
+	// }
 }

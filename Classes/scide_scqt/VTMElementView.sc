@@ -16,7 +16,7 @@ VTMElementView : VTMAbstractDataView {
 		"These are children: %".format(model.components).postln;
 		componentsView.layout_(
 			VLayout(
-				*model.components.collect({arg item;
+				*model.components.reject(_.isNil).collect({arg item;
 					[
 						item.makeView,
 						\align,

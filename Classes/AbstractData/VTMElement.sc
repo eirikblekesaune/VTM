@@ -13,13 +13,17 @@ VTMElement : VTMAbstractData {
 	}
 
 	initElement{
+		this.initComponents;
+		this.changed(\components);
+		//TODO: register with LocalNetworkNode singleton.
+	}
+
+	initComponents{
 		this.prInitAttributes;
 		this.prInitSignals;
 		this.prInitReturns;
 		this.prInitCommands;
 		this.prInitMappings;
-
-		//TODO: register with LocalNetworkNode singleton.
 	}
 
 	prInitAttributes{
