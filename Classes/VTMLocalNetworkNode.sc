@@ -21,9 +21,6 @@ VTMLocalNetworkNode {
 
 	var <active = false;
 
-	var <test;
-
-
 	*initClass{
 		Class.initClassTree(VTMAbstractData);
 		Class.initClassTree(VTMNetworkNodeManager);
