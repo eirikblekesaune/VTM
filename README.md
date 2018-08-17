@@ -4,7 +4,6 @@ This code is in a state of severe alpha and early development. That means that r
 
 ## requirements
 
-* UnitTesting quark
 * API quark
 * Modality-toolkit quark
 * sc3-plugins
@@ -17,9 +16,7 @@ This code is in a state of severe alpha and early development. That means that r
 * Install [SC3-plugins](https://github.com/supercollider/sc3-plugins)
 * Start SuperCollider and run:
 ```
-Quarks.install("UnitTesting");
 Quarks.install("API");
-Quarks.install("json");
 Quarks.install("Modality-toolkit");
 ```
 
@@ -29,7 +26,7 @@ Quarks.install("Modality-toolkit");
 ### raspberry pi
 
 * Install SuperCollider from <https://github.com/redFrik/supercolliderStandaloneRPI2> (sc3-plugins are included)
-* Start sclang and do `Quarks.install("UnitTesting")` and `Quarks.install("API")`
+* Start sclang and do `Quarks.install("Modality-toolkit");` and `Quarks.install("API")`
 * `git clone https://github.com/blacksound/VTM.git`
 * Add the VTM / Classes folder path to under `- includePaths` in the `sclang_conf.yaml` file.
   - Run `Platform.userAppSupportDir` in SuperCollider to see where this file is located.
