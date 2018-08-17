@@ -79,39 +79,45 @@ VTMLocalNetworkNode {
 					net.isIPPartOfSubnet(senderAddr.ip);
 				});
 
-				//Check if it the local computer that sent it.
-				if(senderAddr.isLocal.not, {
-					//a remote network node sent discovery
-					var isAlreadyRegistered;
-					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
-					if(isAlreadyRegistered.not, {
-						var newNetworkNode;
-						"Registering new network node:".postln;
-						"\tname: '%'".format(senderHostname).postln;
-						"\taddr: '%'".format(senderAddr).postln;
-						newNetworkNode = VTMRemoteNetworkNode(
-							senderHostname,
-							(
-								ipString: jsonData['ipString'].asString,
-								mac: jsonData['mac'].asString
-							),
-							networkNodeManager,
-							localNetwork
-						);
-					}, {
-						var networkNode = networkNodeManager[senderHostname];
-						//Check if it sent on a different local network
-						if(networkNode.hasLocalNetwork(localNetwork).not, {
-							//add the new local network to the remote network node
-							networkNode.addLocalNetwork(localNetwork);
+				if(localNetwork.isNil, {
+					"Discovery was sent from a network where this network node is not connected:".postln;
+					"\thostname: %".format(senderHostname).postln;
+					"\taddress: %".format(senderAddr).postln;
+				}, {
+					//Check if it the local computer that sent it.
+					if(senderAddr.isLocal.not, {
+						//a remote network node sent discovery
+						var isAlreadyRegistered;
+						isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
+						if(isAlreadyRegistered.not, {
+							var newNetworkNode;
+							"Registering new network node:".postln;
+							"\tname: '%'".format(senderHostname).postln;
+							"\taddr: '%'".format(senderAddr).postln;
+							newNetworkNode = VTMRemoteNetworkNode(
+								senderHostname,
+								(
+									ipString: jsonData['ipString'].asString,
+									mac: jsonData['mac'].asString
+								),
+								networkNodeManager,
+								localNetwork
+							);
+						}, {
+							var networkNode = networkNodeManager[senderHostname];
+							//Check if it sent on a different local network
+							if(networkNode.hasLocalNetwork(localNetwork).not, {
+								//add the new local network to the remote network node
+								networkNode.addLocalNetwork(localNetwork);
+							});
 						});
+						this.sendMsg(
+							senderAddr.hostname,
+							this.class.discoveryBroadcastPort,
+							'/discovery/reply',
+							localNetwork.getDiscoveryData
+						);
 					});
-					this.sendMsg(
-						senderAddr.hostname,
-						this.class.discoveryBroadcastPort,
-						'/discovery/reply',
-						localNetwork.getDiscoveryData
-					);
 				});
 			}, '/discovery', recvPort: this.class.discoveryBroadcastPort);
 		});
