@@ -225,7 +225,76 @@ VTMLocalNetworkNode {
 	}
 
 	findLocalNetworks{
-		var lines, entries;
+		var lines;
+		var parseOSXIfconfig = {arg lns;
+			var result, entries;
+			"lines: %".format(lns).postln;
+			lns.collect({arg line;
+				if(line.first != Char.tab, {
+					entries = entries.add([line]);
+				}, {
+					entries[entries.size - 1] = entries[entries.size - 1].add(line);
+				});
+			});
+			"XX: %".format(entries).postln;
+			//remove the entries that don't have any extra information
+			entries = entries.reject({arg item; item.class.post;item.size.postln == 1});
+			"A: %".format(entries).postln;
+			//remove the LOOPBACK entry(ies)
+			entries = entries.reject({arg item;
+				"[,<]?LOOPBACK[,>]?".matchRegexp(item.first);
+			});
+			"B: %".format(entries).postln;
+			//get only the active entries
+			entries = entries.reject({arg item;
+				item.any({arg jtem;
+					"status: inactive".matchRegexp(jtem);
+				})
+			});
+			"C: %".format(entries).postln;
+			//get only the lines with IPV4 addresses and
+			entries = entries.collect({arg item;
+				var inetLine, hwLine;
+				inetLine = item.detect({arg jtem;
+					"\\<inet\\>".matchRegexp(jtem);
+				});
+				if(inetLine.notNil, {
+					hwLine = item.detect({arg jtem;
+						"\\<ether\\>".matchRegexp(jtem);
+					})
+				});
+				[inetLine, hwLine];
+			});
+			"D: %".format(entries).postln;
+			//remove all that are nil
+			entries = entries.reject({arg jtem; jtem.first.isNil; });
+			"E: %".format(entries).postln;
+			//separate the addresses
+			entries.collect({arg item;
+				var ip, bcast, mac, netmask;
+				var inetLine, hwLine;
+				#inetLine, hwLine = item;
+
+				ip = inetLine.copy.split(Char.space)[1];
+				bcast = inetLine.findRegexp("broadcast (.+)");
+				bcast = bcast !? {bcast[1][1];};
+				mac = hwLine.findRegexp("ether (.+)");
+				mac = mac !? {mac[1][1]};
+				netmask = inetLine.findRegexp("netmask (.+?)\\s");
+				netmask = netmask !? {netmask[1][1].interpret.asIPString;};
+				(
+					ip: ip.stripWhiteSpace,
+					broadcast: bcast.stripWhiteSpace,
+					mac: mac.stripWhiteSpace,
+					hostname: this.hostname,
+					netmask: netmask
+				)
+			}).collect({arg item;
+				"F: %".format(item).postln;
+				result = result.add(VTMLocalNetwork.performWithEnvir(\new, item));
+			});
+			result;
+		};
 
 		//delete previous local networks
 		localNetworks = [];
@@ -234,134 +303,82 @@ VTMLocalNetworkNode {
 
 		Platform.case(
 			\osx, {
-				lines.collect({arg line;
-					if(line.first != Char.tab, {
-						entries = entries.add([line]);
-					}, {
-						entries[entries.size - 1] = entries[entries.size - 1].add(line);
-					});
-				});
-				//remove the entries that don't have any extra information
-				entries = entries.reject({arg item; item.size == 1});
-				//remove the LOOPBACK entry(ies)
-				entries = entries.reject({arg item;
-					"[,<]?LOOPBACK[,>]?".matchRegexp(item.first);
-				});
-				//get only the active entries
-				entries = entries.reject({arg item;
-					item.any({arg jtem;
-						"status: inactive".matchRegexp(jtem);
-					})
-				});
-				//get only the lines with IPV4 addresses and
-				entries = entries.collect({arg item;
-					var inetLine, hwLine;
-					inetLine = item.detect({arg jtem;
-						"\\<inet\\>".matchRegexp(jtem);
-					});
-					if(inetLine.notNil, {
-						hwLine = item.detect({arg jtem;
-							"\\<ether\\>".matchRegexp(jtem);
-						})
-					});
-					[inetLine, hwLine];
-				});
-				//remove all that are nil
-				entries = entries.reject({arg jtem; jtem.first.isNil; });
-
-				//separate the addresses
-				entries.collect({arg item;
-					var ip, bcast, mac, netmask;
-					var inetLine, hwLine;
-					#inetLine, hwLine = item;
-
-					ip = inetLine.copy.split(Char.space)[1];
-					bcast = inetLine.findRegexp("broadcast (.+)");
-					bcast = bcast !? {bcast[1][1];};
-					mac = hwLine.findRegexp("ether (.+)");
-					mac = mac !? {mac[1][1]};
-					netmask = inetLine.findRegexp("netmask (.+?)\\s");
-					netmask = netmask !? {netmask[1][1].interpret.asIPString;};
-					(
-						ip: ip.stripWhiteSpace,
-						broadcast: bcast.stripWhiteSpace,
-						mac: mac.stripWhiteSpace,
-						hostname: this.hostname,
-						netmask: netmask
-					)
-				}).collect({arg item;
-					localNetworks = localNetworks.add(VTMLocalNetwork.performWithEnvir(\new, item));
-				});
+				localNetworks = parseOSXIfconfig.value(lines);
 			},
 			\linux, {
+				localNetworks = parseOSXIfconfig.value(lines);
+				/*
+				Older linux version parsing
 				var result;
 				//"No find local network method ifr Linux yet!".warn;
 				//clump into separate network interface entries
 				lines.collect({arg line;
-					if(line.first != Char.space, {
-						entries = entries.add([line]);
-					}, {
-						entries[entries.size - 1] = entries[entries.size - 1].add(line);
-					});
+				if(line.first != Char.space, {
+				entries = entries.add([line]);
+				}, {
+				entries[entries.size - 1] = entries[entries.size - 1].add(line);
+				});
 				});
 				//remove empty lines
 				entries = entries.reject{arg entry;
-					var lineIsEmpty = false;
-					if(entry.size == 1, {
-						lineIsEmpty = entry.first.isString and: {entry.first.isEmpty};
-					});
-					lineIsEmpty;
+				var lineIsEmpty = false;
+				if(entry.size == 1, {
+				lineIsEmpty = entry.first.isString and: {entry.first.isEmpty};
+				});
+				lineIsEmpty;
 				};
 				//remove loopback device
 				entries = entries.reject{arg entry;
-					"Loopback".matchRegexp(entry.first);
+				"Loopback".matchRegexp(entry.first);
 				};
 				//select only entries with IPV4 addresses
 				entries = entries.select{arg entry;
-					entry.any{arg line;
-						"\\<inet\\> .+".matchRegexp(line);
-					};
+				entry.any{arg line;
+				"\\<inet\\> .+".matchRegexp(line);
+				};
 				};
 				//Get the MAC addresses
 				entries.do{arg entry;
-					var mac, ip, broadcast;
-					var inetLine, entryData;
-					entryData = ();
-					mac = entry.first.findRegexp("HWaddr (.+)");
-					if(mac.notNil, {
-						entryData.put(\mac, mac[1][1].stripWhiteSpace);
-					}, {
-						"Did not find MAC for entry: %".format(entry).warn;
-					});
-					inetLine = entry.detect{arg line;
-						"\\<inet\\> .+".matchRegexp(line);
-					};
-					if(inetLine.notNil, {
-						var regx;
-						regx = inetLine.findRegexp("addr:(.+) Bcast:(.+) Mask:(.+)");
-						if(regx.notEmpty, {
-							entryData.put(\ip, regx[1][1].stripWhiteSpace);
-							entryData.put(\broadcast, regx[2][1].stripWhiteSpace);
-							entryData.put(\netmask, regx[3][1].stripWhiteSpace);
-						}, {
-							"Could not parse inet line for %\n\t%".format(
-								entry.first, inetLine
-							).warn;
-						});
-					}, {
-						"Did not find IP and broadcast for %".format(
-							String.newFrom(entry.flat)).warn;
-					});
-					result.put(\hostname, this.hostname);
-					result = result.add(entryData);
+				var mac, ip, broadcast;
+				var inetLine, entryData;
+				entryData = ();
+				mac = entry.first.findRegexp("HWaddr (.+)");
+				if(mac.notNil, {
+				entryData.put(\mac, mac[1][1].stripWhiteSpace);
+				}, {
+				"Did not find MAC for entry: %".format(entry).warn;
+				}
+				);
+				inetLine = entry.detect{arg line;
+				"\\<inet\\> .+".matchRegexp(line);
 				};
-				if(result.notNil, {
-					result.do({arg item;
-						localNetworks = localNetworks.add(
-							VTMLocalNetwork.performWithEnvir(\new, item)
-						);
-					});
-				});
+				// if(inetLine.notNil, {
+				// 	var regx;
+				// 	regx = inetLine.findRegexp("addr:(.+) Bcast:(.+) Mask:(.+)");
+				// 	if(regx.notEmpty, {
+				// 		entryData.put(\ip, regx[1][1].stripWhiteSpace);
+				// 		entryData.put(\broadcast, regx[2][1].stripWhiteSpace);
+				// 		entryData.put(\netmask, regx[3][1].stripWhiteSpace);
+				// 		}, {
+				// 			"Could not parse inet line for %\n\t%".format(
+				// 				entry.first, inetLine
+				// 			).warn;
+				// 	});
+				// 	}, {
+				// 		"Did not find IP and broadcast for %".format(
+				// 		String.newFrom(entry.flat)).warn;
+				// });
+				result.put(\hostname, this.hostname);
+				result = result.add(entryData);
+				};
+				// if(result.notNil, {
+				// 	result.do({arg item;
+				// 		localNetworks = localNetworks.add(
+				// 			VTMLocalNetwork.performWithEnvir(\new, item)
+				// 		);
+				// 	});
+				// });
+				*/
 			},
 			\windows, {
 				"No find local network method for Windows yet!".warn;
