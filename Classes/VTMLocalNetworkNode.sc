@@ -232,7 +232,6 @@ VTMLocalNetworkNode {
 			var result, entries;
 
 			lns.collect({arg line;
-				line.ascii.postln;
 				if(line.first != Char.tab, {
 					entries = entries.add([line]);
 				}, {
