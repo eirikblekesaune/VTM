@@ -345,7 +345,6 @@ VTMLocalNetworkNode {
 				var inetLine, hwLine;
 				#inetLine, hwLine = item;
 
-				test = item;
 				ip = inetLine.findRegexp("inet ([^\\s]+)");
 				ip = ip !? {ip[1][1];};
 				bcast = inetLine.findRegexp("broadcast ([^\\s]+)");
