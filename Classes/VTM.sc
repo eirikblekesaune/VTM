@@ -1,6 +1,7 @@
 VTM{
 	classvar <systemConfiguration;
 	classvar <>debugLevel = 0;
+	classvar <>debugFilterFunction;
 
 	*initClass{
 		var configFilePath = "~/.vtm.conf.yaml".standardizePath;
@@ -8,7 +9,7 @@ VTM{
 			try{
 				systemConfiguration = configFilePath.parseYAMLFile.changeScalarValuesToDataTypes;
 			} {
-				"Error reading VTM config file".warn;
+				"Failed to read VTM config file: %".format(configFilePath).warn;
 			}
 		}, {
 			systemConfiguration = IdentityDictionary.new;
