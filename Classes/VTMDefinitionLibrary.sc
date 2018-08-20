@@ -1,5 +1,5 @@
 VTMDefinitionLibrary {
-	var <definitions; 
+	var <definitions;
 	var <folderPaths;
 	classvar <global;//the definitions that are defined in the class files folder.
 	classvar <system;//the definitions loaded from the config file (~/.vtm.conf.yaml)
@@ -47,7 +47,7 @@ VTMDefinitionLibrary {
 		});
 		^result.deepCopy;
 	}
-	
+
 	*readLibrary{arg folderPaths;
 		var result = VTMOrderedIdentityDictionary.new;
 		var readEntry;
@@ -85,7 +85,7 @@ VTMDefinitionLibrary {
 					readEntry.value(entry, result);
 				});
 			}, {
-				Error("Did not find library folder: '%'".format(folderPath).postln;).throw;
+				Error("Did not find library folder: '%'".format(folderPath)).throw;
 			});
 		};
 		^result;

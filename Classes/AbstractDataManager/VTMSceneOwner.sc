@@ -21,7 +21,7 @@ VTMSceneOwner : VTMComposableContextManager {
 			newScene = sceneFactory.build(cue);
 		} {|err|
 			"Scene cue build error".warn;
-			err.postln;
+			err.throw;
 		};
 		this.addScene(newScene);
 	}

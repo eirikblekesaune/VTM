@@ -13,7 +13,7 @@ VTMElementView : VTMAbstractDataView {
 
 	rebuildComponentsView{
 		componentsView.children.do(_.remove);
-		"These are children: %".format(model.components).postln;
+		"These are children: %".format(model.components).vtmdebug(3, thisMethod);
 		componentsView.layout_(
 			VLayout(
 				*model.components.reject(_.isNil).collect({arg item;
@@ -75,8 +75,9 @@ VTMElementView : VTMAbstractDataView {
 
 	//pull style update
 	update{arg theChanged, whatChanged, whoChangedIt, toValue;
-		// "Dependant update: % % % %".format(
-		// theChanged, whatChanged, whoChangedIt, toValue).postln;
+		"Dependant update: % % % %".format(
+			theChanged, whatChanged, whoChangedIt, toValue
+		).vtmdebug(3, thisMethod);
 
 		//only update the view if the valueObj changed
 		if(theChanged === model, {

@@ -6,6 +6,6 @@ VTMHardwareDevice : VTMComposableContext {
 	}
 
 	initHardwareDevice{
-		//"VTMHardwareDevice initialized".debug;
+		"VTMHardwareDevice initialized".vtmdebug(3, thisMethod);
 	}
 }

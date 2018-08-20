@@ -95,7 +95,7 @@ VTMContextView : VTMView {
 
 	//pull style update
 	update{arg theChanged, whatChanged, whoChangedIt, toValue;
-		//"Dependant update: % % % %".format(theChanged, whatChanged, whoChangedIt, toValue).debug;
+		"Dependant update: % % % %".format(theChanged, whatChanged, whoChangedIt, toValue).vtmdebug(3, thisMethod);
 		if(theChanged === context, {//only update the view if the parameter changed
 			switch(whatChanged,
 				//\enabled, { this.enabled_(context.enabled); },

@@ -1,5 +1,6 @@
 VTM{
 	classvar <systemConfiguration;
+	classvar <>debugLevel = 0;
 
 	*initClass{
 		var configFilePath = "~/.vtm.conf.yaml".standardizePath;

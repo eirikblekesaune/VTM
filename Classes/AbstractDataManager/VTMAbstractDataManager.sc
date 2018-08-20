@@ -48,9 +48,12 @@ VTMAbstractDataManager {
 	freeItem{arg itemName;
 		if(this.hasItemNamed(itemName), {
 			var removedItem;
+			"% freeing item: %".format(this.fullPath, itemName).vtmdebug(2, thisMethod);
 			items[itemName].disable;//dissable actions and messages
 			removedItem = this.removeItem(itemName);
 			removedItem.free;
+		}, {
+			"% not freeing item: % since it was not found".format(this.fullPath, itemName).vtmdebug(2, thisMethod);
 		});
 	}
 

@@ -13,15 +13,13 @@ VTMParameterManagerView : VTMView {
 
 	initParameterManagerView{
 		parameterViews = [];
-		//"Context parameters are : %".format(this.context.parameters).debug;
+		"Context parameters are : %".format(this.context.parameters).vtmdebug(4, thisMethod);
 		if(this.context.parameters.notEmpty, {
 			parameterViews = this.context.parameterOrder.collect({arg item;
-				//"making para view: %".format(item).debug;
+				"making para view: %".format(item).vtmdebug(4, thisMethod);
 				this.context.parameters[item].makeView(this);
 			});
 		});
-
-		// ([11,22,33,44].flop ++ [\align, \topLeft]).flop
 
 		this.layout_(
 			VLayout(*(parameterViews.flop ++ [\align, \topLeft]).flop)

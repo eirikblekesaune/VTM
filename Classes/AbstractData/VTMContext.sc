@@ -235,7 +235,7 @@ VTMContext : VTMElement {
 	}
 
 	update{arg theChanged, whatChanged, theChanger ...args;
-		// "[%] Update: %".format(this.name, [theChanged, whatChanged, theChanger, args]).debug;
+		"[%] Update: %".format(this.name, [theChanged, whatChanged, theChanger, args]).vtmdebug(2);
 	}
 
 	enableOSC {

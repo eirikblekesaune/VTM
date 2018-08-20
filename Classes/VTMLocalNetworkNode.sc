@@ -56,7 +56,7 @@ VTMLocalNetworkNode {
 				if(hostnames.detect({arg item;
 					item == this.name;
 				}).notNil, {
-					//"Remote VTM activation from: %".format(addr).debug;
+					"Remote VTM activation from: %".format(addr).vtmdebug(2, thisMethod);
 					this.activate(doDiscovery: true);
 				})
 			}, '/activate', recvPort: this.class.discoveryBroadcastPort);
@@ -80,9 +80,9 @@ VTMLocalNetworkNode {
 				});
 
 				if(localNetwork.isNil, {
-					"Discovery was sent from a network where this network node is not connected:".postln;
-					"\thostname: %".format(senderHostname).postln;
-					"\taddress: %".format(senderAddr).postln;
+					"Discovery was sent from a network where this network node is not connected:" ++
+					"\thostname: %".format(senderHostname) ++
+					"\taddress: %".format(senderAddr).vtmdebug(1, thisMethod);
 				}, {
 					//Check if it the local computer that sent it.
 					if(senderAddr.isLocal.not, {
@@ -91,9 +91,9 @@ VTMLocalNetworkNode {
 						isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
 						if(isAlreadyRegistered.not, {
 							var newNetworkNode;
-							"Registering new network node:".postln;
-							"\tname: '%'".format(senderHostname).postln;
-							"\taddr: '%'".format(senderAddr).postln;
+							"Registering new network node:" ++
+							"\tname: '%'".format(senderHostname) ++
+							"\taddr: '%'".format(senderAddr).vtmdebug(1, thisMethod);
 							newNetworkNode = VTMRemoteNetworkNode(
 								senderHostname,
 								(
@@ -142,9 +142,9 @@ VTMLocalNetworkNode {
 					isAlreadyRegistered = networkNodeManager.hasItemNamed(senderHostname);
 					if(isAlreadyRegistered.not, {
 						var newNetworkNode;
-						"Registering new network node:".postln;
-						"\tname: '%'".format(senderHostname).postln;
-						"\taddr: '%'".format(senderAddr).postln;
+						"Registering new network node:" ++
+						"\tname: '%'".format(senderHostname) ++
+						"\taddr: '%'".format(senderAddr).vtmdebug(2, thisMethod);
 						newNetworkNode = VTMRemoteNetworkNode(
 							senderHostname,
 							(
@@ -177,7 +177,7 @@ VTMLocalNetworkNode {
 					if(networkNodeManager.hasItemNamed(senderHostname), {
 						var networkNode = networkNodeManager[senderHostname];
 						networkNode.free;
-						"Remote network node: '%' sent '/shutdown'".format(senderHostname).postln;
+						"Remote network node: '%' sent '/shutdown'".format(senderHostname).vtmdebug(1, thisMethod);
 					});
 				});
 			}, '/shutdown', recvPort: this.class.discoveryBroadcastPort);
@@ -185,7 +185,7 @@ VTMLocalNetworkNode {
 
 		//Notify shutdown to other nodes
 		ShutDown.add({
-			"Shutting down VTM".postln;
+			"Shutting down VTM".vtmdebug(1, thisMethod);
 			[
 				shutdownResponder,
 				discoveryReplyResponder,

@@ -20,7 +20,7 @@ VTMView : View {
 	*new{arg parent, bounds, definition, settings, model;
 		var viewBounds;
 		viewBounds = bounds ?? { this.prCalculateSize(1).asRect; };
-		//"Making VTM view with parent: %".format(parent).debug;
+		"Making VTM view with parent: %".format(parent).vtmdebug(4, thisMethod);
 		^super.new(parent, viewBounds).init(definition, settings, model);
 	}
 

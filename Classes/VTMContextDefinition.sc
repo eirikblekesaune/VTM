@@ -12,7 +12,7 @@ VTMContextDefinition {
 		var definitionName = pathName.fileName.findRegexp("(.+)_definition.scd$")[1][1].asSymbol;
 		var loadedEnvir;
 		try{
-			"filepath to load: %".format(pathName.fullPath).debug;
+			"filepath to load: %".format(pathName.fullPath).vtmdebug(4, thisMethod);
 			if(File.exists(pathName.fullPath).not, {
 				Error(
 					"Definifion file not found at path: '%'".format(pathName.fullPath)
@@ -20,9 +20,11 @@ VTMContextDefinition {
 			});
 			loadedEnvir = File.loadEnvirFromFile(pathName.fullPath);
 			if(loadedEnvir.isNil, {
-				Error("Could not load environment from definition file: '%'".format(
-					pathName.fullPath
-				)).throw;
+				Error(
+					"Could not load environment from definition file: '%'".format(
+						pathName.fullPath
+					)
+				).throw;
 			}, {
 				^this.new(loadedEnvir, definitionName, filepath);
 			});
@@ -50,7 +52,7 @@ VTMContextDefinition {
 		//			\mappings -> VTMOrderedIdentityDictionary.new,
 		//			\scores -> VTMOrderedIdentityDictionary.new
 		//];
-		"ContextDefinition:% - init".format(name).debug;
+		"init: %".format(name).vtmdebug(4, thisMethod);
 		//		if(env_.notNil, {
 		//			var envToLoad = env_.deepCopy;
 		//			//Turn any arrays of Associations into OrderedIdentityDictionaries
@@ -78,7 +80,7 @@ VTMContextDefinition {
 //			definition.putAll(envToLoad);
 //		});
 	}
-	
+
 	makeEnvir{arg context;
 		var result;
 		result = definition.deepCopy.put(\self, context);
