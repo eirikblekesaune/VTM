@@ -18,6 +18,7 @@ VTMLocalNetworkNode {
 	var <sceneOwner;
 	var <scoreManager;
 	var <networkNodeManager;
+	var <cueManager;
 
 	var <active = false;
 
@@ -39,6 +40,8 @@ VTMLocalNetworkNode {
 		moduleHost = VTMModuleHost.new(nil, this);
 		sceneOwner = VTMSceneOwner.new(nil, this);
 		scoreManager = VTMScoreManager.new(nil, this);
+		cueManager = VTMCueManager.new(nil, this);
+
 		hostname = Pipe("hostname", "r").getLine();
 		if(".local$".matchRegexp(hostname), {
 			hostname = hostname.drop(-6);
@@ -441,7 +444,9 @@ VTMLocalNetworkNode {
 		{class.isKindOf(VTMHardwareDevice.class) } {managerObj =  hardwareSetup; }
 		{class.isKindOf(VTMScene.class) } {managerObj =  sceneOwner; }
 		{class.isKindOf(VTMScore.class) } {managerObj =  scoreManager; }
-		{class.isKindOf(VTMApplication.class) } {managerObj =  applicationManager; };
+		{class.isKindOf(VTMApplication.class) } {managerObj =  applicationManager; }
+		{class.isKindOf(VTMCue.class) } {managerObj =  cueManager; }
+		{class.isKindOf(VTMRemoteNetworkNode.class) } {managerObj =  networkNodeManager; };
 		^managerObj;
 	}
 
