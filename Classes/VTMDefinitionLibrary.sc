@@ -62,7 +62,7 @@ VTMDefinitionLibrary {
 					try{
 						loadedEnvir = File.loadEnvirFromFile(entryPathName.fullPath);
 						if(loadedEnvir.isNil, {
-							Error("Could not load environment from definition file: '%'".format(
+							VTMError("Could not load environment from definition file: '%'".format(
 								entryPathName
 							)).throw;
 						}, {
@@ -85,7 +85,7 @@ VTMDefinitionLibrary {
 					readEntry.value(entry, result);
 				});
 			}, {
-				Error("Did not find library folder: '%'".format(folderPath)).throw;
+				VTMError("Did not find library folder: '%'".format(folderPath)).throw;
 			});
 		};
 		^result;

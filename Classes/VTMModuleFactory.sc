@@ -18,7 +18,7 @@ VTMModuleFactory{
 			var defName;
 			//Module declaration must define a def name, if not defined in arg
 			if(declaration.includesKey(\definition).not, {
-				Error("Module declaration for '%' is missing module definition name".format(declaration[\name])).throw;
+				VTMError("Module declaration for '%' is missing module definition name".format(declaration[\name])).throw;
 				^nil;
 			});
 
@@ -28,7 +28,7 @@ VTMModuleFactory{
 			moduleDefinition = this.host.getDefinition(defName);
 
 			if(moduleDefinition.isNil) {
-				Error(
+				VTMError(
 					"Could not find module definition for '%'".format(
 						defName
 					)
@@ -41,7 +41,7 @@ VTMModuleFactory{
 			// try{
 			// 	moduleDefinition = Environment.make(moduleDefinition);
 			// } {|err|
-			// 	Error(
+			// 	VTMError(
 			// 		"Could not compile module definition '%'".format(
 			// 			defName
 			// 		)

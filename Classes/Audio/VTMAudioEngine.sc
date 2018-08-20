@@ -49,7 +49,7 @@ VTMAudioEngine {
 // 			// );
 // 			server.waitForBoot(
 // 				onFailure: {
-// 					Error("ScSynth server failed to boot").throw;
+// 					VTMError("ScSynth server failed to boot").throw;
 // 				}
 // 			);
 // 		};

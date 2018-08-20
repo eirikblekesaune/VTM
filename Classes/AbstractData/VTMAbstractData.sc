@@ -23,7 +23,7 @@ VTMAbstractData {
 			});
 		});
 		if(name.isNil, {
-			Error(
+			VTMError(
 				"% - 'name' not defined".format(this)
 			).throw;
 		});
@@ -63,17 +63,20 @@ VTMAbstractData {
 				checkType = val[\strictType] ? true;
 				if(checkType, {
 					if(tempVal.isValidType(declaration[key]).not, {
-						Error("Parameter value '%' must be of type '%' value: %"
-							.format(key, tempVal.type,
-								tempVal.value.asCompileString))
-							.throw;
+						VTMError(
+							"Parameter value '%' must be of type '%' value: %".format(
+								key,
+								tempVal.type,
+								tempVal.value.asCompileString
+							)
+						).throw;
 					});
 				});
 				//check if value is e.g. within described range.
 				checkValue = val[\strictValid] ? false;
 				if(checkValue, {
 					if(tempVal.isValidValue(declaration[key]).not, {
-						Error("Parameter value '%' is invalid"
+						VTMError("Parameter value '%' is invalid"
 							.format(key)).throw;
 					});
 				});
@@ -92,7 +95,7 @@ VTMAbstractData {
 				//if not check if it is optional, true by default
 				optional = val[\optional] ? true;
 				if(optional.not, {
-					Error("Parameters is missing non-optional value '%'"
+					VTMError("Parameters is missing non-optional value '%'"
 						.format(key)).throw;
 				}, {
 					//otherwise use the default value for the parameter

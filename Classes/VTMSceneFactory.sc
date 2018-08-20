@@ -33,7 +33,7 @@ VTMSceneFactory{
 		);
 		//>Check if scene declaration contains a name. Issue error if not.
 		if(sceneDeclaration.includesKey(\name).not, {
-			buildResult[\errors] = buildResult[\error].add(Error("Scene declaration must have name"));
+			buildResult[\errors] = buildResult[\error].add(VTMError("Scene declaration must have name"));
 		});
 
 		//>determine the build order by searching the scene declaration for references

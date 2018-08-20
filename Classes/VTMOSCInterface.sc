@@ -19,7 +19,7 @@ VTMOSCInterface {
 				.format(parent.class)).throw;
 		});
 
-		//debug(format("OSC Interface created for: %", parent.fullPath()));
+		"OSC Interface created for: %".format(parent.fullPath).vtmdebug(4, thisMethod);
 		^super.newCopyArgs(parent);
 	}
 
@@ -35,16 +35,13 @@ VTMOSCInterface {
 		responder = OSCFunc({|msg, time, addr, recvport|
 			var path = msg[0];
 			msg = msg.drop(1);
-			// debug(
-				// format(
-					// "OSC Message received at %, on port %, addressed to: %, with value: %", time, recvport, path, msg));
+			"OSC Message received at %, on port %, addressed to: %, with value: %".format(
+				time, recvport, path, msg
+			).vtmdebug(5, thisMethod);
 
 			//this is a temporary hack that will be removed.
 			parent.valueAction_(*msg);
 			/////////
-
-
-
 		}, parent.fullPath, recvPort: NetAddr.localAddr.port());
 
 		//make compliant responder if path is not compliant with OSC standard
@@ -54,7 +51,8 @@ VTMOSCInterface {
 			compliant_responder = OSCFunc({|msg, time, addr, recvport|
 				var path = msg[0];
 				msg = msg.drop(1);
-					// debug(format("OSC Message received at %, on port %, addressed to: %, with value: %", time, recvport, path, msg));
+				"OSC Message received at %, on port %, addressed to: %, with value: %".format(
+					time, recvport, path, msg).vtmdebug(5, thisMethod);
 			}, VTMOSCInterface.makeOSCPathCompliant(parent.fullPath.asString()),
 			recvPort: NetAddr.localAddr.port());
 		});

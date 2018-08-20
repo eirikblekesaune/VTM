@@ -54,7 +54,7 @@ VTMContext : VTMElement {
 		};
 
 		if(loadedContextDefinition.isNil, {
-			Error("Failed to make ContextDefinition for '%'".format(name)).throw;
+			VTMError("Failed to make ContextDefinition for '%'".format(name)).throw;
 		});
 		^super.new(name, declaration, manager).initContext(
 			loadedContextDefinition);

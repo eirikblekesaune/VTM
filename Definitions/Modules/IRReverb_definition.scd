@@ -10,14 +10,14 @@
 		if(File.exists(declaration.at(\irFilePath)), {
 			irFilePath = declaration.at(\irFilePath);
 		}, {
-			Error("irReverb module failed to build: ir file not found '%'".format(declaration.at(\irFilePath))).throw;
+			VTMError("irReverb module failed to build: ir file not found '%'".format(declaration.at(\irFilePath))).throw;
 		})
 	}, {
-		Error("irReverb module failed to build: Needs irFilePath").throw;
+		VTMError("irReverb module failed to build: Needs irFilePath").throw;
 	});
 	if(declaration.includesKey(\fftSize), {
 		if(declaration[\fftSize].isNumber.not, {
-			Error().throw;
+			VTMError().throw;
 		})
 	});
 
@@ -51,7 +51,7 @@
 	~server.sync;
 	irBuffer.free;
 	if(bufferLoaded.not, {
-		"KLANG: Error while loading ir response".warn;
+		VTMError("KLANG: Error while loading ir response").throw;
 	});
 
 	// ~filterKlang[1] = \filter -> {|in|

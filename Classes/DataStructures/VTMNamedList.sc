@@ -57,7 +57,7 @@ VTMNamedList {
 
 				});
 			}, {
-				Error("%:% - Items must be a kind of SequenceableCollection: %.".format(
+				VTMError("%:% - Items must be a kind of SequenceableCollection: %.".format(
 					this.class.name, thisMethod.name, val
 				)).throw;
 			});
@@ -133,7 +133,7 @@ VTMNamedList {
 		if(itemToChange.notNil, {
 			itemToChange.put(\name, name);
 		}, {
-			Error("%:% - Item number not found %.".format(
+			VTMError("%:% - Item number not found %.".format(
 				this.class.name, thisMethod.name, number
 			)).throw;
 		});
@@ -221,7 +221,7 @@ VTMNamedList {
 		if(itemToMove.notNil, {
 			items.insert(slot, itemToMove);
 		}, {
-			Error("%:% - Slot number/name not found: %.".format(
+			VTMError("%:% - Slot number/name not found: %.".format(
 				this.class.name, thisMethod.name, name
 			)).throw;
 		});

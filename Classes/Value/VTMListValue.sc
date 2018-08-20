@@ -90,7 +90,7 @@ VTMListValue : VTMCollectionValue {
 			});
 
 		}, {
-			Error("ListValue items already built, please free current and build a new Value.").throw;
+			VTMError("ListValue items already built, please free current and build a new Value.").throw;
 		});
 	}
 
