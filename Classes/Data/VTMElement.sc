@@ -2,13 +2,7 @@
 An Element is an object that has components.
 */
 VTMElement : VTMData {
-	var attributes;
-	var commands;
-	var returns;
-	var signals;
-	var mappings;
-	var cues;
-	var scores;
+	var <components;
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initElement;
@@ -21,69 +15,43 @@ VTMElement : VTMData {
 	}
 
 	initComponents{
-		this.prInitAttributes;
-		this.prInitSignals;
-		this.prInitReturns;
-		this.prInitCommands;
-		this.prInitMappings;
-		this.prInitCues;
-		this.prInitScores;
+		var itemDeclarations;
+		components = VTMOrderedIdentityDictionary[];
 
-	}
-
-	prInitAttributes{
-		var itemDeclarations = VTMOrderedIdentityDictionary.new;
+		itemDeclarations = VTMOrderedIdentityDictionary.new;
 		this.class.attributeDescriptions.keysValuesDo({arg attrKey, attrDesc;
 			itemDeclarations.put(attrKey, attrDesc.deepCopy);
 			if(declaration.includesKey(attrKey), {
 				itemDeclarations.at(attrKey).put(\value, declaration[attrKey]);
 			});
 		});
-		attributes = VTMAttributeManager(itemDeclarations);
-	}
+		components.put(\attributes,  VTMAttributeManager(itemDeclarations));
 
-	prInitSignals{
-		var itemDeclarations = this.class.signalDescriptions.deepCopy;
-		signals = VTMSignalManager(itemDeclarations);
-	}
+		itemDeclarations = this.class.signalDescriptions.deepCopy;
+		components.put(\signals, VTMSignalManager(itemDeclarations));
 
-	prInitReturns{
-		var itemDeclarations = this.class.returnDescriptions.deepCopy;
-		returns  = VTMReturnManager(itemDeclarations);
-	}
+		itemDeclarations = this.class.returnDescriptions.deepCopy;
+		components.put(\returns, VTMReturnManager(itemDeclarations));
 
-	prInitCommands{
-		var itemDeclarations = this.class.commandDescriptions.deepCopy;
-		commands = VTMCommandManager(itemDeclarations);
-	}
+		itemDeclarations = this.class.commandDescriptions.deepCopy;
+		components.put(\commands, VTMCommandManager(itemDeclarations));
 
-	prInitMappings{
-		var itemDeclarations = this.class.mappingDescriptions.deepCopy;
-		mappings = VTMMappingManager(itemDeclarations);
-	}
+		itemDeclarations = this.class.mappingDescriptions.deepCopy;
+		components.put(\mappings, VTMMappingManager(itemDeclarations));
 
-	prInitCues{
-		var itemDeclarations = this.class.cueDescriptions.deepCopy;
-		cues = VTMCueManager(itemDeclarations, this);
-	}
+		itemDeclarations = this.class.cueDescriptions.deepCopy;
+		components.put(\cues, VTMCueManager(itemDeclarations));
 
-	prInitScores{
-		var itemDeclarations = this.class.scoreDescriptions.deepCopy;
-		scores = VTMScoreManager(itemDeclarations, this);
-	}
-
-
-
-	components{
-		^[attributes, returns, signals, commands, mappings, cues, scores];
+		itemDeclarations = this.class.scoreDescriptions.deepCopy;
+		components.put(\scores, VTMScoreManager(itemDeclarations));
 	}
 
 	numComponents{
-		^this.components.size;
+		^components.collect(_.size).sum;
 	}
 
 	free{
-		this.components.select(_.notNil).do(_.free);
+		this.components.do(_.free);
 		super.free;
 	}
 
@@ -103,19 +71,21 @@ VTMElement : VTMData {
 			\commands -> this.commandDescriptions,
 			\signals -> this.signalDescriptions,
 			\returns -> this.returnDescriptions,
-			\mappings -> this.mappingDescriptions
+			\mappings -> this.mappingDescriptions,
+			\cues -> this.cueDescriptions,
+			\scores -> this.scoreDescriptions
 		]);
 		^result;
 	}
 
 	//set attribute values.
 	set{arg key...args;
-		attributes.set(key, *args);
+		components[\attributes].set(key, *args);
 	}
 
 	//get attribute(init or run-time) or parameter(init-time) values.
 	get{arg key;
-		var result = attributes.get(key);
+		var result = components[\attributes].get(key);
 		if(result.notNil, {
 			^result;
 		});
@@ -125,12 +95,12 @@ VTMElement : VTMData {
 
 	//do command with possible value args. Only run-time.
 	doCommand{arg key ...args;
-		commands.doCommand(key, *args);
+		components[\commands].doCommand(key, *args);
 	}
 
 	//get return results. Only run-time
 	query{arg key;
-		^returns.query(key);
+		^components[\returns].query(key);
 	}
 
 	//emits a signal
@@ -138,60 +108,59 @@ VTMElement : VTMData {
 	//TODO: How to make this method esily avilable from within a
 	//context definition, and still protected from the outside?
 	emit{arg key...args;
-		signals.emit(key, *args);
+		components[\signals].emit(key, *args);
 	}
 
 	return{arg key ...args;
-		returns.return(key, *args);
+		components[\returns].return(key, *args);
 	}
 
 	onSignal{arg key, func;
-		//TODO: Warn or throw if signal not found
-		if(signals.hasItemNamed(key), {
-			signals[key].action_(func);
+		if(components[\signals].hasItemNamed(key), {
+			components[\signals][key].action_(func);
 		});
 	}
 
 	attributes {
-		^attributes.names;
+		^components[\attributes].names;
 	}
 
 	commands{
-		^commands.names;
+		^components[\commands].names;
 	}
 
 	returns{
-		^returns.names;
+		^components[\returns].names;
 	}
 
 	signals{
-		^signals.names;
+		^components[\signals].names;
 	}
 
 	mappings {
-		^mappings.names;
+		^components[\mappings].names;
 	}
 
 	cues {
-		^cues.names;
+		^components[\cues].names;
 	}
 
 	scores {
-		^scores.names;
+		^components[\scores].names;
 	}
 
 	addForwarding{arg key, compName, itemName,  addr, path, vtmJson = false, mapFunc;
 		var comp = switch(compName,
-			\attributes, {attributes},
-			\returns, {returns}
+			\attributes, {components[\attributes]},
+			\returns, {components[\returns]}
 		);
 		comp.addForwarding(key, itemName, addr, path, vtmJson, mapFunc);
 	}
 
 	removeForwarding{arg key, compName, itemName;
 		var comp = switch(compName,
-			\attributes, {attributes},
-			\returns, {returns}
+			\attributes, {components[\attributes]},
+			\returns, {components[\returns]}
 		);
 		comp.removeForwarding(key, itemName);
 	}
