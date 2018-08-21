@@ -40,18 +40,18 @@ VTMContextDefinition {
 		if(filepath_.notNil, {
 			pathName = PathName(filepath_);
 		});
-		//		definition = Environment[
-		//			\name -> name,
-		//			\parameters -> VTMOrderedIdentityDictionary.new,
-		//			\attributes -> VTMOrderedIdentityDictionary.new,
-		//			\commands -> VTMOrderedIdentityDictionary.new,
-		//			\presets -> VTMOrderedIdentityDictionary.new,
-		//			\returns -> VTMOrderedIdentityDictionary.new,
-		//			\signals -> VTMOrderedIdentityDictionary.new,
-		//			\cues -> VTMOrderedIdentityDictionary.new,
-		//			\mappings -> VTMOrderedIdentityDictionary.new,
-		//			\scores -> VTMOrderedIdentityDictionary.new
-		//];
+		definition = Environment[
+			\name -> name,
+			\parameters -> VTMOrderedIdentityDictionary.new,
+			\attributes -> VTMOrderedIdentityDictionary.new,
+			\commands -> VTMOrderedIdentityDictionary.new,
+			\presets -> VTMOrderedIdentityDictionary.new,
+			\returns -> VTMOrderedIdentityDictionary.new,
+			\signals -> VTMOrderedIdentityDictionary.new,
+			\cues -> VTMOrderedIdentityDictionary.new,
+			\mappings -> VTMOrderedIdentityDictionary.new,
+			\scores -> VTMOrderedIdentityDictionary.new
+		];
 		"init: %".format(name).vtmdebug(4, thisMethod);
 		//		if(env_.notNil, {
 		//			var envToLoad = env_.deepCopy;
@@ -60,25 +60,25 @@ VTMContextDefinition {
 		//			definition.keys.do({arg compName;
 		//				if(envToLoad.includesKey(compName), {
 		//					var itemDeclarations;
-//					//Remove the itemDeclarations for this component key
-//					//so that we can add the remaing ones after changes has been made.
-//					itemDeclarations = envToLoad.removeAt(compName);
-//					//If it is an array of associations we change it to OrderedeIdentotitDictionary
-//					if(itemDeclarations.isArray and: {itemDeclarations.every{arg it; it.isKindOf(Association); } }, {
-//						itemDeclarations.do({arg itemDeclaration;
-//							definition[compName].put(
-//								itemDeclaration.key,
-//							   	itemDeclaration.value
-//							);
-//						});
-//					}, {
-//						//otherwise we assume it is a kind of dictionary.
-//						//TODO: Handle dicationaries as arguments
-//					});
-//				});
-//			});
-//			definition.putAll(envToLoad);
-//		});
+		//					//Remove the itemDeclarations for this component key
+		//					//so that we can add the remaing ones after changes has been made.
+		//					itemDeclarations = envToLoad.removeAt(compName);
+		//					//If it is an array of associations we change it to OrderedeIdentotitDictionary
+		//					if(itemDeclarations.isArray and: {itemDeclarations.every{arg it; it.isKindOf(Association); } }, {
+		//						itemDeclarations.do({arg itemDeclaration;
+		//							definition[compName].put(
+		//								itemDeclaration.key,
+		//							   	itemDeclaration.value
+		//							);
+		//						});
+		//					}, {
+		//						//otherwise we assume it is a kind of dictionary.
+		//						//TODO: Handle dicationaries as arguments
+		//					});
+		//				});
+		//			});
+		//			definition.putAll(envToLoad);
+		//		});
 	}
 
 	makeEnvir{arg context;
@@ -88,7 +88,11 @@ VTMContextDefinition {
 	}
 
 	filepath{
-		^pathName.fullPath;
+		var result;
+		if(pathName.notNil, {
+			result = pathName.fullPath;
+		});
+		^result;
 	}
 
 	parameters{
@@ -99,6 +103,9 @@ VTMContextDefinition {
 	}
 	commands{
 		^definition[\command];
+	}
+	returns{
+		^definition[\returns];
 	}
 	presets{
 		^definition[\presets];
@@ -119,6 +126,7 @@ VTMContextDefinition {
 			\parameters -> this.parameters,
 			\attributes -> this.attributes,
 			\commands -> this.commands,
+			\returns -> this.returns,
 			\presets -> this.presets,
 			\cues -> this.cues,
 			\mappings -> this.mappings,

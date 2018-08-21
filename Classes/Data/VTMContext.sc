@@ -1,3 +1,6 @@
+/*
+A Context is comething that manages an inner runtime environment
+*/
 VTMContext : VTMElement {
 	var definition;
 	var buildFunction;
@@ -6,8 +9,6 @@ VTMContext : VTMElement {
 	var <addr; //the address for this object instance.
 	var <state;
 	var stateChangeCallbacks;
-	var cues;
-	var scores;
 	var condition;
 	var library;
 
@@ -67,60 +68,12 @@ VTMContext : VTMElement {
 
 		envir = definition.makeEnvir;
 		condition = Condition.new;
-//		this.prChangeState(\loadedDefinition);
-//		this.prInitCues;
-//		this.prInitScores;
-//		this.prInitComponentsWithContextDefinition;
-//		this.prChangeState(\didInitialize);
+		this.prChangeState(\loadedDefinition);
 	}
 
 	isUnmanaged{
 		^manager.parent === VTM.local;
 	}
-
-	prInitCues{
-		var itemDeclarations = this.class.cueDescriptions.deepCopy;
-		cues = VTMCueManager(itemDeclarations, this);
-	}
-
-	prInitScores{
-		var itemDeclarations = this.class.scoreDescriptions.deepCopy;
-		scores = VTMScoreManager(itemDeclarations, this);
-	}
-
-	prInitComponentsWithContextDefinition{
-//		this.components.select(_.notNil).do({arg component;
-//			var compName = component.name;
-//			if(envir.includesKey(compName), {
-//				var newItem, itemDeclarations;
-//				itemDeclarations = envir[compName];
-//				component.addItemsFromItemDeclarations(itemDeclarations);
-//			});
-//		});
-		this.prAddComponentsToEnvir(envir);
-	}
-
-	prAddComponentsToEnvir{arg componentDeclarations;
-		this.components.select(_.notNil).do({arg component;
-			var compName;
-			compName = component.name;
-			if(componentDeclarations.includesKey(compName), {
-				var newItem, itemDeclarations;
-				itemDeclarations = componentDeclarations[compName];
-				//TODO: This is a temporary hack that checks the type of the argument.
-				if(itemDeclarations.isKindOf(ArrayedCollection), {
-					itemDeclarations = VTMOrderedIdentityDictionary.with(
-						*itemDeclarations
-					);
-				});
-				component.addItemsFromItemDeclarations(itemDeclarations);
-			});
-		});
-	}
-
-	// components{
-	// 	^super.components ++ [cues, scores];
-	// }
 
 	//The context that calls prepare can issue a condition to use for handling
 	//asynchronous events. If no condition is passed as argument the context will
@@ -250,29 +203,6 @@ VTMContext : VTMElement {
 		super.disableOSC();
 	}
 
-	//recursive == true pulls declaration from components
-	//recursive == false pulls only name declaration of components
-	///TODO: Implement gettin gdeclaration from components
-	declaration{arg recursive = false;
-		var result = super.declaration;
-		// var nonEmptyComps = this.components.select({arg item; item.isEmpty.not; });
-		// if(recursive, {
-		// 	nonEmptyComps.do({arg comp;
-		// 		var val;
-		// 		val = comp.declaration(recursive: true);
-		// 		result.put(comp.name, val);
-		// 	});
-		// 	}, {
-		// 		nonEmptyComps.do({arg comp;
-		// 			result.put(comp.name, comp.names);
-		// 		});
-		// });
-		^result;
-	}
-
-	*cueDescriptions{  ^VTMOrderedIdentityDictionary[]; }
-	*scoreDescriptions{ ^VTMOrderedIdentityDictionary[]; }
-
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll( VTMOrderedIdentityDictionary[
 			\definition -> (type: \string, optional: true)
@@ -311,13 +241,5 @@ VTMContext : VTMElement {
 			result = func.inEnvir;
 		};
 		^result;
-	}
-
-	cues {
-		^cues.names;
-	}
-
-	scores {
-		^scores.names;
 	}
 }

@@ -7,6 +7,8 @@ VTMElement : VTMData {
 	var returns;
 	var signals;
 	var mappings;
+	var cues;
+	var scores;
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initElement;
@@ -24,6 +26,9 @@ VTMElement : VTMData {
 		this.prInitReturns;
 		this.prInitCommands;
 		this.prInitMappings;
+		this.prInitCues;
+		this.prInitScores;
+
 	}
 
 	prInitAttributes{
@@ -57,8 +62,20 @@ VTMElement : VTMData {
 		mappings = VTMMappingManager(itemDeclarations);
 	}
 
+	prInitCues{
+		var itemDeclarations = this.class.cueDescriptions.deepCopy;
+		cues = VTMCueManager(itemDeclarations, this);
+	}
+
+	prInitScores{
+		var itemDeclarations = this.class.scoreDescriptions.deepCopy;
+		scores = VTMScoreManager(itemDeclarations, this);
+	}
+
+
+
 	components{
-		^[attributes, returns, signals, commands, mappings];
+		^[attributes, returns, signals, commands, mappings, cues, scores];
 	}
 
 	numComponents{
@@ -75,6 +92,9 @@ VTMElement : VTMData {
 	*returnDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 	*signalDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 	*mappingDescriptions{ ^VTMOrderedIdentityDictionary[]; }
+	*cueDescriptions{  ^VTMOrderedIdentityDictionary[]; }
+	*scoreDescriptions{ ^VTMOrderedIdentityDictionary[]; }
+
 
 	*description{
 		var result = super.description;
@@ -150,6 +170,14 @@ VTMElement : VTMData {
 
 	mappings {
 		^mappings.names;
+	}
+
+	cues {
+		^cues.names;
+	}
+
+	scores {
+		^scores.names;
 	}
 
 	addForwarding{arg key, compName, itemName,  addr, path, vtmJson = false, mapFunc;
