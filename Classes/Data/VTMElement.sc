@@ -3,6 +3,7 @@ An Element is an object that has components.
 */
 VTMElement : VTMData {
 	var <components;
+	var compNameRoutes;
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initElement;
@@ -44,6 +45,22 @@ VTMElement : VTMData {
 
 		itemDeclarations = this.class.scoreDescriptions.deepCopy;
 		components.put(\scores, VTMScoreManager(itemDeclarations));
+
+		//make a namespace routing dictionary
+		compNameRoutes = VTMOrderedIdentityDictionary[];
+		components.keysValuesDo({arg key, compMan;
+			compMan.items.do({arg it;
+				//Warn if some components have the same name
+				if(compNameRoutes.includesKey(it.name), {
+					"%\n\tComponent %:% hides component %:%".format(
+						this.fullPath,
+						key, it.name,
+						compNameRoutes[it.name], it.name
+					).warn;
+				});
+				compNameRoutes.put(it.name, key);
+			})
+		});
 	}
 
 	numComponents{
