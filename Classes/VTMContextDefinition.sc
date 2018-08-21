@@ -112,4 +112,18 @@ VTMContextDefinition {
 	scores{
 		^definition[\scores];
 	}
+
+	description{
+		var result = VTMOrderedIdentityDictionary[
+			\name -> this.name,
+			\parameters -> this.parameters,
+			\attributes -> this.attributes,
+			\commands -> this.commands,
+			\presets -> this.presets,
+			\cues -> this.cues,
+			\mappings -> this.mappings,
+			\scores -> this.scores
+		];
+		^result;
+	}
 }

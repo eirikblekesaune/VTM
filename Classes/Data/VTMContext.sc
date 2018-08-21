@@ -294,9 +294,11 @@ VTMContext : VTMElement {
    	}
 
 	description{arg includeDeclaration = false;
-		^super.description(includeDeclaration).putAll(
-			definition.description
+		var result;
+		result = super.description(includeDeclaration).put(
+			\definition, definition.description
 		);
+		^result;
 	}
 
 	//Make a function that evaluates in the envir.
