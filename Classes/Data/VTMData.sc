@@ -4,6 +4,8 @@ VTMData {
 	var parameters;
 	var oscInterface;
 	var declaration;
+	
+	classvar <isAbstractClass=true;
 
 	*viewClass{
 		^\VTMDataView.asClass;

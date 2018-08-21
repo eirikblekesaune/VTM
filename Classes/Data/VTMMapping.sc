@@ -1,6 +1,7 @@
 VTMMapping : VTMValueElement {
 	var source;
 	var destination;
+	classvar <isAbstractClass=false;
 	*managerClass{ ^VTMMappingManager; }
 
 	*new{arg name, declaration, manager;

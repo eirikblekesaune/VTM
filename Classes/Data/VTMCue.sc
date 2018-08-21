@@ -4,6 +4,7 @@ VTMCue : VTMComposableContext {
 	var >endAction; //a function
 	var condition;
 	var <>armed = true;
+	classvar <isAbstractClass=false;
 
 
 	*managerClass{ ^VTMCueManager; }

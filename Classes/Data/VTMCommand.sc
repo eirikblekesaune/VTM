@@ -1,4 +1,5 @@
 VTMCommand : VTMValueElement {
+	classvar <isAbstractClass=false;
 
 	*managerClass{ ^VTMCommandManager; }
 

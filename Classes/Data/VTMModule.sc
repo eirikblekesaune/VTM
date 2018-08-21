@@ -1,5 +1,6 @@
 //children may be Module
 VTMModule : VTMComposableContext {
+	classvar <isAbstractClass=false;
 
 	*managerClass{ ^VTMModuleHost; }
 

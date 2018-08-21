@@ -1,4 +1,5 @@
 VTMScene : VTMComposableContext {
+	classvar <isAbstractClass=false;
 
 	*managerClass{ ^VTMSceneOwner; }
 

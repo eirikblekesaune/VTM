@@ -1,4 +1,6 @@
 VTMHardwareDevice : VTMComposableContext {
+	classvar <isAbstractClass=false;
+
 	*managerClass{ ^VTMHardwareSetup; }
 
 	*new{arg name, declaration, manager, definition;

@@ -3,6 +3,7 @@ VTMApplication : VTMContext {
 	var <modules;
 	var <hardwareDevices;
 	var <libraries;
+	classvar <isAbstractClass=false;
 
 	*managerClass{ ^VTMApplicationManager; }
 
