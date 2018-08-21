@@ -1,2 +1,2 @@
-VTMParameters : IdentityDictionary {
+VTMParameters : VTMOrderedIdentityDictionary {
 }
