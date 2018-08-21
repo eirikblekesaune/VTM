@@ -1,4 +1,4 @@
-VTMElementView : VTMAbstractDataView {
+VTMElementView : VTMDataView {
 	var componentsView;
 	var showComponents = false;
 	var showComponentsButton;

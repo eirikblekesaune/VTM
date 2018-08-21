@@ -23,7 +23,7 @@ VTMLocalNetworkNode {
 	var <active = false;
 
 	*initClass{
-		Class.initClassTree(VTMAbstractData);
+		Class.initClassTree(VTMData);
 		Class.initClassTree(VTMNetworkNodeManager);
 		Class.initClassTree(VTMDefinitionLibrary);
 		singleton = super.new.initLocalNetworkNode;

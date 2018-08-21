@@ -1,4 +1,4 @@
-VTMValueElement : VTMAbstractData {
+VTMValueElement : VTMData {
 	var <valueObj;
 	var forwardings;
 	var forwarder;

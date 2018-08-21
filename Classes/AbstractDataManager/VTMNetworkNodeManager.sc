@@ -1,5 +1,5 @@
 //a singleton class
-VTMNetworkNodeManager : VTMAbstractDataManager {
+VTMNetworkNodeManager : VTMDataManager {
 
 	*dataClass{ ^VTMRemoteNetworkNode; }
 

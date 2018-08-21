@@ -1,2 +1,2 @@
-VTMComponent : VTMAbstractDataManager{
+VTMComponent : VTMDataManager{
 }

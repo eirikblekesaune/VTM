@@ -1,2 +1,2 @@
-VTMAbstractDataView : VTMView {
+VTMDataView : VTMView {
 }

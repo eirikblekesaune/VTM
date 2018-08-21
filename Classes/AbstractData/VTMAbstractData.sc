@@ -1,4 +1,4 @@
-VTMAbstractData {
+VTMData {
 	var <name;
 	var <manager;
 	var parameters;
@@ -6,7 +6,7 @@ VTMAbstractData {
 	var declaration;
 
 	*viewClass{
-		^\VTMAbstractDataView.asClass;
+		^\VTMDataView.asClass;
 	}
 
 	*managerClass{
@@ -27,10 +27,10 @@ VTMAbstractData {
 				"% - 'name' not defined".format(this)
 			).throw;
 		});
-		^super.new.initAbstractData(name, declaration, manager);
+		^super.new.initData(name, declaration, manager);
 	}
 
-	initAbstractData{arg name_, declaration_, manager_;
+	initData{arg name_, declaration_, manager_;
 		name = name_;
 		manager = manager_;
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);

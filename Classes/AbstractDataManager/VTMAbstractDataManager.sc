@@ -1,4 +1,4 @@
-VTMAbstractDataManager {
+VTMDataManager {
 	var items;
 	var oscInterface;
 	var itemDeclarations;
@@ -10,11 +10,11 @@ VTMAbstractDataManager {
 
 	//% itemDeclarations : VTMOrderedIdentityDictionary
 	*new{arg itemDeclarations, parent;
-		^super.new.initAbstractDataManager(itemDeclarations, parent);
+		^super.new.initDataManager(itemDeclarations, parent);
 	}
 
 	//% itemDeclarations : VTMOrderedIdentityDictionary
-	initAbstractDataManager{arg itemDeclarations_, parent_;
+	initDataManager{arg itemDeclarations_, parent_;
 		itemDeclarations = itemDeclarations_;
 		parent = parent_;
 		items = VTMOrderedIdentityDictionary.new;
@@ -184,7 +184,7 @@ VTMAbstractDataManager {
 	}
 
 	makeView{arg parent, bounds, viewDef, settings;
-		^'VTMAbstractDataManagerView'.asClass.new(
+		^'VTMDataManagerView'.asClass.new(
 			parent, bounds, viewDef, settings, this
 		);
 	}

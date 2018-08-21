@@ -1,7 +1,7 @@
 /*
 An Element is an object that has components.
 */
-VTMElement : VTMAbstractData {
+VTMElement : VTMData {
 	var attributes;
 	var commands;
 	var returns;

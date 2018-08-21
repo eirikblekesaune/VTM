@@ -1,4 +1,4 @@
-VTMAbstractDataManagerView : VTMView {
+VTMDataManagerView : VTMView {
 	var itemsView;
 	var showItems = false;
 	var showItemsButton;
