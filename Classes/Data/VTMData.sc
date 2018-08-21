@@ -52,7 +52,7 @@ VTMData {
 	//Check for missing mandatory parameter values
 	prInitParameters{
 		var tempAttr;
-		var paramDecl = VTMOrderedIdentityDictionary.new;
+		var paramDecl = VTMParameters.new;
 
 		this.class.parameterDescriptions.keysValuesDo({arg key, val;
 			var tempVal;
