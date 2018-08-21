@@ -293,6 +293,12 @@ VTMContext : VTMElement {
 		]);
    	}
 
+	description{arg includeDeclaration = false;
+		^super.description(includeDeclaration).putAll(
+			definition.description
+		);
+	}
+
 	//Make a function that evaluates in the envir.
 	//This method opens a gaping hole into the context's
 	//innards, so it should not be used by other classes
