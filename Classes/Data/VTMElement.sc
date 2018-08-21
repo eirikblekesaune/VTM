@@ -76,14 +76,14 @@ VTMElement : VTMData {
 	*signalDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 	*mappingDescriptions{ ^VTMOrderedIdentityDictionary[]; }
 
-	description{
+	*description{
 		var result = super.description;
 		result.putAll(VTMOrderedIdentityDictionary[
-			\attributes -> this.class.attributeDescriptions,
-			\commands -> this.class.commandDescriptions,
-			\signals -> this.class.signalDescriptions,
-			\returns -> this.class.returnDescriptions,
-			\mappings -> this.class.mappingDescriptions
+			\attributes -> this.attributeDescriptions,
+			\commands -> this.commandDescriptions,
+			\signals -> this.signalDescriptions,
+			\returns -> this.returnDescriptions,
+			\mappings -> this.mappingDescriptions
 		]);
 		^result;
 	}

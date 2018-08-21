@@ -4,7 +4,7 @@ VTMData {
 	var parameters;
 	var oscInterface;
 	var declaration;
-	
+
 	classvar <isAbstractClass=true;
 
 	*viewClass{
@@ -147,10 +147,6 @@ VTMData {
 		this.subclassResponsibility(thisMethod);
 	}
 
-	*parameterKeys{
-		^this.parameterDescriptions.keys;
-	}
-
 	*parameterDescriptions{
 		^VTMOrderedIdentityDictionary[
 			\name -> (type: \string, optional: false)
@@ -169,10 +165,15 @@ VTMData {
 		^result;
 	}
 
-	description{arg includeDeclaration = false;
+	*description{
 		var result = VTMOrderedIdentityDictionary[
-			\parameters -> this.class.parameterDescriptions,
+			\parameters -> this.parameterDescriptions,
 		];
+		^result;
+	}
+
+	description{arg includeDeclaration = false;
+		var result = this.class.description;
 		if(includeDeclaration, {
 			result.put(\declaration, this.declaration);
 		});
