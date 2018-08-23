@@ -1,2 +1,0 @@
-VTMContextOSCInterface : VTMOSCInterface {
-}
