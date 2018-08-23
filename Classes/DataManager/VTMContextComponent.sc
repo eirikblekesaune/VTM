@@ -24,7 +24,7 @@ VTMContextComponent : VTMDataManager {
 		itemDecls.keysValuesDo({arg itemName, itemDeclaration;
 			var newItem;
 			var itemAction;
-			//The action is a part of the ValueElements declaration
+			//The action is a part of the Controls declaration
 			//but only relevant to the Element it is declared in.
 			//Therefor we extract the action here and wrap it into a function
 			//that also includes the context as the second argument.

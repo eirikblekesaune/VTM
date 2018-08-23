@@ -1,4 +1,4 @@
-VTMAttribute : VTMValueElement {
+VTMAttribute : VTMControl {
 	classvar <isAbstractClass=false;
 	*managerClass{ ^VTMAttributeManager; }
 

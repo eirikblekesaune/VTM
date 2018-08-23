@@ -1,4 +1,4 @@
-VTMValueElementView : VTMDataView {
+VTMControlView : VTMDataView {
 	var valueView;
 
 	prMakeChildViews{

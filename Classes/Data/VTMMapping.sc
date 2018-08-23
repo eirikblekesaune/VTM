@@ -1,4 +1,4 @@
-VTMMapping : VTMValueElement {
+VTMMapping : VTMControl {
 	var source;
 	var destination;
 	classvar <isAbstractClass=false;

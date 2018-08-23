@@ -1,17 +1,20 @@
-VTMValueElement : VTMData {
+/*
+A VTMControl is something that controls a unit of data
+*/
+VTMControl : VTMData {
 	var <valueObj;
 	var forwardings;
 	var forwarder;
 
 	*viewClass{
-		^\VTMValueElementView.asClass;
+		^\VTMControlView.asClass;
 	}
 
 	*new{arg name, declaration, manager;
-		^super.new(name, declaration, manager).initValueElement;
+		^super.new(name, declaration, manager).initControl;
 	}
 
-	initValueElement{
+	initControl{
 		var valueClass = VTMValue.typeToClass(declaration[\type]) ? VTMValue;
 		var valueProperties = VTMOrderedIdentityDictionary.new;
 		//extract property values from declaration
@@ -119,7 +122,7 @@ VTMValueElement : VTMData {
 					VTM.sendMsg(item[\addr].hostname, item[\addr].port, item[\path], outputValue);
 				}, {
 					if(this.type==\dictionary, {
-						"VTMValueElement, forwarding, dictionaries must be sent as JSON".warn;
+						"VTMControl, forwarding, dictionaries must be sent as JSON".warn;
 					});
 					item[\addr].sendMsg(item[\path], outputValue);
 				});
