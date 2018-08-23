@@ -37,7 +37,7 @@
 // 				);
 // 			};
 //
-// 			~self.prAddComponentsToEnvir( (
+// 			~self.prAddControlsToEnvir( (
 // 				returns: returns,
 // 				attributes: attributes,
 // 				commands: [ \makeGui -> ( action: { ~mktl.gui } ) ]

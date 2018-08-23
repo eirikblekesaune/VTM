@@ -1,22 +1,22 @@
 VTMElementView : VTMDataView {
-	var componentsView;
-	var showComponents = false;
-	var showComponentsButton;
-	var showNumComponentsLabel;
+	var controlsView;
+	var showControls = false;
+	var showControlsButton;
+	var showNumControlsLabel;
 
-	showComponents_{arg bool;
-		showComponents = bool;
+	showControls_{arg bool;
+		showControls = bool;
 		{
-			componentsView.visible = showComponents;
+			controlsView.visible = showControls;
 		}.defer;
 	}
 
-	rebuildComponentsView{
-		componentsView.children.do(_.remove);
-		"These are children: %".format(model.components).vtmdebug(3, thisMethod);
-		componentsView.layout_(
+	rebuildControlsView{
+		controlsView.children.do(_.remove);
+		"These are children: %".format(model.controls).vtmdebug(3, thisMethod);
+		controlsView.layout_(
 			VLayout(
-				*model.components.reject(_.isNil).collect({arg item;
+				*model.controls.reject(_.isNil).collect({arg item;
 					[
 						item.makeView,
 						\align,
@@ -25,48 +25,48 @@ VTMElementView : VTMDataView {
 				}).add(nil)
 			).spacing_(2).margins_(2)
 		);
-		showNumComponentsLabel.string_(model.numComponents);
+		showNumControlsLabel.string_(model.numControls);
 	}
 
 	prMakeChildViews{
 		labelView = this.prMakeLabelView;
-		componentsView = this.prMakeComponentsView;
-		showComponentsButton = Button()
+		controlsView = this.prMakeControlsView;
+		showControlsButton = Button()
 		.states_([
 			["[+]", Color.black, Color.white.alpha_(0.1)],
 			["[—]", Color.black, Color.white.alpha_(0.1)]
 		])
-		.value_(showComponents.asInt)
-		.action_({arg butt; this.showComponents_(butt.value.booleanValue); })
+		.value_(showControls.asInt)
+		.action_({arg butt; this.showControls_(butt.value.booleanValue); })
 		.font_(this.font)
 		.background_(labelView.background)
 		.fixedSize_(Size(15,15))
 		.canFocus_(false);
-		showNumComponentsLabel = StaticText()
-		.string_(model.numComponents)
+		showNumControlsLabel = StaticText()
+		.string_(model.numControls)
 		.font_(this.font.italic_(true))
 		.fixedSize_(Size(15,15));
-		this.rebuildComponentsView();
+		this.rebuildControlsView();
 	}
 
 	prMakeLayout{
 		^VLayout(
 			View().layout_(
 				HLayout(
-					[showComponentsButton, \align: \left],
+					[showControlsButton, \align: \left],
 					[labelView, \align: \left],
 					nil,
-					[showNumComponentsLabel, \align: \right]
+					[showNumControlsLabel, \align: \right]
 				).spacing_(0).margins_(1)
 			)
 			.maxHeight_(15)
 			.background_(labelView.background),
-			componentsView.visible_(showComponents)
+			controlsView.visible_(showControls)
 		);
 	}
 
 
-	prMakeComponentsView{
+	prMakeControlsView{
 		var result;
 		result = View()
 		.background_(Color.yellow.alpha_(0.1));
@@ -82,7 +82,7 @@ VTMElementView : VTMDataView {
 		//only update the view if the valueObj changed
 		if(theChanged === model, {
 			switch(whatChanged,
-				\components, { { this.rebuildComponentsView; }.defer; },
+				\controls, { { this.rebuildControlsView; }.defer; },
 				\freed, { { this.remove; }.defer; }
 			);
 			{this.refresh;}.defer;

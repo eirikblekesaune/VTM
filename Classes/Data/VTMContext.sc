@@ -87,7 +87,7 @@ VTMContext : VTMElement {
 			if(envir.includesKey(\prepare), {
 				this.execute(\prepare, cond);
 			});
-			//this.components.select(_.notNil).do({arg it; it.prepare(cond)});
+			//this.controls.select(_.notNil).do({arg it; it.prepare(cond)});
 			//this.enableOSC;
 			this.prChangeState(\didPrepare);
 			action.value(this);
@@ -193,11 +193,11 @@ VTMContext : VTMElement {
 
 	enableOSC {
 		super.enableOSC();
-		this.components.select(_.notNil).do(_.enableOSC());
+		this.controls.select(_.notNil).do(_.enableOSC());
 	}
 
 	disableOSC {
-		this.components.select(_.notNil).do({arg item;
+		this.controls.select(_.notNil).do({arg item;
 			item.disableOSC();
 		});
 		super.disableOSC();
@@ -234,7 +234,7 @@ VTMContext : VTMElement {
 	//Make a function that evaluates in the envir.
 	//This method opens a gaping hole into the context's
 	//innards, so it should not be used by other classes
-	//than VTMElementComponent.
+	//than VTMControlManager
 	prContextualizeFunction{arg func;
 		var result;
 		envir.use{

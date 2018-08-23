@@ -193,7 +193,7 @@
 		})
 	].flat.collect({arg item; item.key -> (item.value ++ (chan: 0))}).do({arg item;
 		var data = item.value;
-		~device.addComponent(item.key, data[\chan], data[\number], data[\msgType]);
+		~device.addControl(item.key, data[\chan], data[\number], data[\msgType]);
 	});
 	// ~device.trace(true);
 };

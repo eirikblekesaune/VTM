@@ -56,11 +56,11 @@ VTMContextDefinition {
 		//		if(env_.notNil, {
 		//			var envToLoad = env_.deepCopy;
 		//			//Turn any arrays of Associations into OrderedIdentityDictionaries
-		//			//Get the names of the components our context consists of.
+		//			//Get the names of the controls our context consists of.
 		//			definition.keys.do({arg compName;
 		//				if(envToLoad.includesKey(compName), {
 		//					var itemDeclarations;
-		//					//Remove the itemDeclarations for this component key
+		//					//Remove the itemDeclarations for this control key
 		//					//so that we can add the remaing ones after changes has been made.
 		//					itemDeclarations = envToLoad.removeAt(compName);
 		//					//If it is an array of associations we change it to OrderedeIdentotitDictionary

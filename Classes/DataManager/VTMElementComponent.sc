@@ -1,2 +1,0 @@
-VTMComponent : VTMDataManager{
-}

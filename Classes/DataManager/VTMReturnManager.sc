@@ -1,4 +1,4 @@
-VTMReturnManager : VTMComponent{
+VTMReturnManager : VTMControlManager{
 	*dataClass{ ^VTMReturn; }
 	name{ ^\returns; }
 

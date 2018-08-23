@@ -1,4 +1,4 @@
-VTMCommandManager : VTMComponent {
+VTMCommandManager : VTMControlManager {
 	*dataClass{ ^VTMCommand; }
 	name{ ^\commands; }
 

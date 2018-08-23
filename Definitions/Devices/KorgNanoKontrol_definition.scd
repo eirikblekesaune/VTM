@@ -28,7 +28,7 @@
 		result;
 	}).flat.do({arg item;
 		var data = item.value;
-		~device.addComponent(item.key, data[\chan], data[\number], \control);
+		~device.addControl(item.key, data[\chan], data[\number], \control);
 	});
 	// ~device.trace(true);
 };

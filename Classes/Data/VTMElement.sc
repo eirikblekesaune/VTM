@@ -1,8 +1,8 @@
 /*
-An Element is an object that has components.
+An Element is an object that has controls.
 */
 VTMElement : VTMData {
-	var <components;
+	var <controls;
 	var compNameRoutes;
 
 	*new{arg name, declaration, manager;
@@ -10,14 +10,14 @@ VTMElement : VTMData {
 	}
 
 	initElement{
-		this.initComponents;
-		this.changed(\components);
+		this.initControlManagers;
+		this.changed(\controls);
 		//TODO: register with LocalNetworkNode singleton.
 	}
 
-	initComponents{
+	initControlManagers{
 		var itemDeclarations;
-		components = VTMOrderedIdentityDictionary[];
+		controls = VTMOrderedIdentityDictionary[];
 
 		itemDeclarations = VTMOrderedIdentityDictionary.new;
 		this.class.attributeDescriptions.keysValuesDo({arg attrKey, attrDesc;
@@ -26,33 +26,33 @@ VTMElement : VTMData {
 				itemDeclarations.at(attrKey).put(\value, declaration[attrKey]);
 			});
 		});
-		components.put(\attributes,  VTMAttributeManager(itemDeclarations));
+		controls.put(\attributes,  VTMAttributeManager(itemDeclarations));
 
 		itemDeclarations = this.class.signalDescriptions.deepCopy;
-		components.put(\signals, VTMSignalManager(itemDeclarations));
+		controls.put(\signals, VTMSignalManager(itemDeclarations));
 
 		itemDeclarations = this.class.returnDescriptions.deepCopy;
-		components.put(\returns, VTMReturnManager(itemDeclarations));
+		controls.put(\returns, VTMReturnManager(itemDeclarations));
 
 		itemDeclarations = this.class.commandDescriptions.deepCopy;
-		components.put(\commands, VTMCommandManager(itemDeclarations));
+		controls.put(\commands, VTMCommandManager(itemDeclarations));
 
 		itemDeclarations = this.class.mappingDescriptions.deepCopy;
-		components.put(\mappings, VTMMappingManager(itemDeclarations));
+		controls.put(\mappings, VTMMappingManager(itemDeclarations));
 
 		itemDeclarations = this.class.cueDescriptions.deepCopy;
-		components.put(\cues, VTMCueManager(itemDeclarations));
+		controls.put(\cues, VTMCueManager(itemDeclarations));
 
 		itemDeclarations = this.class.scoreDescriptions.deepCopy;
-		components.put(\scores, VTMScoreManager(itemDeclarations));
+		controls.put(\scores, VTMScoreManager(itemDeclarations));
 
 		//make a namespace routing dictionary
 		compNameRoutes = VTMOrderedIdentityDictionary[];
-		components.keysValuesDo({arg key, compMan;
+		controls.keysValuesDo({arg key, compMan;
 			compMan.items.do({arg it;
-				//Warn if some components have the same name
+				//Warn if some controls have the same name
 				if(compNameRoutes.includesKey(it.name), {
-					"%\n\tComponent %:% hides component %:%".format(
+					"%\n\tControl %:% hides control %:%".format(
 						this.fullPath,
 						key, it.name,
 						compNameRoutes[it.name], it.name
@@ -63,12 +63,12 @@ VTMElement : VTMData {
 		});
 	}
 
-	numComponents{
-		^components.collect(_.size).sum;
+	numControlManagers{
+		^controls.collect(_.size).sum;
 	}
 
 	free{
-		this.components.do(_.free);
+		this.controls.do(_.free);
 		super.free;
 	}
 
@@ -97,12 +97,12 @@ VTMElement : VTMData {
 
 	//set attribute values.
 	set{arg key...args;
-		components[\attributes].set(key, *args);
+		controls[\attributes].set(key, *args);
 	}
 
 	//get attribute(init or run-time) or parameter(init-time) values.
 	get{arg key;
-		var result = components[\attributes].get(key);
+		var result = controls[\attributes].get(key);
 		if(result.notNil, {
 			^result;
 		});
@@ -112,12 +112,12 @@ VTMElement : VTMData {
 
 	//do command with possible value args. Only run-time.
 	doCommand{arg key ...args;
-		components[\commands].doCommand(key, *args);
+		controls[\commands].doCommand(key, *args);
 	}
 
 	//get return results. Only run-time
 	query{arg key;
-		^components[\returns].query(key);
+		^controls[\returns].query(key);
 	}
 
 	//emits a signal
@@ -125,77 +125,77 @@ VTMElement : VTMData {
 	//TODO: How to make this method esily avilable from within a
 	//context definition, and still protected from the outside?
 	emit{arg key...args;
-		components[\signals].emit(key, *args);
+		controls[\signals].emit(key, *args);
 	}
 
 	return{arg key ...args;
-		components[\returns].return(key, *args);
+		controls[\returns].return(key, *args);
 	}
 
 	onSignal{arg key, func;
-		if(components[\signals].hasItemNamed(key), {
-			components[\signals][key].action_(func);
+		if(controls[\signals].hasItemNamed(key), {
+			controls[\signals][key].action_(func);
 		});
 	}
 
 	attributes {
-		^components[\attributes].names;
+		^controls[\attributes].names;
 	}
 
 	commands{
-		^components[\commands].names;
+		^controls[\commands].names;
 	}
 
 	returns{
-		^components[\returns].names;
+		^controls[\returns].names;
 	}
 
 	signals{
-		^components[\signals].names;
+		^controls[\signals].names;
 	}
 
 	mappings {
-		^components[\mappings].names;
+		^controls[\mappings].names;
 	}
 
 	cues {
-		^components[\cues].names;
+		^controls[\cues].names;
 	}
 
 	scores {
-		^components[\scores].names;
+		^controls[\scores].names;
 	}
 
 	addForwarding{arg key, compName, itemName,  addr, path, vtmJson = false, mapFunc;
 		var comp = switch(compName,
-			\attributes, {components[\attributes]},
-			\returns, {components[\returns]}
+			\attributes, {controls[\attributes]},
+			\returns, {controls[\returns]}
 		);
 		comp.addForwarding(key, itemName, addr, path, vtmJson, mapFunc);
 	}
 
 	removeForwarding{arg key, compName, itemName;
 		var comp = switch(compName,
-			\attributes, {components[\attributes]},
-			\returns, {components[\returns]}
+			\attributes, {controls[\attributes]},
+			\returns, {controls[\returns]}
 		);
 		comp.removeForwarding(key, itemName);
 	}
 
 	removeAllForwardings{
-		this.components.select(_.notNil).do({arg comp;
+		this.controls.select(_.notNil).do({arg comp;
 			comp.removeAllForwarding;
 		});
 	}
 
 	enableForwarding{
-		this.components.select(_.notNil).do({arg comp;
+		this.controls.select(_.notNil).do({arg comp;
 			comp.enableForwarding;
 		});
 	}
 
 	disableForwarding{
-		this.components.select(_.notNil).do({arg comp;
+		this.controls.select(_.notNil).do({arg comp;
 			comp.disableForwarding;
 		});
 	}
