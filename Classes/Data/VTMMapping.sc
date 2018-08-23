@@ -1,8 +1,7 @@
 VTMMapping : VTMControl {
+	classvar <isAbstractClass=false;
 	var source;
 	var destination;
-	classvar <isAbstractClass=false;
-	*managerClass{ ^VTMMappingManager; }
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initMapping;

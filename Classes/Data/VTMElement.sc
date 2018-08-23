@@ -26,19 +26,19 @@ VTMElement : VTMData {
 				itemDeclarations.at(attrKey).put(\value, declaration[attrKey]);
 			});
 		});
-		controls.put(\attributes,  VTMAttributeManager(itemDeclarations));
+		controls.put(\attributes,  VTMControlManager(itemDeclarations));
 
 		itemDeclarations = this.class.signalDescriptions.deepCopy;
-		controls.put(\signals, VTMSignalManager(itemDeclarations));
+		controls.put(\signals, VTMControlManager(itemDeclarations));
 
 		itemDeclarations = this.class.returnDescriptions.deepCopy;
-		controls.put(\returns, VTMReturnManager(itemDeclarations));
+		controls.put(\returns, VTMControlManager(itemDeclarations));
 
 		itemDeclarations = this.class.commandDescriptions.deepCopy;
-		controls.put(\commands, VTMCommandManager(itemDeclarations));
+		controls.put(\commands, VTMControlManager(itemDeclarations));
 
 		itemDeclarations = this.class.mappingDescriptions.deepCopy;
-		controls.put(\mappings, VTMMappingManager(itemDeclarations));
+		controls.put(\mappings, VTMControlManager(itemDeclarations));
 
 		itemDeclarations = this.class.cueDescriptions.deepCopy;
 		controls.put(\cues, VTMCueManager(itemDeclarations));

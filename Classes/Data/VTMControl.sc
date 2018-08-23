@@ -1,5 +1,5 @@
 /*
-A VTMControl is something that controls a unit of data
+A VTMControl is something that controls an instance of data
 */
 VTMControl : VTMData {
 	var <valueObj;
@@ -9,6 +9,7 @@ VTMControl : VTMData {
 	*viewClass{
 		^\VTMControlView.asClass;
 	}
+	*managerClass{ ^VTMControlManager; }
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initControl;
