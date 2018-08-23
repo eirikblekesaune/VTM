@@ -1,13 +1,10 @@
-VTMCue : VTMComposableContext {
+VTMCue : VTMControl {
 	var routine;
 	var >startAction; //a function
 	var >endAction; //a function
 	var condition;
 	var <>armed = true;
 	classvar <isAbstractClass=false;
-
-
-	*managerClass{ ^VTMCueManager; }
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initCue;

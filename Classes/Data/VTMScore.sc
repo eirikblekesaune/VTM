@@ -1,4 +1,3 @@
-VTMScore : VTMComposableContext {
+VTMScore : VTMControl {
 	classvar <isAbstractClass=false;
-	*managerClass{ ^VTMScoreManager; }
 }

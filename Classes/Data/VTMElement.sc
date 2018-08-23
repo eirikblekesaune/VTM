@@ -41,10 +41,10 @@ VTMElement : VTMData {
 		controls.put(\mappings, VTMControlManager(itemDeclarations));
 
 		itemDeclarations = this.class.cueDescriptions.deepCopy;
-		controls.put(\cues, VTMCueManager(itemDeclarations));
+		controls.put(\cues, VTMControlManager(itemDeclarations));
 
 		itemDeclarations = this.class.scoreDescriptions.deepCopy;
-		controls.put(\scores, VTMScoreManager(itemDeclarations));
+		controls.put(\scores, VTMControlManager(itemDeclarations));
 
 		//make a namespace routing dictionary
 		compNameRoutes = VTMOrderedIdentityDictionary[];

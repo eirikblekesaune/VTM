@@ -39,8 +39,8 @@ VTMLocalNetworkNode {
 		hardwareSetup = VTMHardwareSetup.new(nil, this);
 		moduleHost = VTMModuleHost.new(nil, this);
 		sceneOwner = VTMSceneOwner.new(nil, this);
-		scoreManager = VTMScoreManager.new(nil, this);
-		cueManager = VTMCueManager.new(nil, this);
+		scoreManager = VTMControlManager.new(nil, this);
+		cueManager = VTMControlManager.new(nil, this);
 
 		hostname = Pipe("hostname", "r").getLine();
 		if(".local$".matchRegexp(hostname), {
