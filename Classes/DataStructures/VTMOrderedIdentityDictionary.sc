@@ -49,6 +49,6 @@ VTMOrderedIdentityDictionary : IdentityDictionary {
 		if(order.includes(key), {
 			order.remove(key);
 		});
-		super.removeAt(key);
+		^super.removeAt(key);
 	}
 }
