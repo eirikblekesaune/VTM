@@ -11,6 +11,32 @@ VTMControl : VTMData {
 		^super.new(name, declaration, manager).initControl;
 	}
 
+	*make{arg name, declaration, manager;
+
+	}
+
+	*attribute{arg name, declaration, manager;
+		^VTMAttribute(name, declaration, manager);
+	}
+	*command{arg name, declaration, manager;
+		^VTMCommand(name, declaration, manager);
+	}
+	*signal{arg name, declaration, manager;
+		^VTMSignal(name, declaration, manager);
+	}
+	*return{arg name, declaration, manager;
+		^VTMReturn(name, declaration, manager);
+	}
+	*score{arg name, declaration, manager;
+		^VTMScore(name, declaration, manager);
+	}
+	*cue{arg name, declaration, manager;
+		^VTMCue(name, declaration, manager);
+	}
+	*mapping{arg name, declaration, manager;
+		^VTMMapping(name, declaration, manager);
+	}
+
 	initControl{
 	}
 

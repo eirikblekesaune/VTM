@@ -111,6 +111,4 @@ VTMValueControl : VTMControl {
 		forwarder.remove(\value);
 		forwarder.clear;
 	}
-
-
 }
