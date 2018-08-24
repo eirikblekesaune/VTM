@@ -1,4 +1,4 @@
-VTMHardwareSetup : VTMComposableContextManager {
+VTMHardwareSetup : VTMContextManager {
 	*dataClass{ ^VTMHardwareDevice; }
 	name{ ^\hardwareDevices; }
 }

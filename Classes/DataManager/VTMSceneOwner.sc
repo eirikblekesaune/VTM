@@ -1,4 +1,4 @@
-VTMSceneOwner : VTMComposableContextManager {
+VTMSceneOwner : VTMContextManager {
 	var <sceneFactory;
 	*dataClass{ ^VTMScene; }
 	name{ ^\scenes; }

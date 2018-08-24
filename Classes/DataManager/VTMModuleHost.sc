@@ -1,4 +1,4 @@
-VTMModuleHost : VTMComposableContextManager {
+VTMModuleHost : VTMContextManager {
 	var <factory;
 
 	*dataClass{ ^VTMModule; }

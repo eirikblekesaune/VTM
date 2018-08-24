@@ -1,4 +1,4 @@
-VTMContextComponent : VTMDataManager {
+VTMContextManager : VTMDataManager {
 
 	context{
 		^parent;

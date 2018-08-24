@@ -1,4 +1,4 @@
-VTMApplicationManager : VTMContextComponent {
+VTMApplicationManager : VTMContextManager {
 
 	*dataClass{ ^VTMApplication; }
 	name{ ^\applications; }
