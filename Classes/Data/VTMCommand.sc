@@ -1,4 +1,4 @@
-VTMCommand : VTMControl {
+VTMCommand : VTMValueControl {
 	classvar <isAbstractClass=false;
 
 	*new{arg name, declaration, manager;

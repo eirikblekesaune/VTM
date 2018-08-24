@@ -1,3 +1,3 @@
-VTMReturn : VTMControl {
+VTMReturn : VTMValueControl {
 	classvar <isAbstractClass=false;
 }

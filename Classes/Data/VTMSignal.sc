@@ -1,3 +1,3 @@
-VTMSignal : VTMControl{
+VTMSignal : VTMValueControl{
 	classvar <isAbstractClass=false;
 }
