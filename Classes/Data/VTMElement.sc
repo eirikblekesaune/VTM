@@ -9,22 +9,24 @@ VTMElement : VTMData {
 	}
 
 	initElement{
-		this.initControlManagers;
-		this.changed(\controls);
+		this.initControls;
 		//TODO: register with LocalNetworkNode singleton.
 	}
 
-	initControlManagers{
-		var itemDeclarations;
-
-		itemDeclarations = VTMOrderedIdentityDictionary.new;
-		this.class.controlDescriptions.keysValuesDo({arg ctrlKey, ctrlDesc;
-			itemDeclarations.put(ctrlKey, ctrlDesc.deepCopy);
-			if(declaration.includesKey(ctrlKey), {
-				itemDeclarations.at(ctrlKey).put(\value, declaration[ctrlKey]);
-			});
-		});
+	initControls{
 		controls = VTMControlManager();
+		this.class.controlDescriptions.keysValuesDo({arg ctrlKey, ctrlDesc;
+			var newCtrl;
+			"Ctrl key: % ctrl desc: %".format(
+				ctrlKey, ctrlDesc
+			).postln;
+			newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc);
+			if(declaration.includesKey(ctrlKey), {
+				newCtrl.set(\value, declaration[ctrlKey]);
+			});
+			controls.addItem(ctrlKey, newCtrl);
+		});
+		this.changed(\controls);
 	}
 
 	numControls{
@@ -38,6 +40,7 @@ VTMElement : VTMData {
 
 	*controlDescriptions{
 		var result = VTMOrderedIdentityDictionary.new;
+		^result;
 	}
 
 	*description{

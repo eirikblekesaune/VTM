@@ -1,2 +1,5 @@
 VTMControlManager : VTMDataManager{
+	*dataClass{
+		^VTMControl;
+	}
 }

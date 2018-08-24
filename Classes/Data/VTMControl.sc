@@ -11,7 +11,13 @@ VTMControl : VTMData {
 		^super.new(name, declaration, manager).initControl;
 	}
 
-	*make{arg name, declaration, manager;
+	*makeFromDescription{arg name, description, manager;
+		var result;
+		var mode;
+		mode = description.removeAt(\mode);
+		this.perform(mode ? \attribute, name, description, manager);
+
+		^result;
 
 	}
 

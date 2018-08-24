@@ -75,7 +75,6 @@ VTMValueControl : VTMControl {
 	}
 
 	enableForwarding{
-		super.enableForwarding;
 		forwarder = SimpleController(valueObj).put(\value, {arg theChanged;
 			forwardings.do({arg item;
 				var outputValue, mapFunc;

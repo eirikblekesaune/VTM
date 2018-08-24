@@ -127,26 +127,6 @@ VTMData {
 		manager = nil;
 	}
 
-	addForwarding{arg key, addr, path, vtmJson = false;
-		this.subclassResponsibility(thisMethod);
-	}
-
-	removeForwarding{arg key;
-		this.subclassResponsibility(thisMethod);
-	}
-
-	removeAllForwardings{
-		this.subclassResponsibility(thisMethod);
-	}
-
-	enableForwarding{
-		this.subclassResponsibility(thisMethod);
-	}
-
-	disableForwarding{
-		this.subclassResponsibility(thisMethod);
-	}
-
 	*parameterDescriptions{
 		^VTMOrderedIdentityDictionary[
 			\name -> (type: \string, optional: false)
