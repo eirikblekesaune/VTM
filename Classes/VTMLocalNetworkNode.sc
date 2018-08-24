@@ -16,15 +16,14 @@ VTMLocalNetworkNode {
 	var <hardwareSetup;
 	var <moduleHost;
 	var <sceneOwner;
-	var <scoreManager;
 	var <networkNodeManager;
-	var <cueManager;
+	var <controls;
 
 	var <active = false;
 
 	*initClass{
 		Class.initClassTree(VTMData);
-		Class.initClassTree(VTMNetworkNodeManager);
+		Class.initClassTree(VTMDataManager);
 		Class.initClassTree(VTMDefinitionLibrary);
 		singleton = super.new.initLocalNetworkNode;
 	}
@@ -38,9 +37,7 @@ VTMLocalNetworkNode {
 		networkNodeManager = VTMNetworkNodeManager.new(nil, this);
 		hardwareSetup = VTMHardwareSetup.new(nil, this);
 		moduleHost = VTMModuleHost.new(nil, this);
-		sceneOwner = VTMSceneOwner.new(nil, this);
-		scoreManager = VTMControlManager.new(nil, this);
-		cueManager = VTMControlManager.new(nil, this);
+		controls = VTMControlManager(nil, this);
 
 		hostname = Pipe("hostname", "r").getLine();
 		if(".local$".matchRegexp(hostname), {
@@ -443,9 +440,8 @@ VTMLocalNetworkNode {
 		{class.isKindOf(VTMModule.class) } {managerObj =  moduleHost; }
 		{class.isKindOf(VTMHardwareDevice.class) } {managerObj =  hardwareSetup; }
 		{class.isKindOf(VTMScene.class) } {managerObj =  sceneOwner; }
-		{class.isKindOf(VTMScore.class) } {managerObj =  scoreManager; }
 		{class.isKindOf(VTMApplication.class) } {managerObj =  applicationManager; }
-		{class.isKindOf(VTMCue.class) } {managerObj =  cueManager; }
+		{class.isKindOf(VTMControl.class) } {managerObj = controls; }
 		{class.isKindOf(VTMRemoteNetworkNode.class) } {managerObj =  networkNodeManager; };
 		^managerObj;
 	}
