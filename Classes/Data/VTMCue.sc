@@ -18,37 +18,26 @@ VTMCue : VTMControl {
 		condition = Condition.new;
 	}
 
-	*attributeDescriptions{
-		^super.attributeDescriptions.putAll(VTMOrderedIdentityDictionary[
-			\preDelay -> (type: \decimal),
-			\duration -> (type: \decimal),
-			\postDelay -> (type: \decimal),
-			\duration -> (type: \decimal),
-			\hangBeforeStart -> (type: \boolean),
-			\maxStartHangTime -> (type: \decimal),
-			\hangBeforeEnd -> (type: \boolean),
-			\maxEndHangTime -> (type: \decimal),
+	*controlDescriptions{
+		^super.controlDescriptions.putAll(VTMOrderedIdentityDictionary[
+			\preDelay -> (type: \decimal, mode: \attribute),
+			\duration -> (type: \decimal, mode: \attribute),
+			\postDelay -> (type: \decimal, mode: \attribute),
+			\duration -> (type: \decimal, mode: \attribute),
+			\hangBeforeStart -> (type: \boolean, mode: \attribute),
+			\maxStartHangTime -> (type: \decimal, mode: \attribute),
+			\hangBeforeEnd -> (type: \boolean, mode: \attribute),
+			\maxEndHangTime -> (type: \decimal, mode: \attribute),
 			\pointOrder -> (type: \string,
 				enum: [\normal, \reverse, \random],
-				restrictValueToEnum: false),
-			\hangBetweenPoints -> (type: \boolean),
-			\delayBetweenPoints -> (type: \decimal)
-		]);
-	}
-
-	*returnDescriptions{
-		^super.returnDescriptions.putAll(VTMOrderedIdentityDictionary[
-			//points are loaded from the definition file so this only represents the names/numbers of the points
-			\points -> (type: \array, itemType: \string)
-		]);
-	}
-
-	*commandDescriptions{
-		^super.commandDescriptions.putAll(VTMOrderedIdentityDictionary[
-			\go -> (action: {this.go;}),
-			\signal -> (action: {this.signal;}),
-			\stop -> (action: {this.stop;}),
-			\reset -> (action: {this.reset;})
+				restrictValueToEnum: false, mode: \attribute),
+			\hangBetweenPoints -> (type: \boolean, mode: \attribute),
+			\delayBetweenPoints -> (type: \decimal, mode: \attribute),
+			\points -> (type: \array, itemType: \string, mode: \return),
+			\go -> (action: {this.go;}, mode: \command),
+			\signal -> (action: {this.signal;}, mode: \command),
+			\stop -> (action: {this.stop;}, mode: \command),
+			\reset -> (action: {this.reset;}, mode: \command)
 		]);
 	}
 

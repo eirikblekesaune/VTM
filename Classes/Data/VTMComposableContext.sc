@@ -1,3 +1,7 @@
+/*
+A ComposableContext is something that can manage instances of its own kind.
+e.g a Module can submodules.
+*/
 VTMComposableContext : VTMContext {
 	var <children;
 
@@ -38,16 +42,11 @@ VTMComposableContext : VTMContext {
 		]);
 	}
 
-	*commandDescriptions{
-		^super.commandDescriptions.putAll(VTMOrderedIdentityDictionary[
-			\takeOwnership -> (type: \string), //which type to describe scene or application here?
-			\releaseOwnership -> (type: \string)
-		]);
-	}
-
-	*returnDescriptions{
-		^super.returnDescriptions.putAll(VTMOrderedIdentityDictionary[
-			\owner -> (type: \string)
+	*controlDescriptions{
+		^super.controlDescriptions.putAll(VTMOrderedIdentityDictionary[
+			\takeOwnership -> (type: \string, mode: \command), //which type to describe scene or application here?
+			\releaseOwnership -> (type: \string, mode: \command),
+			\owner -> (type: \string, mode: \return)
 		]);
 	}
 }

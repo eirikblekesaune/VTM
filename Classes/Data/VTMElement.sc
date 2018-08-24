@@ -3,7 +3,6 @@ An Element is an object that has controls.
 */
 VTMElement : VTMData {
 	var <controls;
-	var compNameRoutes;
 
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initElement;
@@ -17,54 +16,19 @@ VTMElement : VTMData {
 
 	initControlManagers{
 		var itemDeclarations;
-		controls = VTMOrderedIdentityDictionary[];
 
 		itemDeclarations = VTMOrderedIdentityDictionary.new;
-		this.class.attributeDescriptions.keysValuesDo({arg attrKey, attrDesc;
-			itemDeclarations.put(attrKey, attrDesc.deepCopy);
-			if(declaration.includesKey(attrKey), {
-				itemDeclarations.at(attrKey).put(\value, declaration[attrKey]);
+		this.class.controlDescriptions.keysValuesDo({arg ctrlKey, ctrlDesc;
+			itemDeclarations.put(ctrlKey, ctrlDesc.deepCopy);
+			if(declaration.includesKey(ctrlKey), {
+				itemDeclarations.at(ctrlKey).put(\value, declaration[ctrlKey]);
 			});
 		});
-		controls.put(\attributes,  VTMControlManager(itemDeclarations));
-
-		itemDeclarations = this.class.signalDescriptions.deepCopy;
-		controls.put(\signals, VTMControlManager(itemDeclarations));
-
-		itemDeclarations = this.class.returnDescriptions.deepCopy;
-		controls.put(\returns, VTMControlManager(itemDeclarations));
-
-		itemDeclarations = this.class.commandDescriptions.deepCopy;
-		controls.put(\commands, VTMControlManager(itemDeclarations));
-
-		itemDeclarations = this.class.mappingDescriptions.deepCopy;
-		controls.put(\mappings, VTMControlManager(itemDeclarations));
-
-		itemDeclarations = this.class.cueDescriptions.deepCopy;
-		controls.put(\cues, VTMControlManager(itemDeclarations));
-
-		itemDeclarations = this.class.scoreDescriptions.deepCopy;
-		controls.put(\scores, VTMControlManager(itemDeclarations));
-
-		//make a namespace routing dictionary
-		compNameRoutes = VTMOrderedIdentityDictionary[];
-		controls.keysValuesDo({arg key, compMan;
-			compMan.items.do({arg it;
-				//Warn if some controls have the same name
-				if(compNameRoutes.includesKey(it.name), {
-					"%\n\tControl %:% hides control %:%".format(
-						this.fullPath,
-						key, it.name,
-						compNameRoutes[it.name], it.name
-					).warn;
-				});
-				compNameRoutes.put(it.name, key);
-			})
-		});
+		controls = VTMControlManager();
 	}
 
-	numControlManagers{
-		^controls.collect(_.size).sum;
+	numControls{
+		^controls.size;
 	}
 
 	free{
@@ -72,37 +36,26 @@ VTMElement : VTMData {
 		super.free;
 	}
 
-	*attributeDescriptions{  ^VTMOrderedIdentityDictionary[]; }
-	*commandDescriptions{ ^VTMOrderedIdentityDictionary[]; }
-	*returnDescriptions{ ^VTMOrderedIdentityDictionary[]; }
-	*signalDescriptions{ ^VTMOrderedIdentityDictionary[]; }
-	*mappingDescriptions{ ^VTMOrderedIdentityDictionary[]; }
-	*cueDescriptions{  ^VTMOrderedIdentityDictionary[]; }
-	*scoreDescriptions{ ^VTMOrderedIdentityDictionary[]; }
-
+	*controlDescriptions{
+		var result = VTMOrderedIdentityDictionary.new;
+	}
 
 	*description{
 		var result = super.description;
 		result.putAll(VTMOrderedIdentityDictionary[
-			\attributes -> this.attributeDescriptions,
-			\commands -> this.commandDescriptions,
-			\signals -> this.signalDescriptions,
-			\returns -> this.returnDescriptions,
-			\mappings -> this.mappingDescriptions,
-			\cues -> this.cueDescriptions,
-			\scores -> this.scoreDescriptions
+			\controls -> this.controlDescriptions;
 		]);
 		^result;
 	}
 
 	//set attribute values.
 	set{arg key...args;
-		controls[\attributes].set(key, *args);
+		controls[key].set(*args);
 	}
 
 	//get attribute(init or run-time) or parameter(init-time) values.
 	get{arg key;
-		var result = controls[\attributes].get(key);
+		var result = controls[key].get;
 		if(result.notNil, {
 			^result;
 		});
@@ -112,12 +65,12 @@ VTMElement : VTMData {
 
 	//do command with possible value args. Only run-time.
 	doCommand{arg key ...args;
-		controls[\commands].doCommand(key, *args);
+		controls[key].doCommand(*args);
 	}
 
 	//get return results. Only run-time
 	query{arg key;
-		^controls[\returns].query(key);
+		^controls[key].query;
 	}
 
 	//emits a signal
@@ -125,78 +78,70 @@ VTMElement : VTMData {
 	//TODO: How to make this method esily avilable from within a
 	//context definition, and still protected from the outside?
 	emit{arg key...args;
-		controls[\signals].emit(key, *args);
+		controls[key].emit(*args);
 	}
 
 	return{arg key ...args;
-		controls[\returns].return(key, *args);
+		controls[key].return;
 	}
 
 	onSignal{arg key, func;
-		if(controls[\signals].hasItemNamed(key), {
-			controls[\signals][key].action_(func);
+		if(controls.hasItemNamed(key), {
+			controls[key].action_(func);
 		});
 	}
 
 	attributes {
-		^controls[\attributes].names;
+		^controls.select({arg it; it.isKindOf(VTMAttribute)});
 	}
 
 	commands{
-		^controls[\commands].names;
+		^controls.select({arg it; it.isKindOf(VTMCommand)});
 	}
 
 	returns{
-		^controls[\returns].names;
+		^controls.select({arg it; it.isKindOf(VTMReturn)});
 	}
 
 	signals{
-		^controls[\signals].names;
+		^controls.select({arg it; it.isKindOf(VTMSignal)});
 	}
 
 	mappings {
-		^controls[\mappings].names;
+		^controls.select({arg it; it.isKindOf(VTMMapping)});
 	}
 
 	cues {
-		^controls[\cues].names;
+		^controls.select({arg it; it.isKindOf(VTMCue)});
 	}
 
 	scores {
-		^controls[\scores].names;
+		^controls.select({arg it; it.isKindOf(VTMScore)});
 	}
 
-	addForwarding{arg key, compName, itemName,  addr, path, vtmJson = false, mapFunc;
-		var comp = switch(compName,
-			\attributes, {controls[\attributes]},
-			\returns, {controls[\returns]}
-		);
-		comp.addForwarding(key, itemName, addr, path, vtmJson, mapFunc);
+	addForwarding{arg key, itemName,  addr, path, vtmJson = false, mapFunc;
+		controls[key].addForwarding(addr, path, vtmJson, mapFunc);
 	}
 
-	removeForwarding{arg key, compName, itemName;
-		var comp = switch(compName,
-			\attributes, {controls[\attributes]},
-			\returns, {controls[\returns]}
-		);
-		comp.removeForwarding(key, itemName);
+	removeForwarding{arg key, addr, path;
+		controls[key].removeForwarding(addr, path);
 	}
 
 	removeAllForwardings{
-		this.controls.select(_.notNil).do({arg comp;
-			comp.removeAllForwarding;
+		this.controls.do({arg ctrl;
+			ctrl.removeAllForwarding;
 		});
 	}
 
 	enableForwarding{
-		this.controls.select(_.notNil).do({arg comp;
-			comp.enableForwarding;
+		this.controls.do({arg ctrl;
+			ctrl.enableForwarding;
 		});
 	}
 
 	disableForwarding{
-		this.controls.select(_.notNil).do({arg comp;
-			comp.disableForwarding;
+		this.controls.do({arg ctrl;
+			ctrl.disableForwarding;
 		});
 	}
 

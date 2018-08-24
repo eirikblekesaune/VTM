@@ -203,25 +203,20 @@ VTMContext : VTMElement {
 		super.disableOSC();
 	}
 
+	*controlDescriptions{
+		^super.controlDescriptions.putAll( VTMOrderedIdentityDictionary[
+			\prepare -> (type: \none, mode: \command),
+			\run -> (type: \none, mode: \command),
+			\free -> (type: \none, mode: \command),
+			\state -> (type: \string, mode: \return)
+		]);
+	}
+
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll( VTMOrderedIdentityDictionary[
 			\definition -> (type: \string, optional: true)
 		]);
 	}
-
-	*commandDescriptions{
-		^super.commandDescriptions.putAll( VTMOrderedIdentityDictionary[
-			\prepare -> (type: \none),
-			\run -> (type: \none),
-			\free -> (type: \none)
-		]);
-	}
-
-	*returnDescriptions{
-		^super.returnDescriptions.putAll( VTMOrderedIdentityDictionary[
-			\state -> (type: \string)
-		]);
-   	}
 
 	description{arg includeDeclaration = false;
 		var result;
