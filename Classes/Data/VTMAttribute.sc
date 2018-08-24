@@ -7,4 +7,15 @@ VTMAttribute : VTMValueControl {
 
 	initAttribute{}
 
+	value_{arg ...args;
+		valueObj.value_(*args);
+	}
+
+	value{
+		^valueObj.value;
+	}
+
+	valueAction_{arg ...args;
+		valueObj.valueAction_(*args);
+	}
 }

@@ -3,7 +3,6 @@ VTMValueControl : VTMControl {
 	var forwardings;
 	var forwarder;
 
-
 	*new{arg name, declaration, manager;
 		^super.new(name, declaration, manager).initValueControl;
 	}
@@ -41,26 +40,6 @@ VTMValueControl : VTMControl {
 		);
 	}
 
-	valueAction_{arg ...args;
-		valueObj.valueAction_(*args);
-	}
-
-	value_{arg ...args;
-		valueObj.value_(*args);
-	}
-
-	value{
-		^valueObj.value;
-	}
-
-	type{
-		^this.get(\type);
-	}
-
-	declaration{
-		^valueObj.properties.putAll(parameters);
-	}
-
 	//setting the value object properties.
 	set{arg key...args;
 		valueObj.set(key, *args);
@@ -75,6 +54,14 @@ VTMValueControl : VTMControl {
 			result = super.get(key);
 		});
 		^result;
+	}
+
+	type{
+		^this.get(\type);
+	}
+
+	declaration{
+		^valueObj.properties.putAll(parameters);
 	}
 
 	disable{

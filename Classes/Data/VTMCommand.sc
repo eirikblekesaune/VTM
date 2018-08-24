@@ -6,4 +6,8 @@ VTMCommand : VTMValueControl {
 	}
 
 	initCommand{}
+
+	doCommand{arg ...args;
+		valueObj.valueAction_( *args );
+	}
 }
