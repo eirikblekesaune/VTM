@@ -34,7 +34,7 @@ VTMElement : VTMData {
 	}
 
 	free{
-		this.controls.do(_.free);
+		controls.do(_.free);
 		super.free;
 	}
 
@@ -94,33 +94,19 @@ VTMElement : VTMData {
 		});
 	}
 
-	attributes {
-		^controls.select({arg it; it.isKindOf(VTMAttribute)});
-	}
+	attributes { ^controls.attributes; }
 
-	commands{
-		^controls.select({arg it; it.isKindOf(VTMCommand)});
-	}
+	commands{ ^controls.command; }
 
-	returns{
-		^controls.select({arg it; it.isKindOf(VTMReturn)});
-	}
+	returns{ ^controls.return; }
 
-	signals{
-		^controls.select({arg it; it.isKindOf(VTMSignal)});
-	}
+	signals{ ^controls.signal; }
 
-	mappings {
-		^controls.select({arg it; it.isKindOf(VTMMapping)});
-	}
+	mappings { ^controls.mappings; }
 
-	cues {
-		^controls.select({arg it; it.isKindOf(VTMCue)});
-	}
+	cues { ^controls.cues; }
 
-	scores {
-		^controls.select({arg it; it.isKindOf(VTMScore)});
-	}
+	scores { ^controls.scores; }
 
 	addForwarding{arg key, itemName,  addr, path, vtmJson = false, mapFunc;
 		controls[key].addForwarding(addr, path, vtmJson, mapFunc);

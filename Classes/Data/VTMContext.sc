@@ -16,22 +16,25 @@ VTMContext : VTMElement {
 		var defArg, loadedContextDefinition;
 		//If no manager defined, use the local network node as manager.
 		//TODO?: Will there be problems when a class is listed as manager
-		//for multiple type of objects, in the case of Context/LocalNetworkNode?
+		//for multiple type of objects, in the case of
+        //Context/LocalNetworkNode?
 		manager = manager ? VTM.local.findManagerForContextClass(this);
 
-		//The definition argument takes presedence over the definition named in
-		//the declaration.
-		//This makes it easier to temporary override context defitnitions in case
-		//they need to be worked on or modified on the spot.
-		if(declaration.notNil and: {declaration.includesKey(\definition)}, {
-			defArg = declaration[\definition];
-		});
+		//The definition argument takes presedence over the definition
+        //named in the declaration. This makes it easier to temporary
+        //override context defitnitions in case they need to be worked
+        //on or modified on the spot.
+		if(declaration.notNil
+          and: {declaration.includesKey(\definition)},
+          {
+            defArg = declaration[\definition];
+          }
+        );
 
 		//The definition arg can either be a Symbol or an Environment.
-		//If a Symbol is used it will try to find the named definition from
-		//the manager library.
-		//If it is an Environment it will make an unamed ContextDefinition from
-		//the Enviroment instance.
+		//If a Symbol is used it will try to find the named definition
+        //from the manager library. If it is an Environment it will make
+        //an unamed ContextDefinition from the Enviroment instance.
 		defArg = definition ? defArg;
 
 		//If no definition was declared use an empty Environment for this.
@@ -39,8 +42,8 @@ VTMContext : VTMElement {
 			defArg = Environment.new;
 		});
 
-		//If the definition is an Environment, either by defaut or fraom arg,
-		//make a new ContextDefinition from that.
+		//If the definition is an Environment, either by default or
+        //from arg, make a new ContextDefinition from that.
 		case
 		{defArg.isKindOf(Environment)} {
 			loadedContextDefinition = VTMContextDefinition(defArg);
@@ -49,13 +52,17 @@ VTMContext : VTMElement {
 			loadedContextDefinition = VTMContextDefinition.loadFromFile(
 				defArg.fullPath);
 		}
-		{ //otherwise try to find the ContextDefinition from the managers definition
-			//library.
-			loadedContextDefinition = manager.findContextDefinition(defArg);
+        //otherwise try to find the ContextDefinition from the managers
+        //definition library.
+		{
+			loadedContextDefinition = manager.findContextDefinition(
+              defArg );
 		};
 
 		if(loadedContextDefinition.isNil, {
-			VTMError("Failed to make ContextDefinition for '%'".format(name)).throw;
+			VTMError("Failed to make ContextDefinition for '%'".format(
+              name)
+            ).throw;
 		});
 		^super.new(name, declaration, manager).initContext(
 			loadedContextDefinition);
@@ -75,11 +82,11 @@ VTMContext : VTMElement {
 		^manager.parent === VTM.local;
 	}
 
-	//The context that calls prepare can issue a condition to use for handling
-	//asynchronous events. If no condition is passed as argument the context will
-	//make its own condition instance.
-	//The ~prepare stage is where the module definition defines and creates its
-	//parameters.
+	//The context that calls prepare can issue a condition to use for
+    //handling asynchronous events. If no condition is passed as
+    //argument the context will make its own condition instance.
+	//The ~prepare stage is where the module definition defines and
+    //creates its parameters.
 	prepare{arg condition, action;
 		forkIfNeeded{
 			var cond = condition ?? {Condition.new};
@@ -193,13 +200,11 @@ VTMContext : VTMElement {
 
 	enableOSC {
 		super.enableOSC();
-		this.controls.select(_.notNil).do(_.enableOSC());
+		controls.enableOSC;
 	}
 
 	disableOSC {
-		this.controls.select(_.notNil).do({arg item;
-			item.disableOSC();
-		});
+		controls.disableOSC;
 		super.disableOSC();
 	}
 

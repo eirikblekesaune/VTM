@@ -103,6 +103,36 @@ VTMDataManager {
 		^result;
 	}
 
+	attributes {
+		^items.select({arg it; it.isKindOf(VTMAttribute)});
+	}
+
+	commands{
+		^items.select({arg it; it.isKindOf(VTMCommand)});
+	}
+
+	returns{
+		^items.select({arg it; it.isKindOf(VTMReturn)});
+	}
+
+	signals{
+		^items.select({arg it; it.isKindOf(VTMSignal)});
+	}
+
+	mappings {
+		^items.select({arg it; it.isKindOf(VTMMapping)});
+	}
+
+	cues {
+		^items.select({arg it; it.isKindOf(VTMCue)});
+	}
+
+	scores {
+		^items.select({arg it; it.isKindOf(VTMScore)});
+	}
+
+
+
 	path{
 		^'/';
 	}
