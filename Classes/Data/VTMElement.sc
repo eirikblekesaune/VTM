@@ -17,9 +17,6 @@ VTMElement : VTMData {
 		controls = VTMControlManager();
 		this.class.controlDescriptions.keysValuesDo({arg ctrlKey, ctrlDesc;
 			var newCtrl;
-			"Ctrl key: % ctrl desc: %".format(
-				ctrlKey, ctrlDesc
-			).postln;
 			newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc);
 			if(declaration.includesKey(ctrlKey), {
 				newCtrl.set(\value, declaration[ctrlKey]);
