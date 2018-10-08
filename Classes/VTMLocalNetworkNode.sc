@@ -13,10 +13,10 @@ VTMLocalNetworkNode {
 
 	//global data managers for unnamed contexts
 	var <applicationManager;
+	var <networkNodeManager;
 	var <hardwareSetup;
 	var <moduleHost;
 	var <sceneOwner;
-	var <networkNodeManager;
 	var <controls;
 
 	var <active = false;
@@ -37,6 +37,7 @@ VTMLocalNetworkNode {
 		networkNodeManager = VTMNetworkNodeManager.new(nil, this);
 		hardwareSetup = VTMHardwareSetup.new(nil, this);
 		moduleHost = VTMModuleHost.new(nil, this);
+        sceneOwner = VTMSceneOwner.new(nil, this);
 		controls = VTMControlManager(nil, this);
 
 		hostname = Pipe("hostname", "r").getLine();
