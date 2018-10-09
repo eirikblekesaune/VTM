@@ -4,8 +4,8 @@ An Element is an object that has controls.
 VTMElement : VTMData {
 	var <controls;
 
-	*new{arg name, declaration, manager;
-		^super.new(name, declaration, manager).initElement;
+	*new{arg name, declaration;
+		^super.new(name, declaration).initElement;
 	}
 
 	initElement{

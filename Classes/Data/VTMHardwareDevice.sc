@@ -3,8 +3,8 @@ VTMHardwareDevice : VTMComposableContext {
 
 	*managerClass{ ^VTMHardwareSetup; }
 
-	*new{arg name, declaration, manager, definition;
-		^super.new(name, declaration, manager, definition).initHardwareDevice;
+	*new{arg name, declaration, definition;
+		^super.new(name, declaration, definition).initHardwareDevice;
 	}
 
 	initHardwareDevice{

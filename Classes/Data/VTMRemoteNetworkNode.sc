@@ -4,8 +4,10 @@ VTMRemoteNetworkNode : VTMElement {
 
 	*managerClass{ ^VTMNetworkNodeManager; }
 
-	*new{arg name, declaration, manager, localNetwork;
-		^super.new(name, declaration, manager).initRemoteNetworkNode(localNetwork);
+	*new{arg name, declaration, localNetwork;
+		^super.new(name, declaration).initRemoteNetworkNode(
+			localNetwork
+		);
 	}
 
 	initRemoteNetworkNode{arg localNetwork;

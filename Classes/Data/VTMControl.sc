@@ -7,42 +7,42 @@ VTMControl : VTMData {
 	}
 	*managerClass{ ^VTMControlManager; }
 
-	*new{arg name, declaration, manager;
-		^super.new(name, declaration, manager).initControl;
+	*new{arg name, declaration;
+		^super.new(name, declaration).initControl;
 	}
 
-	*makeFromDescription{arg name, description, manager;
+	*makeFromDescription{arg name, description;
 		var result;
 		var mode;
 		mode = description.removeAt(\mode);
-		this.perform(mode ? \attribute, name, description, manager);
+		this.perform(mode ? \attribute, name, description);
 
 		^result;
 	}
 
-    *parameter{arg name, declaration, manager;
-		^VTMParameter(name, declaration, manager);
+    *parameter{arg name, declaration;
+		^VTMParameter(name, declaration);
     }
-	*attribute{arg name, declaration, manager;
-		^VTMAttribute(name, declaration, manager);
+	*attribute{arg name, declaration;
+		^VTMAttribute(name, declaration);
 	}
-	*command{arg name, declaration, manager;
-		^VTMCommand(name, declaration, manager);
+	*command{arg name, declaration;
+		^VTMCommand(name, declaration);
 	}
-	*signal{arg name, declaration, manager;
-		^VTMSignal(name, declaration, manager);
+	*signal{arg name, declaration;
+		^VTMSignal(name, declaration);
 	}
-	*return{arg name, declaration, manager;
-		^VTMReturn(name, declaration, manager);
+	*return{arg name, declaration;
+		^VTMReturn(name, declaration);
 	}
-	*score{arg name, declaration, manager;
-		^VTMScore(name, declaration, manager);
+	*score{arg name, declaration;
+		^VTMScore(name, declaration);
 	}
-	*cue{arg name, declaration, manager;
-		^VTMCue(name, declaration, manager);
+	*cue{arg name, declaration;
+		^VTMCue(name, declaration);
 	}
-	*mapping{arg name, declaration, manager;
-		^VTMMapping(name, declaration, manager);
+	*mapping{arg name, declaration;
+		^VTMMapping(name, declaration);
 	}
 
 	initControl{

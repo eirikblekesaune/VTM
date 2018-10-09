@@ -16,29 +16,20 @@ VTMData {
 	}
 
 	//name is mandatory, must be defined in arg or declaration
-	*new{arg name, declaration, manager;
+	*new{arg name, declaration;
         var decl;
 		if(name.isNil, {
 			VTMError(
 				"% - 'name' not defined".format(this)
 			).throw;
 		});
-        ^super.new.initData(name, declaration, manager);
+        ^super.new.initData(name, declaration);
 
 	}
 
-	initData{arg name_, declaration_, manager_;
-		manager = manager_;
+	initData{arg name_, declaration_;
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
 		this.prInitParameters;
-		//this.prInitManager;
-	}
-
-	prInitManager{
-		if(manager.notNil, {
-			manager.addItem(this);
-			this.addDependant(manager);
-		});
 	}
 
 	//get the parameter values from the declaration
@@ -208,7 +199,6 @@ VTMData {
 		^viewClass.new(parent, bounds, viewDef, settings, this);
 	}
 
-
 	debugString{
 		var result;
 		result = "\n'%' [%]\n".format(this.name, this.class);
@@ -216,5 +206,24 @@ VTMData {
 		result = result ++ "\t'description':\n %".format(
           this.description.makeTreeString(3));
 		^result;
+	}
+
+	update{arg whoChanged, whatChanged ...more;
+		switch(whatChanged,
+			\itemAdded, {
+				if(whoChanged.isKindOf(this.class.managerClass)
+				and: {more.first === this}, {
+					this.changed(\addedToManager, whoChanged);
+					manager = whoChanged;
+				});
+			},
+			\itemRemoved, {
+				if(whoChanged.isKindOf(this.class.managerClass)
+				and: {more.first === this}, {
+					manager = nil;
+					this.changed(\removedFromManager, whoChanged);
+				});
+			}
+		)
 	}
 }

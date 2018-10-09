@@ -3,8 +3,8 @@ VTMMapping : VTMControl {
 	var source;
 	var destination;
 
-	*new{arg name, declaration, manager;
-		^super.new(name, declaration, manager).initMapping;
+	*new{arg name, declaration;
+		^super.new(name, declaration ).initMapping;
 	}
 
 	initMapping{

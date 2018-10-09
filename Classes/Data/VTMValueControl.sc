@@ -3,8 +3,8 @@ VTMValueControl : VTMControl {
 	var forwardings;
 	var forwarder;
 
-	*new{arg name, declaration, manager;
-		^super.new(name, declaration, manager).initValueControl;
+	*new{arg name, declaration;
+		^super.new(name, declaration ).initValueControl;
 	}
 
 	initValueControl{

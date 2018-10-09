@@ -12,70 +12,22 @@ VTMContext : VTMElement {
 	var condition;
 	var library;
 
-	*new{arg name, declaration, manager, definition;
-		var defArg, loadedContextDefinition;
-		//If no manager defined, use the local network node as manager.
-		//TODO?: Will there be problems when a class is listed as manager
-		//for multiple type of objects, in the case of
-        //Context/LocalNetworkNode?
-		manager = manager ? VTM.local.findManagerForContextClass(this);
-
-		//The definition argument takes presedence over the definition
-        //named in the declaration. This makes it easier to temporary
-        //override context defitnitions in case they need to be worked
-        //on or modified on the spot.
-		if(declaration.notNil
-          and: {declaration.includesKey(\definition)},
-          {
-            defArg = declaration[\definition];
-          }
-        );
-
-		//The definition arg can either be a Symbol or an Environment.
-		//If a Symbol is used it will try to find the named definition
-        //from the manager library. If it is an Environment it will make
-        //an unamed ContextDefinition from the Enviroment instance.
-		defArg = definition ? defArg;
-
-		//If no definition was declared use an empty Environment for this.
-		if(defArg.isNil, {
-			defArg = Environment.new;
-		});
-
-		//If the definition is an Environment, either by default or
-        //from arg, make a new ContextDefinition from that.
-		case
-		{defArg.isKindOf(Environment)} {
-			loadedContextDefinition = VTMContextDefinition(defArg);
-		}
-		{defArg.isKindOf(PathName)} {
-			loadedContextDefinition = VTMContextDefinition.loadFromFile(
-				defArg.fullPath);
-		}
-        //otherwise try to find the ContextDefinition from the managers
-        //definition library.
-		{
-			loadedContextDefinition = manager.findContextDefinition(
-              defArg );
-		};
-
-		if(loadedContextDefinition.isNil, {
-			VTMError("Failed to make ContextDefinition for '%'".format(
-              name)
-            ).throw;
-		});
-		^super.new(name, declaration, manager).initContext(
-			loadedContextDefinition);
+	*new{arg name, declaration, definition;
+		^super.new(name, declaration).initContext(
+			definition);
 	}
 
 	//definition arg must be an instance of VTMContextDefinition
 	initContext{arg definition_;
 		definition = definition_;
 		stateChangeCallbacks = IdentityDictionary.new;
+		manager = VTM.local.findManagerForContextClass(this);
 
 		envir = definition.makeEnvir;
 		condition = Condition.new;
 		this.prChangeState(\loadedDefinition);
+		//add to default manager
+		manager.addItem(this);
 	}
 
 	isUnmanaged{

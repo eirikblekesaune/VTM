@@ -6,8 +6,8 @@ VTMCue : VTMControl {
 	var <>armed = true;
 	classvar <isAbstractClass=false;
 
-	*new{arg name, declaration, manager;
-		^super.new(name, declaration, manager).initCue;
+	*new{arg name, declaration;
+		^super.new(name, declaration).initCue;
 	}
 
 	*newFromCueFile{
