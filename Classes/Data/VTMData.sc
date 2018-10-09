@@ -17,36 +17,20 @@ VTMData {
 
 	//name is mandatory, must be defined in arg or declaration
 	*new{arg name, declaration, manager;
+        var decl;
 		if(name.isNil, {
 			VTMError(
 				"% - 'name' not defined".format(this)
 			).throw;
-		}, {
-			if(declaration.notNil
-			and: {declaration.isKindOf(Dictionary)}, {
-                declaration[\name] = name;
-			});
-        });
-		^this.newFromDeclaration(declaration, manager);
+		});
+        ^super.new.initData(name, declaration, manager);
+
 	}
 
-    *newFromDeclaration{| declaration, manager |
-        if(declaration.notNil
-        and: {declaration.isKindOf(Dictionary)}
-        and: {declaration.includesKey('name')}, {
-            ^super.new.initData(declaration, manager);
-        }, {
-			VTMError(
-				"% - 'name' not defined".format(this)
-			).throw;
-        });
-    }
-
-	initData{arg declaration_, manager_;
+	initData{arg name_, declaration_, manager_;
 		manager = manager_;
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
-        name = declaration[\name];
-		//this.prInitParameters;
+		this.prInitParameters;
 		//this.prInitManager;
 	}
 
@@ -60,22 +44,25 @@ VTMData {
 	//get the parameter values from the declaration
 	//Check for missing mandatory parameter values
 	prInitParameters{
-		var tempAttr;
-		var paramDecl = VTMParameters.new;
+		parameters = VTMParameterManager(this);
 
-		this.class.parameterDescriptions.keysValuesDo({arg key, val;
+		this.class.parameterDescriptions.keysValuesDo({
+			| key, props |
 			var tempVal;
+			var newProps;
+			var newParameter;
 			//check if parameter is defined in parameter values
 			if(declaration.includesKey(key), {
 				var checkType;
 				var checkValue;
-				tempVal = VTMValue.makeFromProperties(val);
-				//is type strict? true by default
-				checkType = val[\strictType] ? true;
+				tempVal = VTMValue.makeFromProperties(props);
+				//is type strict? true bk default
+				checkType = props[\strictType] ? true;
 				if(checkType, {
 					if(tempVal.isValidType(declaration[key]).not, {
 						VTMError(
-							"Parameter value '%' must be of type '%' value: %".format(
+							"Parameter value '%' must be of type '%'"
+                            "value: %".format(
 								key,
 								tempVal.type,
 								tempVal.value.asCompileString
@@ -84,7 +71,7 @@ VTMData {
 					});
 				});
 				//check if value is e.g. within described range.
-				checkValue = val[\strictValid] ? false;
+				checkValue = props[\strictValid] ? false;
 				if(checkValue, {
 					if(tempVal.isValidValue(declaration[key]).not, {
 						VTMError("Parameter value '%' is invalid"
@@ -92,30 +79,27 @@ VTMData {
 					});
 				});
 				tempVal.value = declaration[key];
-//				if(tempVal.value != declaration[key], {
-//					("%[%] - Parameter value was changed by value object:".format(
-//					name, this.class)	++
-//					"\n\tfrom: '%'[%] \n\tto: '%'[%]".format(
-//						declaration[key], declaration[key].class,
-//						tempVal.value, tempVal.value.class
-//					)).warn;
-//				});
-				paramDecl.put(key, tempVal.value);
+				newProps = tempVal.properties;
 			}, {
 				var optional;
 				//if not check if it is optional, true by default
-				optional = val[\optional] ? true;
+				optional = props[\optional] ? true;
 				if(optional.not, {
-					VTMError("Parameters is missing non-optional value '%'"
+					VTMError(
+                      "Parameters is missing non-optional value '%'"
 						.format(key)).throw;
-				}, {
-					//otherwise use the default value for the parameter
-					//decription.
-					paramDecl.put(key, VTMValue.makeFromProperties(val));
 				});
+				newProps = props.deepCopy;
 			});
+
+			newParameter = VTMParameter( key, newProps );
+			if(newParameter.isNil, {
+				VTMError("Building Parameter '%' failed!".format(
+					key
+				)).throw
+			});
+			parameters.addItem(newParameter);
 		});
-		parameters = VTMParameters.newFrom(paramDecl);
 	}
 
 	disable{
@@ -137,9 +121,7 @@ VTMData {
 	}
 
 	*parameterDescriptions{
-		^VTMOrderedIdentityDictionary[
-			\name -> (type: \string, optional: false)
-		];
+		^VTMOrderedIdentityDictionary.new;
 	}
 
 	*mandatoryParameters{
@@ -205,7 +187,9 @@ VTMData {
 
 	enableOSC {
 		oscInterface !? { oscInterface.enable(); };
-		oscInterface ?? { oscInterface = VTMOSCInterface(this).enable() };
+		oscInterface ?? {
+          oscInterface = VTMOSCInterface(this).enable()
+        };
 	}
 
 
@@ -229,7 +213,8 @@ VTMData {
 		var result;
 		result = "\n'%' [%]\n".format(this.name, this.class);
 		result = result ++ "\t'fullPath': %\n".format(this.fullPath);
-		result = result ++ "\t'description':\n %".format(this.description.makeTreeString(3));
+		result = result ++ "\t'description':\n %".format(
+          this.description.makeTreeString(3));
 		^result;
 	}
 }

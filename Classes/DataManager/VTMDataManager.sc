@@ -9,25 +9,30 @@ VTMDataManager {
 	}
 
 	//% itemDeclarations : VTMOrderedIdentityDictionary
-	*new{arg itemDeclarations, parent;
-		^super.new.initDataManager(itemDeclarations, parent);
+	*new{arg parent;
+		^super.new.initDataManager(parent);
 	}
 
 	//% itemDeclarations : VTMOrderedIdentityDictionary
-	initDataManager{arg itemDeclarations_, parent_;
-		itemDeclarations = itemDeclarations_;
+	initDataManager{arg  parent_;
 		parent = parent_;
 		items = VTMOrderedIdentityDictionary.new;
-		if(itemDeclarations.notNil, {
-			this.addItemsFromItemDeclarations(itemDeclarations);
-		});
+	}
+
+	*buildItem{arg name, declaration, manager;
+		var result;
+		result = this.class.dataClass.new(
+			name, declaration, manager
+		);
+		^result;
 	}
 
 	addItemsFromItemDeclarations{arg itemDecls;
 		itemDecls.keysValuesDo({arg itemName, itemDeclaration;
 			var newItem;
-			newItem = this.class.dataClass.new(itemName, itemDeclaration, this);
-			this.addItem(newItem);
+			newItem = this.class.buildItem(
+				itemName, itemDeclaration, this);
+			this.addItem( newItem );
 		});
 	}
 

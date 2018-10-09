@@ -18,9 +18,11 @@ VTMControl : VTMData {
 		this.perform(mode ? \attribute, name, description, manager);
 
 		^result;
-
 	}
 
+    *parameter{arg name, declaration, manager;
+		^VTMParameter(name, declaration, manager);
+    }
 	*attribute{arg name, declaration, manager;
 		^VTMAttribute(name, declaration, manager);
 	}

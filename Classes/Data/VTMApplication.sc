@@ -20,9 +20,9 @@ VTMApplication : VTMContext {
 		// libraries = VTMDefinitionLibraryManager.new(compItems, this);
 //		compItems = nil;
 //
-		hardwareDevices = VTMHardwareSetup(nil, this);
-		modules = VTMModuleHost(nil, this);
-		scenes = VTMSceneOwner(nil, this);
+		hardwareDevices = VTMHardwareSetup(this);
+		modules = VTMModuleHost(this);
+		scenes = VTMSceneOwner(this);
 	}
 
 	// components{

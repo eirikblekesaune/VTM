@@ -33,12 +33,12 @@ VTMLocalNetworkNode {
 	}
 
 	initLocalNetworkNode{
-		applicationManager = VTMApplicationManager.new(nil, this);
-		networkNodeManager = VTMNetworkNodeManager.new(nil, this);
-		hardwareSetup = VTMHardwareSetup.new(nil, this);
-		moduleHost = VTMModuleHost.new(nil, this);
-        sceneOwner = VTMSceneOwner.new(nil, this);
-		controls = VTMControlManager(nil, this);
+		applicationManager = VTMApplicationManager.new(this);
+		networkNodeManager = VTMNetworkNodeManager.new(this);
+		hardwareSetup = VTMHardwareSetup.new(this);
+		moduleHost = VTMModuleHost.new(this);
+        sceneOwner = VTMSceneOwner.new(this);
+		controls = VTMControlManager(this);
 
 		hostname = Pipe("hostname", "r").getLine();
 		if(".local$".matchRegexp(hostname), {

@@ -14,7 +14,7 @@ VTMElement : VTMData {
 	}
 
 	initControls{
-		controls = VTMControlManager();
+		controls = VTMControlManager(this);
 		this.class.controlDescriptions.keysValuesDo({arg ctrlKey, ctrlDesc;
 			var newCtrl;
 			newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc);

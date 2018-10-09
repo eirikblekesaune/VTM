@@ -8,7 +8,9 @@ VTMValueControl : VTMControl {
 	}
 
 	initValueControl{
-		var valueClass = VTMValue.typeToClass(declaration[\type]) ? VTMValue;
+		var valueClass = VTMValue.typeToClass(
+			declaration[\type]
+		) ? VTMValue;
 		var valueProperties = VTMOrderedIdentityDictionary.new;
 		//extract property values from declaration
 		valueClass.propertyKeys.do({arg propKey;
@@ -16,7 +18,10 @@ VTMValueControl : VTMControl {
 				valueProperties.put(propKey, declaration[propKey]);
 			});
 		});
-		valueObj = VTMValue.makeFromType(declaration[\type], valueProperties);
+		valueObj = VTMValue.makeFromType(
+			declaration[\type], valueProperties
+		);
+
 		forwardings = VTMOrderedIdentityDictionary.new;
 		this.enableForwarding;
 	}
@@ -35,7 +40,11 @@ VTMValueControl : VTMControl {
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll(
 			VTMOrderedIdentityDictionary[
-				\type -> (type: \string, optional: true, defaultValue: \none)
+				\type -> (
+					type: \string,
+					optional: true,
+					defaultValue: \none
+				)
 			]
 		);
 	}
