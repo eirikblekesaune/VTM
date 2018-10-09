@@ -18,27 +18,36 @@ VTMData {
 	//name is mandatory, must be defined in arg or declaration
 	*new{arg name, declaration, manager;
 		if(name.isNil, {
-			if(declaration.notNil and: {declaration.isKindOf(Dictionary)}, {
-				if(declaration.includesKey(\name), {
-					name = declaration[\name];
-				});
-			});
-		});
-		if(name.isNil, {
 			VTMError(
 				"% - 'name' not defined".format(this)
 			).throw;
-		});
-		^super.new.initData(name, declaration, manager);
+		}, {
+			if(declaration.notNil
+			and: {declaration.isKindOf(Dictionary)}, {
+                declaration[\name] = name;
+			});
+        });
+		^this.newFromDeclaration(declaration, manager);
 	}
 
-	initData{arg name_, declaration_, manager_;
-		name = name_;
+    *newFromDeclaration{| declaration, manager |
+        if(declaration.notNil
+        and: {declaration.isKindOf(Dictionary)}
+        and: {declaration.includesKey('name')}, {
+            ^super.new.initData(declaration, manager);
+        }, {
+			VTMError(
+				"% - 'name' not defined".format(this)
+			).throw;
+        });
+    }
+
+	initData{arg declaration_, manager_;
 		manager = manager_;
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
-		declaration.put(\name, name);
-		this.prInitParameters;
-		this.prInitManager;
+        name = declaration[\name];
+		//this.prInitParameters;
+		//this.prInitManager;
 	}
 
 	prInitManager{
