@@ -17,17 +17,28 @@ VTMContext : VTMElement {
 			definition);
 	}
 
-	//definition arg must be an instance of VTMContextDefinition
+	//definition arg can be either nil, an instance of
+	//VTMContextDefinition,  or Environment.
 	initContext{arg definition_;
-		definition = definition_;
+		var def;
+		if(definition_.isNil, {
+			def = Environment.new;
+		}, {
+			def = definition_;
+		});
+		if(def.isKindOf(Environment), {
+			def = VTMContextDefinition.newFromEnvir(def);
+		});
+
+		//in any case we copy the def
+		definition = def.deepCopy;
+		envir = definition.makeEnvir;
+
 		stateChangeCallbacks = IdentityDictionary.new;
 		manager = VTM.local.findManagerForContextClass(this);
 
-		envir = definition.makeEnvir;
 		condition = Condition.new;
 		this.prChangeState(\loadedDefinition);
-		//add to default manager
-		manager.addItem(this);
 	}
 
 	isUnmanaged{
