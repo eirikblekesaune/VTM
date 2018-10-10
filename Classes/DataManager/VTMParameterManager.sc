@@ -5,6 +5,8 @@ VTMParameterManager : VTMDataManager {
     ^super.new(itemDeclarations, parent).initParameterManager;
   }
 
+  name{ ^\parameters; }
+
   initParameterManager{
 
   }

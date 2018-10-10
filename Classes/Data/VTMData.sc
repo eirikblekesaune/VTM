@@ -23,11 +23,11 @@ VTMData {
 				"% - 'name' not defined".format(this)
 			).throw;
 		});
-        ^super.new.initData(name, declaration);
-
+        ^super.new.initData(name.asSymbol, declaration);
 	}
 
 	initData{arg name_, declaration_;
+		name = name_;
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
 		this.prInitParameters;
 	}
@@ -208,21 +208,35 @@ VTMData {
 		^result;
 	}
 
-	update{arg whoChanged, whatChanged ...more;
+	update{arg theChanged, whatChanged ...args;
+		(
+			"'%'\n\ttheChanged: %".format(this.name, theChanged) ++
+			"\n\twhatChanged: %".format(whatChanged) ++
+			"\n\targs: %".format(args)
+		).vtmdebug( 2, thisMethod);
+
 		switch(whatChanged,
-			\itemAdded, {
-				if(whoChanged.isKindOf(this.class.managerClass)
-				and: {more.first === this}, {
-					this.changed(\addedToManager, whoChanged);
-					manager = whoChanged;
-				});
-			},
-			\itemRemoved, {
-				if(whoChanged.isKindOf(this.class.managerClass)
-				and: {more.first === this}, {
-					manager = nil;
-					this.changed(\removedFromManager, whoChanged);
-				});
+			\items, {
+				var cmd, obj;
+				#cmd, obj = args;
+				switch(cmd,
+					\added, {
+						if(theChanged.isKindOf(this.class.managerClass)
+						and: {obj === this}, {
+							manager = theChanged;
+							this.addDependant(manager);
+							this.changed(\addedToManager, theChanged);
+						});
+					},
+					\removed, {
+						if(theChanged.isKindOf(this.class.managerClass)
+						and: {obj === this}, {
+							this.removeDependant(manager);
+							manager = nil;
+							this.changed(\removedFromManager, theChanged);
+						});
+					}
+				);
 			}
 		)
 	}

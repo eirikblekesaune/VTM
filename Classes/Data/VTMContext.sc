@@ -157,10 +157,6 @@ VTMContext : VTMElement {
 		^result;
 	}
 
-	update{arg theChanged, whatChanged, theChanger ...args;
-		"[%] Update: %".format(this.name, [theChanged, whatChanged, theChanger, args]).vtmdebug(2);
-	}
-
 	enableOSC {
 		super.enableOSC();
 		controls.enableOSC;

@@ -37,28 +37,41 @@ VTMDataManager {
 	}
 
 	addItem{arg newItem;
+		"% added item: %".format(this.fullPath, newItem).vtmdebug(
+			2, thisMethod);
+
 		if(newItem.isKindOf(this.class.dataClass), {//check arg type
+			//If the manager has already registered a context of this name then
+			//we free the old context.
+			//TODO: See if this need to be scheduled/synced in some way.
+			if(this.hasItemNamed(newItem.name), {
+				this.freeItem(newItem.name);
+			});
+
 			items.put(newItem.name, newItem);
-			this.changed(\items);
+			this.addDependant(newItem);
+			this.changed(\items, \added, newItem);
 		});
 	}
 
 	removeItem{arg itemName;
 		var removedItem;
-		items.removeAt(itemName);
-		this.changed(\items);
+		removedItem = items.removeAt(itemName);
+		if(removedItem.notNil, {
+			"% removed item: %".format(this.fullPath, removedItem).vtmdebug(2, thisMethod);
+			this.changed(\items, \removed, removedItem);
+			this.removeDependant(removedItem);
+		})
 		^removedItem;
 	}
 
 	freeItem{arg itemName;
-		if(this.hasItemNamed(itemName), {
-			var removedItem;
+		var removedItem;
+		items[itemName].disable;//dissable actions and messages
+		removedItem = this.removeItem(itemName);
+		if(removedItem.notNil, {
 			"% freeing item: %".format(this.fullPath, itemName).vtmdebug(2, thisMethod);
-			items[itemName].disable;//dissable actions and messages
-			removedItem = this.removeItem(itemName);
 			removedItem.free;
-		}, {
-			"% not freeing item: % since it was not found".format(this.fullPath, itemName).vtmdebug(2, thisMethod);
 		});
 	}
 
