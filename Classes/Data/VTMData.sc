@@ -35,13 +35,11 @@ VTMData {
 	//get the parameter values from the declaration
 	//Check for missing mandatory parameter values
 	prInitParameters{
-		parameters = VTMParameterManager(this);
+		parameters = VTMOrderedIdentityDictionary.new;
 
 		this.class.parameterDescriptions.keysValuesDo({
 			| key, props |
 			var tempVal;
-			var newProps;
-			var newParameter;
 			//check if parameter is defined in parameter values
 			if(declaration.includesKey(key), {
 				var checkType;
@@ -70,7 +68,6 @@ VTMData {
 					});
 				});
 				tempVal.value = declaration[key];
-				newProps = tempVal.properties;
 			}, {
 				var optional;
 				//if not check if it is optional, true by default
@@ -79,17 +76,17 @@ VTMData {
 					VTMError(
                       "Parameters is missing non-optional value '%'"
 						.format(key)).throw;
+				}, {
+					tempVal = VTMValue.makeFromProperties(props)
 				});
-				newProps = props.deepCopy;
 			});
 
-			newParameter = VTMParameter( key, newProps );
-			if(newParameter.isNil, {
+			if(tempVal.isNil, {
 				VTMError("Building Parameter '%' failed!".format(
 					key
 				)).throw
 			});
-			parameters.addItem(newParameter);
+			parameters.put(key, tempVal.deepCopy);
 		});
 	}
 
