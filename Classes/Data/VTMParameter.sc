@@ -1,2 +1,0 @@
-VTMParameter : VTMControl {
-}

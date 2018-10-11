@@ -3,7 +3,7 @@ VTMContextView : VTMView {
 	var labelView;
 	var contentView;
 	var headerView;
-	var parameterManagerView;
+	var parametersView;
 	classvar <unitSize;
 	classvar <defaultWidth;
 
@@ -23,11 +23,11 @@ VTMContextView : VTMView {
 		labelView = StaticText().string_(context.name).font_(this.font);
 		labelView.background_(Color.green);
 
-		parameterManagerView = VTMParameterManagerView.new(this);
+		parametersView = VTMDataParametersView.new(this);
 
 		contentView = View(this).layout_(
 			VLayout(
-				[parameterManagerView.background_(Color.yellow), align: \topLeft],
+				[parametersView.background_(Color.yellow), align: \topLeft],
 				// StaticText().string_("context content view").font_(this.font).background_(Color.cyan)
 			).spacing_(0).margins_(0);
 		);

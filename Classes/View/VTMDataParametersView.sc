@@ -1,4 +1,4 @@
-VTMParameterManagerView : VTMView {
+VTMDataParametersView : VTMView {
 	var contextView;
 	var parameterViews;
 
@@ -6,7 +6,7 @@ VTMParameterManagerView : VTMView {
 		if(parent.isKindOf(VTMContextView), {
 			^super.new(parent, bounds, definition, settings).initParameterManagerView;
 		}, {
-			"VTMParameterManagerView - parent View must be a kind of VTMContextView".warn;
+			"VTMDataParametersView - parent View must be a kind of VTMContextView".warn;
 			^nil;
 		});
 	}

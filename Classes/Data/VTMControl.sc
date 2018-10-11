@@ -20,9 +20,6 @@ VTMControl : VTMData {
 		^result;
 	}
 
-    *parameter{arg name, declaration;
-		^VTMParameter(name, declaration);
-    }
 	*attribute{arg name, declaration;
 		^VTMAttribute(name, declaration);
 	}
