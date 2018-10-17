@@ -1,6 +1,6 @@
 VTMJSON : JSON {
 
-	*stringify { arg obj;
+	*stringify { | obj |
 		var out;
 
 		if(obj.isString, {
@@ -12,7 +12,7 @@ VTMJSON : JSON {
 
 		if(obj.isKindOf(Dictionary), {
 			out = List.new;
-			obj.keysValuesDo({ arg key, value;
+			obj.keysValuesDo({ | key, value |
 				out.add( key.asString.asCompileString ++ ":" + VTMJSON.stringify(value) );
 			});
 			^("{" ++ (out.join(", ")) ++ "}");
@@ -48,7 +48,7 @@ VTMJSON : JSON {
 			^obj.asString
 		});
 		if(obj.isKindOf(SequenceableCollection), {
-			^"[" ++ obj.collect({ arg sub;
+			^"[" ++ obj.collect({ | sub |
 				VTMJSON.stringify(sub)
 			}).join(", ")
 			++ "]";
@@ -67,7 +67,7 @@ VTMJSON : JSON {
 		^VTMJSON.stringify(obj.asCompileString)
 	}
 
-	*parse{arg str;
+	*parse{| str |
 		var result;
 		result = str;
 		if(result.isKindOf(Symbol), {
@@ -76,11 +76,11 @@ VTMJSON : JSON {
 		result = result.parseYAML;
 		case
 		{result.isString;} {result = this.parseYAMLValue(result);}
-		{result.isKindOf(Collection)} {result = result.collect({arg item; this.parse(item);})}
+		{result.isKindOf(Collection)} {result = result.collect({| item | this.parse(item);})}
 		^result;
 	}
 
-	*parseYAMLValue{arg str;
+	*parseYAMLValue{| str |
 		var result = str;
 		case
 		{"^<int> -?[0-9]+$".matchRegexp(str)}
@@ -89,7 +89,7 @@ VTMJSON : JSON {
 		}
 		{"^<float> [0-9a-fA-F]{16}$".matchRegexp(str)}
 		{
-			result = str.drop(8).clump(8).collect({arg it; "0x%".format(it).interpret});
+			result = str.drop(8).clump(8).collect({| it | "0x%".format(it).interpret});
 			result = Float.from64Bits(*result);
 		}
 		{"^<float> [0-9a-fA-F]{8}$".matchRegexp(str)}

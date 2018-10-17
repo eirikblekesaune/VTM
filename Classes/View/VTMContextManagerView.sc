@@ -1,7 +1,7 @@
 VTMContextManagerView : VTMContextView {
 	var treeView;
 
-	*new{arg parent, bounds, context, definition, settings;
+	*new{| parent, bounds, context, definition, settings |
 		^super.new(parent, bounds, context, definition, settings).initContextManagerView;
 	}
 
@@ -19,14 +19,14 @@ VTMContextManagerView : VTMContextView {
 	prUpdateChildren{
 	{
 	treeView.clear;
-	context.children.do({arg child;
+	context.children.do({| child |
 	treeView.addItem([child.name]);
 	"updating children: %".format(child.name).vtmdebug(3, thisMethod);
 	});
 	}.defer;
 	}
 
-	update{arg theChanged, whatChanged, toValue ...args;
+	update{| theChanged, whatChanged, toValue ...args |
 	"[%] Update: %".format(this.name, [theChanged, whatChanged, theChanger, args]).vtmdebug(3, thisMethod);
 	if(theChanged === context, {
 	if(this.children.includes(theChanged), {

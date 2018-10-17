@@ -1,15 +1,15 @@
 VTMModuleFactory{
 	var <>host;
 
-	*new{arg host;
+	*new{| host |
 		^super.new.init(host);
 	}
 
-	init{arg host_;
+	init{| host_ |
 		host = host_;
 	}
 
-	build{arg definition, declaration;
+	build{| definition, declaration |
 		var moduleDefinition;
 		var newModule;
 
@@ -58,7 +58,7 @@ VTMModuleFactory{
 
 	}
 
-	loadModuleDefinitionFromFile{arg filepath;
+	loadModuleDefinitionFromFile{| filepath |
 
 	}
 
@@ -66,11 +66,11 @@ VTMModuleFactory{
 		^host.node.getFilePathFor(\moduleDefinition);
 	}
 
-	*isDeclarationForRemoteModule{arg desc;
+	*isDeclarationForRemoteModule{| desc |
 		^desc.includesKey(\app);
 	}
 
-	*isDeclarationForExistingModule{arg desc;
+	*isDeclarationForExistingModule{| desc |
 		^desc.includesKey(\path);
 	}
 }

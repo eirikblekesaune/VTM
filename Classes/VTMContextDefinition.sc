@@ -3,15 +3,15 @@ VTMContextDefinition {
 	var definition;
 	var pathName;
 
-	*new{arg envir, name;
+	*new{| envir, name |
 		^super.new.initContextDefinition(envir, name);
 	}
 
-	*newFromEnvir{arg envir, name;
+	*newFromEnvir{| envir, name |
 		^this.new(envir, name);
 	}
 
-	*newFromFile{arg filepath;
+	*newFromFile{| filepath |
 		var pathName = PathName(filepath);
 		var definitionName = pathName.fileName.findRegexp("(.+)_definition.scd$")[1][1].asSymbol;
 		var loadedEnvir;
@@ -38,7 +38,7 @@ VTMContextDefinition {
 		};
 	}
 
-	initContextDefinition{arg env_, name_;
+	initContextDefinition{| env_, name_ |
 		name = name_;
 		definition = env_.deepCopy;
 		definition = Environment[
@@ -56,7 +56,7 @@ VTMContextDefinition {
 		"init: %".format(name).vtmdebug(4, thisMethod);
 	}
 
-	makeEnvir{arg context;
+	makeEnvir{| context |
 		var result;
 		result = definition.deepCopy.put(\self, context);
 		^result;
@@ -70,7 +70,7 @@ VTMContextDefinition {
 		^result;
 	}
 
-	filepath_{arg str;
+	filepath_{| str |
 		pathName = PathName(str);
 	}
 

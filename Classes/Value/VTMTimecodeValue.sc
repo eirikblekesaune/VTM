@@ -10,11 +10,11 @@ VTMTimecodeValue : VTMValue {
 		^0;
 	}
 
-	isValidType{arg val;
+	isValidType{| val |
 		^val.isKindOf(SimpleNumber);
 	}
 
-	*new{arg properties;
+	*new{| properties |
 		^super.new(properties).initTimecodeValue;
 	}
 
@@ -22,7 +22,7 @@ VTMTimecodeValue : VTMValue {
 	}
 
 	//get only milliseconds as integer
-	milliseconds{arg wrap = true;
+	milliseconds{| wrap = true |
 		var result = this.value;
 		if(wrap, {
 			result = result % 1000.0;
@@ -30,7 +30,7 @@ VTMTimecodeValue : VTMValue {
 		^result;
 	}
 	//get only seconds as integer
-	seconds{arg wrap = true;
+	seconds{| wrap = true |
 		var result;
 		result = this.milliseconds(false) * 0.001;
 		if(wrap, {
@@ -39,7 +39,7 @@ VTMTimecodeValue : VTMValue {
 		^result.asInteger;
 	}
 	//get only minutes as integer
-	minutes{arg wrap = true;
+	minutes{| wrap = true |
 		var result;
 		result = this.seconds(false) / 60;
 		if(wrap, {
@@ -48,7 +48,7 @@ VTMTimecodeValue : VTMValue {
 		^result.asInteger;
 	}
 	//get only hours as integer
-	hours{arg wrap = true;
+	hours{| wrap = true |
 		var result;
 		result = this.minutes(false) / 60;
 		if(wrap, {
@@ -57,7 +57,7 @@ VTMTimecodeValue : VTMValue {
 		^result.asInteger;
 	}
 	//get only days as integer
-	days{arg wrap = true;
+	days{| wrap = true |
 		var result;
 		result = this.hours(false) / 24;
 		if(wrap, {
@@ -70,11 +70,11 @@ VTMTimecodeValue : VTMValue {
 		^[ this.milliseconds, this.seconds, this.minutes, this.hours, this.days	];
 	}
 
-	timestring{arg precision, maxDays, dropDaysIfPossible;
+	timestring{| precision, maxDays, dropDaysIfPossible |
 		^this.value.asTimeString(precision, maxDays, dropDaysIfPossible);
 	}
 
-	milliseconds_{arg val;
+	milliseconds_{| val |
 		var result;
 		//Should be a SimpleNumber maximum value 999.999999. Values outside this range will be clipped
 		if(val.isKindOf(SimpleNumber), {
@@ -89,7 +89,7 @@ VTMTimecodeValue : VTMValue {
 		});
 	}
 
-	seconds_{arg val;
+	seconds_{| val |
 		var result;
 		//Should be a SimpleNumber within 0 - 59. Values outside this range will be clipped.
 		//Floats will be converted into Integer
@@ -106,7 +106,7 @@ VTMTimecodeValue : VTMValue {
 		});
 	}
 
-	minutes_{arg val;
+	minutes_{| val |
 		var result;
 		//Should be a SimpleNumber within 0 - 59. Values outside this range will be clipped
 		//Floats will be converted into Integer
@@ -123,7 +123,7 @@ VTMTimecodeValue : VTMValue {
 		});
 	}
 
-	hours_{arg val;
+	hours_{| val |
 		var result;
 		//Should be a SimpleNumber within 0 - 23. Values outside this range will be clipped
 		//Floats will be converted into Integer
@@ -140,7 +140,7 @@ VTMTimecodeValue : VTMValue {
 		});
 	}
 
-	days_{arg val;
+	days_{| val |
 		var result;
 		//Should be a SimpleNumber within 0 - 364. Values outside this range will be clipped
 		//Floats will be converted into Integer

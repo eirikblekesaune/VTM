@@ -9,11 +9,11 @@ VTMValue {
 		^nil;
 	}
 
-	*typeToClass{arg val;
+	*typeToClass{| val |
 		^"VTM%Value".format(val.asString.capitalize).asSymbol.asClass;
 	}
 
-	*classToType{arg val;
+	*classToType{| val |
 		^val.name.asString.findRegexp("^VTM(.+)Value$")[1][1].toLower;
 	}
 
@@ -26,25 +26,25 @@ VTMValue {
 	}
 
 
-	*none{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*string{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*boolean{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*timecode{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*integer{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*decimal{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*array{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*dictionary{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*schema{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*list{arg properties; ^this.makeFromType(thisMethod.name, properties); }
-	*tuple{arg properties; ^this.makeFromType(thisMethod.name, properties); }
+	*none{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*string{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*boolean{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*timecode{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*integer{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*decimal{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*array{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*dictionary{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*schema{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*list{| properties | ^this.makeFromType(thisMethod.name, properties); }
+	*tuple{| properties | ^this.makeFromType(thisMethod.name, properties); }
 
-	*makeFromProperties{arg properties;
+	*makeFromProperties{| properties |
 		var dec = properties.deepCopy;
 		var type = dec.removeAt(\type);
 		^this.makeFromType(type, dec);
 	}
 
-	*makeFromType{arg type, properties;
+	*makeFromType{| type, properties |
 		var class;
 		class = this.typeToClass(type);
 		if(class.notNil, {
@@ -54,11 +54,11 @@ VTMValue {
 		});
 	}
 
-	*new{arg properties;
+	*new{| properties |
 		^super.new.initValue(properties);
 	}
 
-	initValue{arg properties_;
+	initValue{| properties_ |
 		properties = VTMValueProperties.newFrom(properties_ ? []);
 		if(properties.notEmpty, {
 			if(properties.includesKey(\value), {
@@ -75,12 +75,12 @@ VTMValue {
 	}
 
 	//only non-abstract sub classes will implement this.
-	isValidType{arg val;
+	isValidType{| val |
 		this.subclassResponsibility(thisMethod);
 	}
 
 	//set value to default
-	reset{arg doActionUponReset = false;
+	reset{| doActionUponReset = false |
 		if(this.defaultValue.notNil, {
 			this.value_(this.defaultValue);
 			if(doActionUponReset, {
@@ -89,7 +89,7 @@ VTMValue {
 		});
 	}
 
-	valueAction_{arg val;
+	valueAction_{| val |
 		if(this.filterRepetitions, {
 			var willDoAction = val != this.value; //check if new value is different
 			this.value_(val);
@@ -104,7 +104,7 @@ VTMValue {
 
 	//Enabled by default.
 	//Will enable action to be run
-	enable{arg doActionWhenEnabled = false;
+	enable{| doActionWhenEnabled = false |
 		this.enabled_(true);
 		if(doActionWhenEnabled, {
 			this.doAction;
@@ -122,7 +122,7 @@ VTMValue {
 		});
 	}
 
-	ramp{arg val, time;
+	ramp{| val, time |
 		if(scheduler.isPlaying, {
 			scheduler.stop;
 		});
@@ -132,33 +132,33 @@ VTMValue {
 		};
 	}
 
-	addEnum{arg val, name, slot;
+	addEnum{| val, name, slot |
 		enum.addItem(val, name, slot);
 		this.changed(\enum);
 	}
 
-	removeEnum{arg slotOrName;
+	removeEnum{| slotOrName |
 		if(enum.removedItem(slotOrName).notNil, {
 			this.changed(\enum);
 		});
 	}
 
-	moveEnum{arg slotOrName, toSlot;
+	moveEnum{| slotOrName, toSlot |
 		enum.moveItem(slotOrName, toSlot);
 		this.changed(\enum);
 	}
 
-	setEnumName{arg slotOrName, itemName;
+	setEnumName{| slotOrName, itemName |
 		enum.setItemName(slotOrName, itemName);
 		this.changed(\enum);
 	}
 
-	changeEnum{arg slotOrName, newValue;
+	changeEnum{| slotOrName, newValue |
 		enum.changeItem(slotOrName, newValue);
 		this.changed(\enum);
 	}
 
-	getEnumValue{arg slotOrName;
+	getEnumValue{| slotOrName |
 		^enum[slotOrName];
 	}
 
@@ -166,16 +166,16 @@ VTMValue {
 		^[\enabled, \filterRepetitions, \value, \defaultValue, \enum, \restrictValueToEnum];
 	}
 
-	set{arg key, val;
+	set{| key, val |
 		properties.put(key, val);
 		this.changed(\properties, key);
 	}
 
-	get{arg key;
+	get{| key |
 		^properties[key];
 	}
 
-	properties{arg includeDefaultValues = true, includeType = true;
+	properties{| includeDefaultValues = true, includeType = true |
 		var result = properties.class.new;
 		var propKeys;
 		propKeys = result.keys;
@@ -185,7 +185,7 @@ VTMValue {
 		if(includeType, {
 			propKeys = propKeys.add(\type);
 		});
-		propKeys.do({arg attrKey;
+		propKeys.do({| attrKey |
 			var attrVal = this.perform(attrKey);
 			//don't use the ones that are nil
 			if(attrVal.notNil, {
@@ -198,13 +198,13 @@ VTMValue {
 
 	//Property getters
 	enabled{ ^this.get(\enabled) ? true; }
-	enabled_{arg val; this.set(\enabled, val); }
+	enabled_{| val | this.set(\enabled, val); }
 
 	filterRepetitions{ ^this.get(\filterRepetitions) ? false; }
-	filterRepetitions_{arg val; this.set(\filterRepetitions, val); }
+	filterRepetitions_{| val | this.set(\filterRepetitions, val); }
 
 	value{ ^this.get(\value) ? this.defaultValue; }
-	value_{arg val;
+	value_{| val |
 		if(this.restrictValueToEnum, {
 			if(this.enum.includes(val), {
 				this.set(\value, val);
@@ -217,13 +217,13 @@ VTMValue {
 	}
 
 	defaultValue{ ^this.get(\defaultValue) ? this.class.prDefaultValueForType; }
-	defaultValue_{arg val; this.set(\defaultValue, val); }
+	defaultValue_{| val | this.set(\defaultValue, val); }
 
 	enum{ ^this.get(\enum); }
-	enum_{arg val; this.set(\enum, val); }
+	enum_{| val | this.set(\enum, val); }
 
 	restrictValueToEnum{ ^this.get(\restrictValueToEnum) ? false; }
-	restrictValueToEnum_{arg val; this.set(\restrictValueToEnum, val); }
+	restrictValueToEnum_{| val | this.set(\restrictValueToEnum, val); }
 
 
 	//views
@@ -231,7 +231,7 @@ VTMValue {
 		^'VTMValueView'.asClass;
 	}
 
-	makeView{arg parent, bounds, definition, settings;
+	makeView{| parent, bounds, definition, settings |
 		var viewClass = this.class.getViewClass;
 		//override class if defined in settings.
 		^viewClass.new(parent, bounds, definition, settings, this);

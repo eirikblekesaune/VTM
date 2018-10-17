@@ -1,14 +1,14 @@
 VTMOrderedDictionary : Dictionary{
 	var <order;
 
-	put{arg key, value;
+	put{| key, value |
 		if(this.includesKey(key).not, {
 			order = order.add(key);
 		});
 		^super.put(key, value);
 	}
 
-	keysValuesArrayDo { arg argArray, function;
+	keysValuesArrayDo {| argArray, function |
 		var arr;
 		if(this.isEmpty.not, {
 			arr = [
@@ -19,7 +19,7 @@ VTMOrderedDictionary : Dictionary{
 		});
 	}
 
-	keys { arg species(Array);
+	keys { | species(Array) |
 		^super.keys(species);
 	}
 
@@ -38,14 +38,14 @@ VTMOrderedDictionary : Dictionary{
 	}
 
 	//adding additional check for equal order
-	== {arg what;
+	== {| what |
 		var result = super == what;
 		if(result.not, { ^false; });
 		if(order != what.order, {^false;});
 		^true;
 	}
 
-	removeAt{arg key;
+	removeAt{| key |
 		if(order.includes(key), {
 			order.remove(key);
 		});

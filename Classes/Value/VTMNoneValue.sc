@@ -1,7 +1,7 @@
 VTMNoneValue : VTMValue{
 	*type{ ^\none; }
 
-	*prDefaultValueForType{ 
+	*prDefaultValueForType{
 		^VTMValue.allSubclasses.choose.prDefaultValueForType;
 	}
 }

@@ -12,10 +12,10 @@ VTMSceneOwner : VTMContextManager {
 		super.free;
 	}
 
-	addScene{arg newScene;
+	addScene{| newScene |
 	}
 
-	loadSceneCue{arg cue;
+	loadSceneCue{| cue |
 		var newScene;
 		try{
 			newScene = sceneFactory.build(cue);

@@ -4,18 +4,18 @@ VTMModule : VTMComposableContext {
 
 	*managerClass{ ^VTMModuleHost; }
 
-	*new{arg name, declaration, definition;
+	*new{| name, declaration, definition |
 		^super.new(name, declaration, definition).initModule;
 	}
 
 	initModule{
 	}
 
-	play{arg ...args;
+	play{| ...args |
 		this.execute(\play, *args);
 	} //temp for module definition hackaton
 
-	stop{arg ...args;
+	stop{| ...args |
 		this.execute(\stop, *args);
 	} //temp for module definition hackaton
 

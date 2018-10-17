@@ -2,7 +2,7 @@ VTMDataParametersView : VTMView {
 	var contextView;
 	var parameterViews;
 
-	*new{arg parent, bounds, definition, settings;
+	*new{| parent, bounds, definition, settings |
 		if(parent.isKindOf(VTMContextView), {
 			^super.new(parent, bounds, definition, settings).initParameterManagerView;
 		}, {
@@ -15,7 +15,7 @@ VTMDataParametersView : VTMView {
 		parameterViews = [];
 		"Context parameters are : %".format(this.context.parameters).vtmdebug(4, thisMethod);
 		if(this.context.parameters.notEmpty, {
-			parameterViews = this.context.parameterOrder.collect({arg item;
+			parameterViews = this.context.parameterOrder.collect({| item |
 				"making para view: %".format(item).vtmdebug(4, thisMethod);
 				this.context.parameters[item].makeView(this);
 			});

@@ -9,7 +9,7 @@ VTMArrayValue : VTMCollectionValue {
 	var <fixedSize = false;
 	var <itemType;
 
-	isValidType{arg val;
+	isValidType{| val |
 		^(val.isString.not and: {val.isArray});
 	}
 
@@ -19,7 +19,7 @@ VTMArrayValue : VTMCollectionValue {
 		^[];
 	}
 
-	*new{arg properties;
+	*new{| properties |
 		^super.new(properties).initArrayValue;
 	}
 

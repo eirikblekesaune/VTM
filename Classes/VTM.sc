@@ -24,18 +24,18 @@ VTM{
 		^List[this.local].addAll(this.local.networkNodeManager.items);
 	}
 
-	*sendMsg{arg hostname, port, path ...data;
+	*sendMsg{| hostname, port, path ...data |
 		this.local.sendMsg(hostname, port, path, *data);
 	}
 
-	*sendLocalMsg{arg path ...data;
+	*sendLocalMsg{| path ...data |
 		this.sendMsg(
 			NetAddr.localAddr.hostname, NetAddr.localAddr.port,
 			path, *data
 		);
 	}
 
-	*activate{arg discovery = false, remoteNetworkNodesToActivate;
+	*activate{| discovery = false, remoteNetworkNodesToActivate |
 		this.local.activate(discovery, remoteNetworkNodesToActivate);
 	}
 
@@ -49,11 +49,11 @@ VTM{
 
 	*vtmPath{ ^PathName(PathName(this.filenameSymbol.asString).parentPath).parentPath; }
 
-	*loadLibrary{arg folderPath;
+	*loadLibrary{| folderPath |
 
 	}
 
-	*makeView{arg parent, bounds, viewDef, settings;
+	*makeView{| parent, bounds, viewDef, settings |
 		var result;
 		result = Window("VTM", bounds).layout_(
 			HLayout(

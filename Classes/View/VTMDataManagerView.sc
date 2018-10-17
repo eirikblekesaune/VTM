@@ -4,7 +4,7 @@ VTMDataManagerView : VTMView {
 	var showItemsButton;
 	var showNumItemsLabel;
 
-	showItems_{arg bool;
+	showItems_{| bool |
 		showItems = bool;
 		{
 			itemsView.visible = showItems;
@@ -15,7 +15,7 @@ VTMDataManagerView : VTMView {
 		itemsView.children.do(_.remove);
 		itemsView.layout_(
 			VLayout(
-				*model.items.collect({arg item;
+				*model.items.collect({| item |
 					[
 						item.makeView,
 						\align,
@@ -36,7 +36,7 @@ VTMDataManagerView : VTMView {
 			["[—]", Color.black, Color.white.alpha_(0.1)]
 		])
 		.value_(showItems.asInt)
-		.action_({arg butt; this.showItems_(butt.value.booleanValue); })
+		.action_({| butt | this.showItems_(butt.value.booleanValue); })
 		.font_(this.font)
 		.background_(labelView.background)
 		.fixedSize_(Size(15,15))
@@ -73,7 +73,7 @@ VTMDataManagerView : VTMView {
 	}
 
 	//pull style update
-	update{arg theChanged, whatChanged, whoChangedIt, toValue;
+	update{| theChanged, whatChanged, whoChangedIt, toValue |
 		"Dependant update: % % % %".format(
 			theChanged, whatChanged, whoChangedIt, toValue
 		).vtmdebug(3, thisMethod);

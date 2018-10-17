@@ -9,17 +9,17 @@ VTMDataManager {
 	}
 
 	//% itemDeclarations : VTMOrderedIdentityDictionary
-	*new{arg parent;
+	*new{| parent |
 		^super.new.initDataManager(parent);
 	}
 
 	//% itemDeclarations : VTMOrderedIdentityDictionary
-	initDataManager{arg  parent_;
+	initDataManager{|  parent_ |
 		parent = parent_;
 		items = VTMOrderedIdentityDictionary.new;
 	}
 
-	*buildItem{arg name, declaration, manager;
+	*buildItem{| name, declaration, manager |
 		var result;
 		result = this.class.dataClass.new(
 			name, declaration, manager
@@ -27,8 +27,8 @@ VTMDataManager {
 		^result;
 	}
 
-	addItemsFromItemDeclarations{arg itemDecls;
-		itemDecls.keysValuesDo({arg itemName, itemDeclaration;
+	addItemsFromItemDeclarations{| itemDecls |
+		itemDecls.keysValuesDo({| itemName, itemDeclaration |
 			var newItem;
 			newItem = this.class.buildItem(
 				itemName, itemDeclaration, this);
@@ -36,11 +36,10 @@ VTMDataManager {
 		});
 	}
 
-	addItem{arg newItem;
-		"% added item: %".format(this.fullPath, newItem).vtmdebug(
-			2, thisMethod);
+	addItem{| newItem |
+		"% added item: %".format(this.fullPath, newItem).vtmdebug(2, thisMethod);
 
-		if(newItem.isKindOf(this.class.dataClass), {//check arg type
+		if(newItem.isKindOf(this.class.dataClass), {//check argument type
 			//If the manager has already registered a context of this name then
 			//we free the old context.
 			//TODO: See if this need to be scheduled/synced in some way.
@@ -54,7 +53,7 @@ VTMDataManager {
 		});
 	}
 
-	removeItem{arg itemName;
+	removeItem{| itemName |
 		var removedItem;
 		removedItem = items.removeAt(itemName);
 		if(removedItem.notNil, {
@@ -65,7 +64,7 @@ VTMDataManager {
 		^removedItem;
 	}
 
-	freeItem{arg itemName;
+	freeItem{| itemName |
 		var removedItem;
 		items[itemName].disable;//dissable actions and messages
 		removedItem = this.removeItem(itemName);
@@ -75,7 +74,7 @@ VTMDataManager {
 		});
 	}
 
-	hasItemNamed{arg key;
+	hasItemNamed{| key |
 		^items.includesKey(key);
 	}
 
@@ -87,7 +86,7 @@ VTMDataManager {
 		^items.size;
 	}
 
-	at{arg key;
+	at{| key |
 		^items.at(key);
 	}
 
@@ -95,7 +94,7 @@ VTMDataManager {
 
 	free{
 		this.disableOSC;
-		this.names.do({arg itemName;
+		this.names.do({| itemName |
 			this.freeItem(itemName);
 		});
 		this.changed(\freed);
@@ -107,14 +106,14 @@ VTMDataManager {
 
 	name{ this.subclassResponsibility(thisMethod); }
 
-	itemDeclarations{arg recursive;
+	itemDeclarations{| recursive |
 		var result;
 		if(recursive, {
-			items.do({arg item;
+			items.do({| item |
 				result = result.addAll([item.name, item.declaration]);
 			});
 		}, {
-			items.do({arg item;
+			items.do({| item |
 				result = result.addAll([item.name]);
 			});
 		});
@@ -122,31 +121,31 @@ VTMDataManager {
 	}
 
 	attributes {
-		^items.select({arg it; it.isKindOf(VTMAttribute)});
+		^items.select({| it | it.isKindOf(VTMAttribute)});
 	}
 
 	commands{
-		^items.select({arg it; it.isKindOf(VTMCommand)});
+		^items.select({| it | it.isKindOf(VTMCommand)});
 	}
 
 	returns{
-		^items.select({arg it; it.isKindOf(VTMReturn)});
+		^items.select({| it | it.isKindOf(VTMReturn)});
 	}
 
 	signals{
-		^items.select({arg it; it.isKindOf(VTMSignal)});
+		^items.select({| it | it.isKindOf(VTMSignal)});
 	}
 
 	mappings {
-		^items.select({arg it; it.isKindOf(VTMMapping)});
+		^items.select({| it | it.isKindOf(VTMMapping)});
 	}
 
 	cues {
-		^items.select({arg it; it.isKindOf(VTMCue)});
+		^items.select({| it | it.isKindOf(VTMCue)});
 	}
 
 	scores {
-		^items.select({arg it; it.isKindOf(VTMScore)});
+		^items.select({| it | it.isKindOf(VTMScore)});
 	}
 
 
@@ -180,9 +179,9 @@ VTMDataManager {
 		^oscInterface.notNil();
 	}
 
-	*makeDataManagerDeclaration{arg descriptions, valueDeclarations;
+	*makeDataManagerDeclaration{| descriptions, valueDeclarations |
 		var result = VTMOrderedIdentityDictionary[];
-		descriptions.keysValuesDo({arg key, val;
+		descriptions.keysValuesDo({| key, val |
 			result.put(key, val);
 			if(valueDeclarations.includesKey(key), {
 				result[key].put(\value, valueDeclarations[key]);
@@ -191,35 +190,35 @@ VTMDataManager {
 		^result;
 	}
 
-	addForwarding{arg key, itemName, addr, path, vtmJson = false, mapFunc;
+	addForwarding{| key, itemName, addr, path, vtmJson = false, mapFunc |
 		var item = items[itemName];
 		item.addForwarding(key, addr, path, vtmJson, mapFunc);
 	}
 
-	removeForwarding{arg key, itemName;
+	removeForwarding{| key, itemName |
 		var item = items[itemName];
 		item.removeForwarding(key);
 	}
 
 	removeAllForwardings{
-		items.do({arg item;
+		items.do({| item |
 			item.removeAllForwarding;
 		});
 	}
 
 	enableForwarding{
-		items.do({arg item;
+		items.do({| item |
 			item.enableForwarding;
 		});
 	}
 
 	disableForwarding{
-		items.do({arg item;
+		items.do({| item |
 			item.disableForwarding;
 		});
 	}
 
-	update{arg theChanged, whatChanged ...more;
+	update{| theChanged, whatChanged ...more |
 		if(theChanged.isKindOf(this.class.dataClass) and: {
 			items.includes(theChanged)
 		}, {
@@ -231,7 +230,7 @@ VTMDataManager {
 		});
 	}
 
-	makeView{arg parent, bounds, viewDef, settings;
+	makeView{| parent, bounds, viewDef, settings |
 		^'VTMDataManagerView'.asClass.new(
 			parent, bounds, viewDef, settings, this
 		);

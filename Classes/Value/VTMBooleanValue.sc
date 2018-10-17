@@ -5,11 +5,11 @@ VTMBooleanValue : VTMValue {
 
 	*type{ ^\boolean; }
 
-	isValidType{arg val;
+	isValidType{| val |
 		^val.isKindOf(Boolean);
 	}
 
-	*new{arg properties;
+	*new{| properties |
 		^super.new(properties).initBooleanValue;
 	}
 
@@ -21,7 +21,7 @@ VTMBooleanValue : VTMValue {
 		this.valueAction_(this.value.not);
 	}
 
-	doActionOn_{arg when;
+	doActionOn_{| when |
 		if([\rising, \falling, \change].includes(when), {
 			doActionOn = when;
 		}, {

@@ -7,11 +7,11 @@ VTMControl : VTMData {
 	}
 	*managerClass{ ^VTMControlManager; }
 
-	*new{arg name, declaration;
+	*new{| name, declaration |
 		^super.new(name, declaration).initControl;
 	}
 
-	*makeFromDescription{arg name, description;
+	*makeFromDescription{| name, description |
 		var result;
 		var mode;
 		mode = description.removeAt(\mode);
@@ -20,25 +20,25 @@ VTMControl : VTMData {
 		^result;
 	}
 
-	*attribute{arg name, declaration;
+	*attribute{| name, declaration |
 		^VTMAttribute(name, declaration);
 	}
-	*command{arg name, declaration;
+	*command{| name, declaration |
 		^VTMCommand(name, declaration);
 	}
-	*signal{arg name, declaration;
+	*signal{| name, declaration |
 		^VTMSignal(name, declaration);
 	}
-	*return{arg name, declaration;
+	*return{| name, declaration |
 		^VTMReturn(name, declaration);
 	}
-	*score{arg name, declaration;
+	*score{| name, declaration |
 		^VTMScore(name, declaration);
 	}
-	*cue{arg name, declaration;
+	*cue{| name, declaration |
 		^VTMCue(name, declaration);
 	}
-	*mapping{arg name, declaration;
+	*mapping{| name, declaration |
 		^VTMMapping(name, declaration);
 	}
 
@@ -49,7 +49,7 @@ VTMControl : VTMData {
 		super.free;
 	}
 
-	makeView{arg parent, bounds, viewDef, settings;
+	makeView{| parent, bounds, viewDef, settings |
 		^this.class.viewClass.new(parent, bounds, viewDef, settings, this);
 	}
 }

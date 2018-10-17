@@ -12,14 +12,14 @@ VTMContext : VTMElement {
 	var condition;
 	var library;
 
-	*new{arg name, declaration, definition;
+	*new{| name, declaration, definition |
 		^super.new(name, declaration).initContext(
 			definition);
 	}
 
-	//definition arg can be either nil, an instance of
+	//definition argument can be either nil, an instance of
 	//VTMContextDefinition,  or Environment.
-	initContext{arg definition_;
+	initContext{| definition_ |
 		var def;
 		if(definition_.isNil, {
 			def = Environment.new;
@@ -50,21 +50,21 @@ VTMContext : VTMElement {
     //argument the context will make its own condition instance.
 	//The ~prepare stage is where the module definition defines and
     //creates its parameters.
-	prepare{arg condition, action;
+	prepare{| condition, action |
 		forkIfNeeded{
 			var cond = condition ?? {Condition.new};
 			this.prChangeState(\willPrepare);
 			if(envir.includesKey(\prepare), {
 				this.execute(\prepare, cond);
 			});
-			//this.controls.select(_.notNil).do({arg it; it.prepare(cond)});
+			//this.controls.select(_.notNil).do({| it | it.prepare(cond)});
 			//this.enableOSC;
 			this.prChangeState(\didPrepare);
 			action.value(this);
 		};
 	}
 
-	free{arg condition, action;
+	free{| condition, action |
 		//the stuff that needs to be freed in the envir will happen
 		//in a separate thread. Everything else happens synchronously.
 		this.prChangeState(\willFree);
@@ -108,7 +108,7 @@ VTMContext : VTMElement {
 	//		^result;
 	//	}
 
-	prChangeState{ arg val;
+	prChangeState{ | val |
 		var newState;
 		var callback;
 		if(state != val, {
@@ -123,14 +123,14 @@ VTMContext : VTMElement {
 		});
 	}
 
-	on{arg stateKey, func;
+	on{| stateKey, func |
 		var it = stateChangeCallbacks[stateKey];
 		it = it.addFunc(func);
 		stateChangeCallbacks.put(stateKey, it);
 	}
 
 	//Call functions in the runtime environment with this context as first arg.
-	execute{arg selector ...args;
+	execute{| selector ...args |
 		var result;
 		envir.use{
 			result = currentEnvironment[selector].value(this, *args);
@@ -138,7 +138,7 @@ VTMContext : VTMElement {
 		^result;
 	}
 
-	executeWithPrototypes{arg selector ...args;
+	executeWithPrototypes{| selector ...args |
 		var funcList, nextProto, result;
 		//Make a function stack of the proto functions
 		nextProto = envir;
@@ -149,7 +149,7 @@ VTMContext : VTMElement {
 			nextProto = nextProto.proto;
 		});
 		envir.use{
-			funcList.reverseDo({arg item;
+			funcList.reverseDo({| item |
 				//last one to evaluate is the the one that returns result
 				result = item.valueEnvir(this, *args);
 			});
@@ -182,7 +182,7 @@ VTMContext : VTMElement {
 		]);
 	}
 
-	description{arg includeDeclaration = false;
+	description{| includeDeclaration = false |
 		var result;
 		result = super.description(includeDeclaration).put(
 			\definition, definition.description
@@ -194,7 +194,7 @@ VTMContext : VTMElement {
 	//This method opens a gaping hole into the context's
 	//innards, so it should not be used by other classes
 	//than VTMControlManager
-	prContextualizeFunction{arg func;
+	prContextualizeFunction{| func |
 		var result;
 		envir.use{
 			result = func.inEnvir;

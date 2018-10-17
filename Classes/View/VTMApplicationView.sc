@@ -5,11 +5,11 @@ VTMApplicationView : VTMView {
 	var headerView, contentView, bottomView, statusView;
 	var sceneOwnerView, moduleHostView, hardwareSetupView, networkView;
 
-	*new{arg parent, bounds, application, definition, settings;
+	*new{| parent, bounds, application, definition, settings |
 		^super.new(parent, bounds, definition, settings).initApplicationView(application);
 	}
 
-	initApplicationView{arg application_;
+	initApplicationView{| application_ |
 		application = application_;
 		//make views
 		appNameView = View()
@@ -85,7 +85,7 @@ VTMApplicationView : VTMView {
 
 	}
 
-	showInStageView{arg val;
+	showInStageView{| val |
 
 	}
 }

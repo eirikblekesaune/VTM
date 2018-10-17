@@ -11,7 +11,7 @@ VTMOSCInterface {
 	var <enabled = false;
 	var responder, compliant_responder;
 
-	*new { |parent|
+	*new {| parent |
 
 		if(parent.respondsTo(\fullPath).not, {
 			NotYetImplementedError(
@@ -23,7 +23,7 @@ VTMOSCInterface {
 		^super.newCopyArgs(parent);
 	}
 
-	*makeOSCPathCompliant { |path|
+	*makeOSCPathCompliant {| path |
 		var res = path.asString().replace("/:", "/");
 		if(res.contains(":")) { res = res.replace(":", "/") };
 		^res
@@ -32,7 +32,7 @@ VTMOSCInterface {
 	makeResponderFromParent {
 		var compliantPath;
 
-		responder = OSCFunc({|msg, time, addr, recvport|
+		responder = OSCFunc({| msg, time, addr, recvport |
 			var path = msg[0];
 			msg = msg.drop(1);
 			"OSC Message received at %, on port %, addressed to: %, with value: %".format(
@@ -48,7 +48,7 @@ VTMOSCInterface {
 		compliantPath = this.class.makeOSCPathCompliant(parent.fullPath.asString());
 		compliantPath = compliantPath.asSymbol;
 		if(compliantPath != parent.fullPath, {
-			compliant_responder = OSCFunc({|msg, time, addr, recvport|
+			compliant_responder = OSCFunc({| msg, time, addr, recvport |
 				var path = msg[0];
 				msg = msg.drop(1);
 				"OSC Message received at %, on port %, addressed to: %, with value: %".format(

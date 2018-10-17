@@ -1,5 +1,5 @@
 VTMTupleValue : VTMListValue {
-	isValidType{arg val;
+	isValidType{| val |
 		var result = false;
 		if(super.isValidType(val), {
 			result = this.validate(val);

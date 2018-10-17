@@ -1,6 +1,6 @@
 VTMDictionaryValue : VTMCollectionValue {
 	*prDefaultValueForType {^Dictionary.new}
-	isValidType{arg val;
+	isValidType{| val |
 		^val.isKindOf(Dictionary);
 	}
 	value{^super.value.copy}

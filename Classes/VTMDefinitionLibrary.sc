@@ -21,11 +21,11 @@ VTMDefinitionLibrary {
 		});
 	}
 
-	*new{arg folderPaths;
+	*new{| folderPaths |
 		^super.new.initDefinitionLibrary(folderPaths);
 	}
 
-	initDefinitionLibrary{arg folderPaths_;
+	initDefinitionLibrary{| folderPaths_ |
 		folderPaths = folderPaths_;
 		if(folderPaths.isString, {
 			folderPaths = [folderPaths];
@@ -34,7 +34,7 @@ VTMDefinitionLibrary {
 		definitions = this.class.readLibrary(folderPaths);
 	}
 
-	findDefinition{arg defName;
+	findDefinition{| defName |
 		var result;
 		result = definitions[defName];
 
@@ -48,10 +48,10 @@ VTMDefinitionLibrary {
 		^result.deepCopy;
 	}
 
-	*readLibrary{arg folderPaths;
+	*readLibrary{| folderPaths |
 		var result = VTMOrderedIdentityDictionary.new;
 		var readEntry;
-		readEntry = {arg entryPathName, res;
+		readEntry = {| entryPathName, res |
 			case
 			{entryPathName.isFile} {
 				var defEnvir;
@@ -74,14 +74,14 @@ VTMDefinitionLibrary {
 				});
 			}
 			{entryPathName.isFolder} {
-				entryPathName.entries.do({arg item;
+				entryPathName.entries.do({| item |
 					readEntry.value(item, res);
 				});
 			};
 		};
-		folderPaths.do{arg folderPath;
+		folderPaths.do{| folderPath |
 			if(File.exists(folderPath), {
-				PathName(folderPath).entries.do({arg entry;
+				PathName(folderPath).entries.do({| entry |
 					readEntry.value(entry, result);
 				});
 			}, {

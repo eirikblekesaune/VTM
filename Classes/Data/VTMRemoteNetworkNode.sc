@@ -4,13 +4,13 @@ VTMRemoteNetworkNode : VTMElement {
 
 	*managerClass{ ^VTMNetworkNodeManager; }
 
-	*new{arg name, declaration, localNetwork;
+	*new{| name, declaration, localNetwork |
 		^super.new(name, declaration).initRemoteNetworkNode(
 			localNetwork
 		);
 	}
 
-	initRemoteNetworkNode{arg localNetwork;
+	initRemoteNetworkNode{| localNetwork |
 		localNetworks = [];
 		if(localNetwork.notNil, {
 			localNetworks = localNetworks.add(localNetwork);
@@ -21,7 +21,7 @@ VTMRemoteNetworkNode : VTMElement {
 
 	//when a computer is available both on WIFI and Cable LAN
 	//we add the second one with this method.
-	addLocalNetwork{arg localNetwork;
+	addLocalNetwork{| localNetwork |
 		localNetworks = localNetworks.add(localNetwork);
 	}
 
@@ -32,7 +32,7 @@ VTMRemoteNetworkNode : VTMElement {
 		]);
 	}
 
-	sendMsg{arg path ...args;
+	sendMsg{| path ...args |
 		VTM.sendMsg(addr.hostname, addr.port, path, *args);
 	}
 
@@ -45,7 +45,7 @@ VTMRemoteNetworkNode : VTMElement {
 		result = result ++ "\t'localNetworks':\n";
 		if(localNetworks.notNil and: {localNetworks.notEmpty}, {
 			result = result ++ "\t\t[\n";
-			localNetworks.do({arg item, i;
+			localNetworks.do({| item, i |
 				result = result ++ item.getDiscoveryData.makeTreeString(5);
 				result = result ++ "\t\t\t,\n";
 			});
@@ -54,7 +54,7 @@ VTMRemoteNetworkNode : VTMElement {
 		^result;
 	}
 
-	hasLocalNetwork{arg lan;
+	hasLocalNetwork{| lan |
 		var result;
 		result = localNetworks.includes(lan);
 		^result;

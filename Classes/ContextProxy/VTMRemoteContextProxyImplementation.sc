@@ -2,7 +2,7 @@ VTMRemoteContextProxyImplementation : VTMContextProxyImplementation {
 	var <targetAddr;
 	var <targetPath;
 
-	*new{arg context, definition, declaration;
+	*new{| context, definition, declaration |
 		^super.new(context, definition, declaration).initRemoteContextProxyImplementation;
 	}
 
@@ -20,7 +20,7 @@ VTMRemoteContextProxyImplementation : VTMContextProxyImplementation {
 		});
 	}
 
-	sendMsg{arg subpath ...msg;
+	sendMsg{| subpath ...msg |
 		targetAddr.sendMsg("%%".format(this.targetPath, subpath), *msg);
 	}
 

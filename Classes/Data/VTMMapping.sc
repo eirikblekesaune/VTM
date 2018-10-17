@@ -3,7 +3,7 @@ VTMMapping : VTMControl {
 	var source;
 	var destination;
 
-	*new{arg name, declaration;
+	*new{| name, declaration |
 		^super.new(name, declaration ).initMapping;
 	}
 
@@ -55,8 +55,7 @@ VTMMapping : VTMControl {
 				\enabled -> (
 					type: \boolean,
 					defaultValue: true,
-					action: {
-						arg attr, mapping;
+					action: { | attr, mapping |
 						if(attr.value, {
 							mapping.enable;
 						}, {

@@ -2,15 +2,15 @@ VTMNumberValue : VTMValue {
 	var <dataspace;//Optional instance of VTMDataspace
 	var <scheduler;//Where instances of VTMNumberInterpolator will be
 
-	*new{arg properties;
+	*new{| properties |
 		^super.new(properties).initNumberValue;
 	}
 
-	isValidType{arg val;
+	isValidType{| val |
 		^val.isKindOf(SimpleNumber);
 	}
 
-	isValidValue{arg val;
+	isValidValue{| val |
 		^true; //TEMP implement checks in subclasses
 	}
 
@@ -40,7 +40,7 @@ VTMNumberValue : VTMValue {
 		^scheduler.notNil
 	}
 
-	ramp{arg targetValue, time, curve = \lin;
+	ramp{| targetValue, time, curve = \lin |
 		if(this.isRamping, {
 			this.stopRamp;
 		});
@@ -61,11 +61,11 @@ VTMNumberValue : VTMValue {
 	}
 
 
-	defaultValue_{arg val;
+	defaultValue_{| val |
 		super.defaultValue = this.prCheckRangeAndClipValue(val);
 	}
 
-	increment{arg doAction = true;
+	increment{| doAction = true |
 		if(doAction, {
 			this.valueAction_(this.value + this.stepsize);
 		}, {
@@ -73,7 +73,7 @@ VTMNumberValue : VTMValue {
 		});
 	}
 
-	decrement{ arg doAction = true;
+	decrement{ | doAction = true |
 		if(doAction, {
 			this.valueAction_(this.value - this.stepsize);
 		}, {
@@ -86,7 +86,7 @@ VTMNumberValue : VTMValue {
 	}
 
 
-	prCheckRangeAndClipValue{arg val;
+	prCheckRangeAndClipValue{| val |
 		var result;
 		result = val;
 		switch(this.clipmode,
@@ -122,7 +122,7 @@ VTMNumberValue : VTMValue {
 	*defaultViewType{ ^\slider; }
 
 	//Properties setters and getters
-	minVal_{ arg val;
+	minVal_{ | val |
 		if(val.isNil, {
 			this.set(\minVal, nil);
 		}, {
@@ -138,7 +138,7 @@ VTMNumberValue : VTMValue {
 	}
 	minVal{ ^this.get(\minVal); }
 
-	maxVal_{ arg val;
+	maxVal_{ | val |
 		if(val.isNil, {
 			this.set(\maxVal, nil);
 		}, {
@@ -155,7 +155,7 @@ VTMNumberValue : VTMValue {
 	}
 	maxVal{ ^this.get(\maxVal); }
 
-	stepsize_{ arg val;
+	stepsize_{ | val |
 		var newVal = val;
 		if(this.isValidType(val), {
 			if(newVal.isNegative, {
@@ -171,7 +171,7 @@ VTMNumberValue : VTMValue {
 	}
 	stepsize{ ^this.get(\stepsize) ? 0; }
 
-	clipmode_{ arg val;
+	clipmode_{ | val |
 		if(#['none', 'low', 'high', 'both'].includes(val.asSymbol), {
 			var newVal;
 			this.set(\clipmode, val.asSymbol);
@@ -184,7 +184,7 @@ VTMNumberValue : VTMValue {
 	}
 	clipmode{ ^this.get(\clipmode) ? \none; }
 
-	value_{arg val;
+	value_{| val |
 		super.value_(
 			this.prCheckRangeAndClipValue(val)
 		);

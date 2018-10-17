@@ -11,7 +11,7 @@ VTMSchemaValue : VTMDictionaryValue {
 	var description;
 	var required;
 
-	isValidType{arg val;
+	isValidType{| val |
 		var result = false;
 		if(super.isValidType(val), {
 			result = this.validate(val);
@@ -22,7 +22,7 @@ VTMSchemaValue : VTMDictionaryValue {
 	*prDefaultValueForType{
 		^[];
 	}
-	validate{arg val;
+	validate{| val |
 		^true;//temp always validate to true
 	}
 }

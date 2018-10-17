@@ -5,6 +5,6 @@ VTMNetworkNodeManager : VTMDataManager {
 
 	name{ ^\networkNodes; }
 
-	*sendToAll{arg ...args;
+	*sendToAll{| ...args |
 	}
 }

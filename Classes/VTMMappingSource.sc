@@ -6,7 +6,7 @@ VTMMappingSource{
 	//    - some already receices data, other may need to subscribe to the value
 	//  local source prepends with a leading slash: '/my/path'
 	*/
-	map{arg destination;
+	map{| destination |
 
 	}
 }

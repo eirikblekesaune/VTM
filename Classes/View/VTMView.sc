@@ -13,18 +13,18 @@ VTMView : View {
 		^Color(0.823, 0.757, 0.486)
 	}
 
-	*prCalculateSize{arg units;
+	*prCalculateSize{| units |
 		^Size(unitWidth, unitHeight * units);
 	}
 
-	*new{arg parent, bounds, definition, settings, model;
+	*new{| parent, bounds, definition, settings, model |
 		var viewBounds;
 		viewBounds = bounds ?? { this.prCalculateSize(1).asRect; };
 		"Making VTM view with parent: %".format(parent).vtmdebug(4, thisMethod);
 		^super.new(parent, viewBounds).init(definition, settings, model);
 	}
 
-	init{arg definition_, settings_, model_;
+	init{| definition_, settings_, model_ |
 		settings = settings_;
 		definition = definition_;
 		model = model_;
@@ -36,7 +36,7 @@ VTMView : View {
 		//This is needed to set the fixedSize
 		this.bounds_(this.bounds);
 
-		this.addAction({arg ...args;
+		this.addAction({| ...args |
 			model.removeDependant(this);
 		}, \onClose);
 	}
@@ -45,7 +45,7 @@ VTMView : View {
 		labelView = this.prMakeLabelView;
 	}
 
-	prMakeLabelView{arg str;
+	prMakeLabelView{| str |
 		var result;
 		var labelStr = str ?? {model.name};
 		result = StaticText(

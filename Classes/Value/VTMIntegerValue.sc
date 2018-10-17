@@ -6,35 +6,35 @@ VTMIntegerValue : VTMNumberValue {
 	//but it will convert Float numbers to Integers
 
 
-	minVal_{arg val;
+	minVal_{| val |
 		if(val.class == Float, {
 			val = val.asInteger;
 		});
 		super.minVal_(val);
 	}
 
-	maxVal_{arg val;
+	maxVal_{| val |
 		if(val.class == Float, {
 			val = val.asInteger;
 		});
 		super.maxVal_(val);
 	}
 
-	stepsize_{arg val;
+	stepsize_{| val |
 		if(val.class == Float, {
 			val = val.asInteger;
 		});
 		super.stepsize_(val);
 	}
 
-	value_{arg val;
+	value_{| val |
 		if(val.class == Float, {
 			val = val.asInteger;
 		});
 		super.value_(val);
 	}
 
-	defaultValue_{arg val;
+	defaultValue_{| val |
 		if(val.class == Float, {
 			val = val.asInteger;
 		});

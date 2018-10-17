@@ -4,7 +4,7 @@ VTMCollectionValue : VTMValue {
 	var <maxLength;
 	var <minLength;
 
-	*new{arg name, properties;
+	*new{| name, properties |
 		^super.new(name, properties).initCollectionValue;
 	}
 
@@ -16,19 +16,19 @@ VTMCollectionValue : VTMValue {
 		});
 	}
 
-	addItem{arg val;
+	addItem{| val |
 		items.add(val);
 	}
 
-	removeItem{arg val;
+	removeItem{| val |
 		items.remove(val);
 	}
 
-	minLength_{arg val;
+	minLength_{| val |
 		minLength = val;
 	}
 
-	maxLength_{arg val;
+	maxLength_{| val |
 		maxLength = val;
 	}
 }

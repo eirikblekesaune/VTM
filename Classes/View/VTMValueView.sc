@@ -7,13 +7,13 @@ VTMValueView : VTMView {
 	classvar <viewTypeToClassMappings;
 
 
-	init{arg definition_, settings_, model_;
+	init{| definition_, settings_, model_ |
 		super.init(definition_, settings_, model_);
 
 		this.updateValue;
 		this.refreshLabel;
 		this.deleteOnClose_(true);
-		this.addAction({arg ...args;
+		this.addAction({| ...args |
 			this.action = nil;
 		}, \onClose);
 	}
@@ -59,7 +59,7 @@ VTMValueView : VTMView {
 		.align_(\right)
 		.object_(model.value)
 		.background_(Color.white.alpha_(0.0))
-		.action_({arg v;
+		.action_({| v |
 			model.valueAction_(v.string);
 		});
 	}
@@ -71,7 +71,7 @@ VTMValueView : VTMView {
 		^"";
 	}
 
-	label_{arg str;
+	label_{| str |
 		settings[\label] = str;
 		this.refreshLabel;
 	}
@@ -83,7 +83,7 @@ VTMValueView : VTMView {
 		}.defer;
 	}
 
-	bounds_{arg argBounds;
+	bounds_{| argBounds |
 		this.fixedSize_(argBounds.size);
 		super.bounds_(argBounds);
 	}
@@ -95,7 +95,7 @@ VTMValueView : VTMView {
 	}
 
 	//pull style update
-	update{arg theChanged, whatChanged, whoChangedIt, toValue;
+	update{| theChanged, whatChanged, whoChangedIt, toValue |
 		"Dependant update: % % % %".format(
 			theChanged, whatChanged, whoChangedIt, toValue
 		).vtmdebug(3, thisMethod);

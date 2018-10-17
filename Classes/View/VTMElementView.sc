@@ -4,7 +4,7 @@ VTMElementView : VTMDataView {
 	var showControlsButton;
 	var showNumControlsLabel;
 
-	showControls_{arg bool;
+	showControls_{| bool |
 		showControls = bool;
 		{
 			controlsView.visible = showControls;
@@ -16,7 +16,7 @@ VTMElementView : VTMDataView {
 		"These are children: %".format(model.controls).vtmdebug(3, thisMethod);
 		controlsView.layout_(
 			VLayout(
-				*model.controls.reject(_.isNil).collect({arg item;
+				*model.controls.reject(_.isNil).collect({| item |
 					[
 						item.makeView,
 						\align,
@@ -37,7 +37,7 @@ VTMElementView : VTMDataView {
 			["[—]", Color.black, Color.white.alpha_(0.1)]
 		])
 		.value_(showControls.asInt)
-		.action_({arg butt; this.showControls_(butt.value.booleanValue); })
+		.action_({| butt | this.showControls_(butt.value.booleanValue); })
 		.font_(this.font)
 		.background_(labelView.background)
 		.fixedSize_(Size(15,15))
@@ -74,7 +74,7 @@ VTMElementView : VTMDataView {
 	}
 
 	//pull style update
-	update{arg theChanged, whatChanged, whoChangedIt, toValue;
+	update{| theChanged, whatChanged, whoChangedIt, toValue |
 		"Dependant update: % % % %".format(
 			theChanged, whatChanged, whoChangedIt, toValue
 		).vtmdebug(3, thisMethod);

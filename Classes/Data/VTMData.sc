@@ -16,7 +16,7 @@ VTMData {
 	}
 
 	//name is mandatory, must be defined in arg or declaration
-	*new{arg name, declaration;
+	*new{| name, declaration |
         var decl;
 		if(name.isNil, {
 			VTMError(
@@ -26,7 +26,7 @@ VTMData {
         ^super.new.initData(name.asSymbol, declaration);
 	}
 
-	initData{arg name_, declaration_;
+	initData{| name_, declaration_ |
 		name = name_;
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
 		this.prInitParameters;
@@ -114,7 +114,7 @@ VTMData {
 
 	*mandatoryParameters{
 		var result = [];
-		this.parameterDescriptions.keysValuesDo({arg key, desc;
+		this.parameterDescriptions.keysValuesDo({| key, desc |
 			if(desc.includesKey(\optional) and: {
 				desc[\optional].not
 			}, {
@@ -131,7 +131,7 @@ VTMData {
 		^result;
 	}
 
-	description{arg includeDeclaration = false;
+	description{| includeDeclaration = false |
 		var result = this.class.description;
 		if(includeDeclaration, {
 			result.put(\declaration, this.declaration);
@@ -167,7 +167,7 @@ VTMData {
 		^manager.notNil;
 	}
 
-	get{arg key;
+	get{| key |
 		^parameters.at(key);
 	}
 
@@ -190,7 +190,7 @@ VTMData {
 		^oscInterface.notNil();
 	}
 
-	makeView{arg parent, bounds, viewDef, settings;
+	makeView{| parent, bounds, viewDef, settings |
 		var viewClass = this.class.viewClass;
 		//override class if defined in settings.
 		^viewClass.new(parent, bounds, viewDef, settings, this);
@@ -205,7 +205,7 @@ VTMData {
 		^result;
 	}
 
-	update{arg theChanged, whatChanged ...args;
+	update{| theChanged, whatChanged ...args |
 		(
 			"'%'\n\ttheChanged: %".format(this.name, theChanged) ++
 			"\n\twhatChanged: %".format(whatChanged) ++

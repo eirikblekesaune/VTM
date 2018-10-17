@@ -3,7 +3,7 @@ VTMValueControl : VTMControl {
 	var forwardings;
 	var forwarder;
 
-	*new{arg name, declaration;
+	*new{| name, declaration |
 		^super.new(name, declaration ).initValueControl;
 	}
 
@@ -13,7 +13,7 @@ VTMValueControl : VTMControl {
 		) ? VTMValue;
 		var valueProperties = VTMOrderedIdentityDictionary.new;
 		//extract property values from declaration
-		valueClass.propertyKeys.do({arg propKey;
+		valueClass.propertyKeys.do({| propKey |
 			if(declaration.includesKey(propKey), {
 				valueProperties.put(propKey, declaration[propKey]);
 			});
@@ -33,7 +33,7 @@ VTMValueControl : VTMControl {
 		super.free;
 	}
 
-	action_{arg func;
+	action_{| func |
 		valueObj.action_(func);
 	}
 
@@ -50,13 +50,13 @@ VTMValueControl : VTMControl {
 	}
 
 	//setting the value object properties.
-	set{arg key...args;
+	set{| key...args |
 		valueObj.set(key, *args);
 	}
 
 	//getting the vaue object properties, or if not found
 	//try getting the Element parameters
-	get{arg key;
+	get{| key |
 		var result;
 		result = valueObj.get(key);
 		if(result.isNil, {
@@ -84,8 +84,8 @@ VTMValueControl : VTMControl {
 	}
 
 	enableForwarding{
-		forwarder = SimpleController(valueObj).put(\value, {arg theChanged;
-			forwardings.do({arg item;
+		forwarder = SimpleController(valueObj).put(\value, {| theChanged |
+			forwardings.do({| item |
 				var outputValue, mapFunc;
 				//TODO: Change this so it supports other value types
 				mapFunc = item[\mapFunc] ? {|val| val};
@@ -102,12 +102,12 @@ VTMValueControl : VTMControl {
 		});
 	}
 
-	addForwarding{arg key, addr, path, vtmJson = false, mapFunc;
+	addForwarding{| key, addr, path, vtmJson = false, mapFunc |
 		//Observe value object for changng values
 		forwardings.put(key, (addr: addr, path: path, vtmJson: vtmJson, mapFunc: mapFunc));
 	}
 
-	removeForwarding{arg key;
+	removeForwarding{| key |
 		forwardings.removeAt(key);
 	}
 

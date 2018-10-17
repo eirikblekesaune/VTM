@@ -3,28 +3,28 @@ VTMDecimalValue : VTMNumberValue {
 
 	*prDefaultValueForType{ ^0.0; }
 
-	minVal_{arg val;
+	minVal_{| val |
 		if(val.class == Integer, {
 			val = val.asFloat;
 		});
 		super.minVal_(val);
 	}
 
-	maxVal_{arg val;
+	maxVal_{| val |
 		if(val.class == Integer, {
 			val = val.asFloat;
 		});
 		super.maxVal_(val);
 	}
 
-	stepsize_{arg val;
+	stepsize_{| val |
 		if(val.class == Integer, {
 			val = val.asFloat;
 		});
 		super.stepsize_(val);
 	}
 
-	value_{arg val;
+	value_{| val |
 		if(val.class == Integer, {
 			val = val.asFloat;
 			super.value_(val);
@@ -33,7 +33,7 @@ VTMDecimalValue : VTMNumberValue {
 		});
 	}
 
-	defaultValue_{arg val;
+	defaultValue_{| val |
 		if(val.class == Integer, {
 			val = val.asFloat;
 		});

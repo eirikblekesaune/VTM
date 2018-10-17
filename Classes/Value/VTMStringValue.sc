@@ -4,15 +4,15 @@ VTMStringValue : VTMValue {
 
 	*prDefaultValueForType{ ^""; }
 
-	isValidType{arg val;
+	isValidType{| val |
 		^(val.isKindOf(String) or: {val.isKindOf(Symbol)});
 	}
 
-	*new{arg properties;
+	*new{| properties |
 		^super.new(properties).initStringValue;
 	}
 
-	initStringValue{arg stringAttr_;
+	initStringValue{| stringAttr_ |
 		if(properties.notEmpty, {
 			if(properties.includesKey(\pattern), {
 				this.pattern_(properties[\pattern]);
@@ -23,7 +23,7 @@ VTMStringValue : VTMValue {
 		});
 	}
 
-	clear{arg doActionUponClear = false;
+	clear{| doActionUponClear = false |
 		var valToSet;
 		//Set to default if pattern matching is enabled
 		if(this.matchPattern and: {this.pattern.isEmpty.not}, {
@@ -42,7 +42,7 @@ VTMStringValue : VTMValue {
 	}
 
 	//Properties getters and setters
-	matchPattern_{arg val;
+	matchPattern_{| val |
 		if(val.isKindOf(Boolean), {
 			this.set(\matchPattern, val);
 			//Check the current value for matching, set to default if not.
@@ -59,7 +59,7 @@ VTMStringValue : VTMValue {
 	}
 	matchPattern{ ^this.get(\matchPattern) ? false; }
 
-	pattern_{arg val;
+	pattern_{| val |
 		var result = val ? "";
 		if(val.isString or: {val.isKindOf(Symbol)}, {
 			this.set(\pattern, val.asString);
@@ -71,7 +71,7 @@ VTMStringValue : VTMValue {
 	}
 	pattern{ ^this.get(\pattern) ? ""; }
 
-	defaultValue_{arg val;
+	defaultValue_{| val |
 		var inval = val.copy.asString;
 		if(inval.class == Symbol, {//Symbols are accepted and converted into strings
 			inval = inval.asString;
@@ -89,7 +89,7 @@ VTMStringValue : VTMValue {
 		});
 	}
 
-	value_{arg val;
+	value_{| val |
 		var inval = val.copy.asString;
 		if(inval.class == Symbol, {//Symbols are accepted and converted into strings
 			inval = inval.asString;

@@ -20,8 +20,8 @@ VTMContextManager : VTMDataManager {
 	}
 
 	//This method overrides the superclass
-	addItemsFromItemDeclarations{arg itemDecls;
-		itemDecls.keysValuesDo({arg itemName, itemDeclaration;
+	addItemsFromItemDeclarations{| itemDecls |
+		itemDecls.keysValuesDo({| itemName, itemDeclaration |
 			var newItem;
 			var itemAction;
 			//The action is a part of the Controls declaration
@@ -37,7 +37,7 @@ VTMContextManager : VTMDataManager {
 				if(this.context.notNil, {
 					itemAction = this.context.prContextualizeFunction(itemAction);
 				});
-				newItem.action_({arg item;
+				newItem.action_({| item |
 					itemAction.value(newItem, this.context);
 				});
 			});

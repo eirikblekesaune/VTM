@@ -1,13 +1,13 @@
 VTMAttribute : VTMValueControl {
 	classvar <isAbstractClass=false;
 
-	*new{arg name, declaration;
+	*new{| name, declaration |
 		^super.new(name, declaration ).initAttribute;
 	}
 
 	initAttribute{}
 
-	value_{arg ...args;
+	value_{| ...args |
 		valueObj.value_(*args);
 	}
 
@@ -15,7 +15,7 @@ VTMAttribute : VTMValueControl {
 		^valueObj.value;
 	}
 
-	valueAction_{arg ...args;
+	valueAction_{| ...args |
 		valueObj.valueAction_(*args);
 	}
 }

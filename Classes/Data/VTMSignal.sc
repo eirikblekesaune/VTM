@@ -1,7 +1,7 @@
 VTMSignal : VTMValueControl{
 	classvar <isAbstractClass=false;
 
-	emit{arg ...args;
+	emit{| ...args |
 		valueObj.valueAction_(*args);
 	}
 }

@@ -3,17 +3,17 @@ VTMContextProxyImplementation {
 	var declaration;
 	var definition;
 
-	*new{arg context, definition, declaration;
+	*new{| context, definition, declaration |
 		^super.new.initContextProxyImplementation(context, definition, declaration);
 	}
 
-	initContextProxyImplementation{arg context_, definition_, declaration_;
+	initContextProxyImplementation{| context_, definition_, declaration_ |
 		context = context_;
 		declaration = declaration_;
 		definition = definition_;
 	}
 
-	sendMsg{arg subpath ...msg;
+	sendMsg{| subpath ...msg |
 		this.subclassResponsibility(thisMethod);
 	}
 }

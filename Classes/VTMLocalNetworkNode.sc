@@ -49,9 +49,9 @@ VTMLocalNetworkNode {
 		NetAddr.broadcastFlag = true;
 		StartUp.add({
 			//Make remote activate responder
-			remoteActivateResponder = OSCFunc({arg msg, time, addr, port;
+			remoteActivateResponder = OSCFunc({| msg, time, addr, port |
 				var hostnames = VTMJSON.parse(msg[1]);
-				if(hostnames.detect({arg item;
+				if(hostnames.detect({| item |
 					item == this.name;
 				}).notNil, {
 					"Remote VTM activation from: %".format(addr).vtmdebug(2, thisMethod);
@@ -62,10 +62,10 @@ VTMLocalNetworkNode {
 
 	}
 
-	activate{arg doDiscovery = false, remoteNetworkNodesToActivate;
+	activate{| doDiscovery = false, remoteNetworkNodesToActivate |
 
 		if(discoveryResponder.isNil, {
-			discoveryResponder = OSCFunc({arg msg, time, resp, addr;
+			discoveryResponder = OSCFunc({| msg, time, resp, addr |
 				var jsonData = VTMJSON.parse(msg[1]).changeScalarValuesToDataTypes;
 				var senderHostname, senderAddr, registered = false;
 				var localNetwork;
@@ -73,7 +73,7 @@ VTMLocalNetworkNode {
 				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
 
 				//find which network the node is sending on
-				localNetwork = localNetworks.detect({arg net;
+				localNetwork = localNetworks.detect({| net |
 					net.isIPPartOfSubnet(senderAddr.ip);
 				});
 
@@ -121,7 +121,7 @@ VTMLocalNetworkNode {
 		});
 
 		if(discoveryReplyResponder.isNil, {
-			discoveryReplyResponder = OSCFunc({arg msg, time, addr, port;
+			discoveryReplyResponder = OSCFunc({| msg, time, addr, port |
 				var jsonData = VTMJSON.parse(msg[1]).changeScalarValuesToDataTypes;
 				var senderHostname, senderAddr, registered = false;
 				var localNetwork;
@@ -129,7 +129,7 @@ VTMLocalNetworkNode {
 				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
 				//find which network the node is sending on
 
-				localNetwork = localNetworks.detect({arg net;
+				localNetwork = localNetworks.detect({| net |
 					net.isIPPartOfSubnet(senderAddr.ip);
 				});
 
@@ -166,7 +166,7 @@ VTMLocalNetworkNode {
 		});
 
 		if(shutdownResponder.isNil, {
-			shutdownResponder = OSCFunc({arg msg, time, addr, port;
+			shutdownResponder = OSCFunc({| msg, time, addr, port |
 				var senderHostname;
 				senderHostname = VTMJSON.parseYAMLValue(msg[1].asString);
 				//Check if it the local computer that sent it.
@@ -189,9 +189,9 @@ VTMLocalNetworkNode {
 				discoveryReplyResponder,
 				discoveryResponder,
 				remoteActivateResponder
-			].do({arg resp; resp.clear; resp.free;});
+			].do({| resp | resp.clear; resp.free;});
 
-			networkNodeManager.items.do({arg remoteNetworkNode;
+			networkNodeManager.items.do({| remoteNetworkNode |
 				this.sendMsg(
 					remoteNetworkNode.addr.hostname.asString,
 					this.class.discoveryBroadcastPort,
@@ -210,7 +210,7 @@ VTMLocalNetworkNode {
 
 	}
 
-	activateRemoteNetworkNodes{arg remoteHostnames;
+	activateRemoteNetworkNodes{| remoteHostnames |
 		this.broadcastMsg('/activate', remoteHostnames);
 	}
 
@@ -232,10 +232,10 @@ VTMLocalNetworkNode {
 
 	findLocalNetworks{
 		var lines;
-		var parseOSXIfconfig = {arg lns;
+		var parseOSXIfconfig = {| lns |
 			var result, entries;
 
-			lns.collect({arg line;
+			lns.collect({| line |
 				if(line.first != Char.tab, {
 					entries = entries.add([line]);
 				}, {
@@ -244,36 +244,36 @@ VTMLocalNetworkNode {
 			});
 
 			//remove the entries that don't have any extra information
-			entries = entries.reject({arg item; item.size == 1});
+			entries = entries.reject({| item | item.size == 1});
 
 			//remove the LOOPBACK entry(ies)
-			entries = entries.reject({arg item;
+			entries = entries.reject({| item |
 				"[,<]?LOOPBACK[,>]?".matchRegexp(item.first);
 			});
 
 			//get only the active entries
-			entries = entries.reject({arg item;
-				item.any({arg jtem;
+			entries = entries.reject({| item |
+				item.any({| jtem |
 					"status: inactive".matchRegexp(jtem);
 				})
 			});
 			//get only the lines with IPV4 addresses and
-			entries = entries.collect({arg item;
+			entries = entries.collect({| item |
 				var inetLine, hwLine;
-				inetLine = item.detect({arg jtem;
+				inetLine = item.detect({| jtem |
 					"\\<inet\\>".matchRegexp(jtem);
 				});
 				if(inetLine.notNil, {
-					hwLine = item.detect({arg jtem;
+					hwLine = item.detect({| jtem |
 						"\\<ether\\>".matchRegexp(jtem);
 					})
 				});
 				[inetLine, hwLine];
 			});
 			//remove all that are nil
-			entries = entries.reject({arg jtem; jtem.first.isNil; });
+			entries = entries.reject({| jtem | jtem.first.isNil; });
 			//separate the addresses
-			entries.collect({arg item;
+			entries.collect({| item |
 				var ip, bcast, mac, netmask;
 				var inetLine, hwLine;
 				#inetLine, hwLine = item;
@@ -292,15 +292,15 @@ VTMLocalNetworkNode {
 					hostname: this.hostname,
 					netmask: netmask
 				)
-			}).collect({arg item;
+			}).collect({| item |
 				result = result.add(VTMLocalNetwork.performWithEnvir(\new, item));
 			});
 			result;
 		};
-		var parseLinuxIfconfig = {arg lns;
+		var parseLinuxIfconfig = {| lns |
 			var result, entries;
 
-			lns.collect({arg line;
+			lns.collect({| line |
 				if(line.first != Char.space, {
 					entries = entries.add([line]);
 				}, {
@@ -309,28 +309,28 @@ VTMLocalNetworkNode {
 			});
 
 			//remove the entries that don't have any extra information
-			entries = entries.reject({arg item; item.size == 1});
+			entries = entries.reject({| item | item.size == 1});
 
 			//remove the LOOPBACK entry(ies)
-			entries = entries.reject({arg item;
+			entries = entries.reject({| item |
 				"[,<]?LOOPBACK[,>]?".matchRegexp(item.first);
 			});
 
 			//get only the active entries
-			entries = entries.reject({arg item;
-				item.any({arg jtem;
+			entries = entries.reject({| item |
+				item.any({| jtem |
 					"status: inactive".matchRegexp(jtem);
 				})
 			});
 
 			//get only the lines with IPV4 addresses and MAC address
-			entries = entries.collect({arg item;
+			entries = entries.collect({| item |
 				var inetLine, hwLine;
-				inetLine = item.detect({arg jtem;
+				inetLine = item.detect({| jtem |
 					"\\<inet\\>".matchRegexp(jtem);
 				});
 				if(inetLine.notNil, {
-					hwLine = item.detect({arg jtem;
+					hwLine = item.detect({| jtem |
 						"\\<ether\\>".matchRegexp(jtem);
 					})
 				});
@@ -338,10 +338,10 @@ VTMLocalNetworkNode {
 			});
 
 			//remove all that are nil
-			entries = entries.reject({arg jtem; jtem.first.isNil; });
+			entries = entries.reject({| jtem | jtem.first.isNil; });
 
 			//separate the addresses
-			entries.collect({arg item;
+			entries.collect({| item |
 				var ip, bcast, mac, netmask;
 				var inetLine, hwLine;
 				#inetLine, hwLine = item;
@@ -361,7 +361,7 @@ VTMLocalNetworkNode {
 					hostname: this.hostname,
 					netmask: netmask
 				);
-			}).collect({arg item;
+			}).collect({| item |
 				result = result.add(VTMLocalNetwork.performWithEnvir(\new, item));
 				nil;
 			});
@@ -395,10 +395,10 @@ VTMLocalNetworkNode {
 		^'/';
 	}
 
-	discover {arg targetHostname;
+	discover {| targetHostname |
 		//Broadcast discover to all network connections
 		if(localNetworks.isNil, { ^this; });
-		localNetworks.do({arg network;
+		localNetworks.do({| network |
 			var data, targetAddr;
 
 			data = network.getDiscoveryData;
@@ -422,20 +422,20 @@ VTMLocalNetworkNode {
 
 	*leadingSeparator { ^$/; }
 
-	sendMsg{arg targetHostname, port, path ...data;
+	sendMsg{| targetHostname, port, path ...data |
 		//sending eeeeverything as typed YAML for now.
 		NetAddr(targetHostname, port).sendMsg(path, VTMJSON.stringify(data.unbubble));
 	}
 
-	broadcastMsg{arg path ...data;
+	broadcastMsg{| path ...data |
 		if(localNetworks.notNil, {
-			localNetworks.do({arg item;
+			localNetworks.do({| item |
 				item.broadcastAddr.sendMsg(path, VTMJSON.stringify(data.unbubble));
 			})
 		});
 	}
 
-	findManagerForContextClass{arg class;
+	findManagerForContextClass{| class |
 		var managerObj;
 		case
 		{class.isKindOf(VTMModule.class) } {managerObj =  moduleHost; }
@@ -447,7 +447,7 @@ VTMLocalNetworkNode {
 		^managerObj;
 	}
 
-	makeView{arg parent, bounds, viewDef, settings;
+	makeView{| parent, bounds, viewDef, settings |
 		var viewClass = 'VTMLocalNetworkNodeView'.asClass;
 		//override class if defined in settings.
 		^viewClass.new(parent, bounds, viewDef, settings, this);

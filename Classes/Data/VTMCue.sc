@@ -6,7 +6,7 @@ VTMCue : VTMControl {
 	var <>armed = true;
 	classvar <isAbstractClass=false;
 
-	*new{arg name, declaration;
+	*new{| name, declaration |
 		^super.new(name, declaration).initCue;
 	}
 
@@ -56,7 +56,7 @@ VTMCue : VTMControl {
 					this.preDelay !? {delaytime.wait;};
 				});
 
-				this.points.do({arg point, i;
+				this.points.do({| point, i |
 					this.changed(\state, \executingPoint, i);
 					point.value;
 				});
@@ -94,39 +94,39 @@ VTMCue : VTMControl {
 
 	//Attribute getters
 	preDelay{ ^this.get(\preDelay) ? 0.0; }
-	preDelay_{arg val; this.set(\preDelay, val); }
+	preDelay_{| val | this.set(\preDelay, val); }
 
 	duration{ ^this.get(\duration) ? 0.0; }
-	duration_{arg val; this.set(\duration, val); }
+	duration_{| val | this.set(\duration, val); }
 
 	postDelay{ ^this.get(\postDelay) ? 0.0; }
-	postDelay_{arg val; this.set(\postDelay, val); }
+	postDelay_{| val | this.set(\postDelay, val); }
 
 	points{ ^this.get(\points); }
-	points_{arg val; this.set(\points, val); }
+	points_{| val | this.set(\points, val); }
 
 	hangBeforeStart{ ^this.get(\hangBeforeStart) ? false; }
-	hangBeforeStart_{arg val; this.set(\hangBeforeStart, val); }
+	hangBeforeStart_{| val | this.set(\hangBeforeStart, val); }
 
 	maxStartHangTime{ ^this.get(\maxStartHangTime) ? 10.0; }
-	maxStartHangTime_{arg val; this.set(\maxStartHangTime, val); }
+	maxStartHangTime_{| val | this.set(\maxStartHangTime, val); }
 
 	hangBeforeEnd{ ^this.get(\hangBeforeEnd) ? false; }
-	hangBeforeEnd_{arg val; this.set(\hangBeforeEnd, val); }
+	hangBeforeEnd_{| val | this.set(\hangBeforeEnd, val); }
 
 	maxEndHangTime{ ^this.get(\maxEndHangTime) ? 10.0; }
-	maxEndHangTime_{arg val; this.set(\maxEndHangTime, val); }
+	maxEndHangTime_{| val | this.set(\maxEndHangTime, val); }
 
 	//'normal', 'reverse', 'random', <array of integers>
 	pointOrder{ ^this.get(\pointOrder) ? \normal; }
-	pointOrder_{arg val; this.set(\pointOrder, val); }
+	pointOrder_{| val | this.set(\pointOrder, val); }
 
 	hangBetweenPoints{ ^this.get(\hangBetweenPoints) ? false; }
-	hangBetweenPoints_{arg val; this.set(\hangBetweenPoints, val); }
+	hangBetweenPoints_{| val | this.set(\hangBetweenPoints, val); }
 
 	maxBetweenPointsHangTime{ ^this.get(\maxBetweenPointsHangTime) ? 10.0; }
-	maxBetweenPointsHangTime_{arg val; this.set(\maxBetweenPointsHangTime, val); }
+	maxBetweenPointsHangTime_{| val | this.set(\maxBetweenPointsHangTime, val); }
 
 	delayBetweenPoints{ ^this.get(\delayBetweenPoints) ? 0.0; }
-	delayBetweenPoints_{arg val; this.set(\delayBetweenPoints, val); }
+	delayBetweenPoints_{| val | this.set(\delayBetweenPoints, val); }
 }

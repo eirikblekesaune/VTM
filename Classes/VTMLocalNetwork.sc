@@ -11,7 +11,7 @@ VTMLocalNetwork{
 	var <netmaskAddr;
 	var <broadcastAddr;
 
-	*new{arg ip, broadcast, mac, netmask, hostname;
+	*new{| ip, broadcast, mac, netmask, hostname |
 		^super.newCopyArgs(ip, broadcast, mac, netmask, hostname).init;
 	}
 
@@ -37,7 +37,7 @@ VTMLocalNetwork{
 	}
 
 	//check if another ip is a part of this subnet
-	isIPPartOfSubnet{arg otherIP;
+	isIPPartOfSubnet{| otherIP |
 		var result;
 		var lanmask = netmaskAddr.addr.bitNot.bitOr(addr.addr);
 		result = lanmask.bitOr(NetAddr(otherIP).addr);
@@ -45,7 +45,7 @@ VTMLocalNetwork{
 		^result;
 	}
 
-	=={arg obj;
+	=={| obj |
 		^this.hash == obj.hash;
 	}
 

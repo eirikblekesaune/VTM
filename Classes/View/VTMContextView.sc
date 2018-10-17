@@ -12,11 +12,11 @@ VTMContextView : VTMView {
 		defaultWidth = unitSize.width;
 	}
 
-	*new{arg parent, bounds, definition, settings, context;
+	*new{| parent, bounds, definition, settings, context |
 		^super.new(parent, bounds, definition, settings).initContextView(context);
 	}
 
-	initContextView{arg context_;
+	initContextView{| context_ |
 		context = context_;
 		context.addDependant(this);
 
@@ -65,7 +65,7 @@ VTMContextView : VTMView {
 		}.defer;
 	}
 
-	refreshContextView{arg what = \all;
+	refreshContextView{| what = \all |
 		switch(what,
 			\scenes, {
 				this.refreshSceneList();
@@ -94,7 +94,7 @@ VTMContextView : VTMView {
 	refreshNetworkList{}
 
 	//pull style update
-	update{arg theChanged, whatChanged, whoChangedIt, toValue;
+	update{| theChanged, whatChanged, whoChangedIt, toValue |
 		"Dependant update: % % % %".format(theChanged, whatChanged, whoChangedIt, toValue).vtmdebug(3, thisMethod);
 		if(theChanged === context, {//only update the view if the parameter changed
 			switch(whatChanged,

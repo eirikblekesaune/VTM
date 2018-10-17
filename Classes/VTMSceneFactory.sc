@@ -1,11 +1,11 @@
 VTMSceneFactory{
 	var <sceneOwner;
 
-	*new{arg sceneOwner;
+	*new{| sceneOwner |
 		^super.new.init(sceneOwner);
 	}
 
-	init{arg sceneOwner_;
+	init{| sceneOwner_ |
 		sceneOwner = sceneOwner_;
 	}
 
@@ -17,7 +17,7 @@ VTMSceneFactory{
 		^sceneOwner.application.hardwareSetup;
 	}
 
-	build{arg sceneDefinition, sceneDeclaration;
+	build{| sceneDefinition, sceneDeclaration |
 		var newScene, buildResult;
 		var modules = (
 			local: (static: [], dynamic: []),

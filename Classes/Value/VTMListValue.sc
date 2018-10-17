@@ -6,7 +6,7 @@ VTMListValue : VTMCollectionValue {
 	var orderThunk;
 	var itemAtThunk, <prItemDict;
 
-	isValidType{arg val;
+	isValidType{| val |
 		^(val.isArray and: val.isString.not);
 	}
 
@@ -16,7 +16,7 @@ VTMListValue : VTMCollectionValue {
 		^[];
 	}
 
-	*new{arg properties;
+	*new{| properties |
 		^super.new(properties).initListValue;
 	}
 
@@ -38,7 +38,7 @@ VTMListValue : VTMCollectionValue {
 		};
 		//build item dictionary for lookup
 		prItemDict = Dictionary.new;
-		items.do({arg item;
+		items.do({| item |
 			prItemDict.put(item.name, item);
 		});
 	}
@@ -62,7 +62,7 @@ VTMListValue : VTMCollectionValue {
 			//All item properties should now be expanded into separate Associations
 			itemDescription = this.class.prExpanditemDescription(itemDescription);
 			propertyKeys = itemClass.propertyKeys.asSet.sect(properties.keys);
-			itemDescription = itemDescription.collect({arg itemAssoc, index;
+			itemDescription = itemDescription.collect({| itemAssoc, index |
 				var itemName, itemDesc, newItemDesc;
 				itemName = itemAssoc.key;
 				itemDesc = itemAssoc.value;
@@ -71,7 +71,7 @@ VTMListValue : VTMCollectionValue {
 				//add the values from the outer properties that applies to all items of this type.
 				//Getting only the keys that pertain to the itemClass, and which are defined in the
 				//properties.
-				itemClass.propertyKeys.asSet.sect(properties.keys).do({arg attrKey;
+				itemClass.propertyKeys.asSet.sect(properties.keys).do({| attrKey |
 					newItemDesc.put(attrKey, properties[attrKey]);
 				});
 
@@ -85,7 +85,7 @@ VTMListValue : VTMCollectionValue {
 			});
 
 			//Build the item Value objects
-			items = itemDescription.collect({arg itemDesc;
+			items = itemDescription.collect({| itemDesc |
 				VTMValue.makeFromType(properties[\itemType], itemDesc);
 			});
 
@@ -94,14 +94,14 @@ VTMListValue : VTMCollectionValue {
 		});
 	}
 
-	*prExpanditemDescription{arg desc;
+	*prExpanditemDescription{| desc |
 		var result;
-		desc.do({arg item, i;
+		desc.do({| item, i |
 			if(item.isKindOf(Association), {
 				if(item.key.isArray and: {item.isString.not}, {
-					item.key.do({arg jtem, j;
+					item.key.do({| jtem, j |
 						var jDesc = ();
-						item.value.keysValuesDo({arg ke, va;
+						item.value.keysValuesDo({| ke, va |
 							if(va.isArray and: {va.isString.not}, {
 								//expand item properties value to arrayed key by wrapped indexing
 								jDesc.put(
@@ -132,7 +132,7 @@ VTMListValue : VTMCollectionValue {
 			});
 		});
 		//Make all items into Associations with name pointing to a Dictionary
-		result = result.collect({arg item;
+		result = result.collect({| item |
 			var res = item;
 			if(item.isKindOf(Association).not, {
 				res = Association.new(item, ());
@@ -146,7 +146,7 @@ VTMListValue : VTMCollectionValue {
 		^orderThunk.value;
 	}
 
-	at{arg itemName;
+	at{| itemName |
 		^prItemDict.at(itemName)
 	}
 }
