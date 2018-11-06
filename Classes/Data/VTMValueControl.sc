@@ -2,6 +2,7 @@ VTMValueControl : VTMControl {
 	var <valueObj;
 	var forwardings;
 	var forwarder;
+	var traceResponder;
 
 	*new{| name, declaration |
 		^super.new(name, declaration ).initValueControl;
@@ -118,5 +119,34 @@ VTMValueControl : VTMControl {
 	disableForwarding{
 		forwarder.remove(\value);
 		forwarder.clear;
+	}
+
+	trace{ arg bool = true;
+		if(bool, {
+			if(traceResponder.isNil, {
+				traceResponder = {arg theChanged, what ...args;
+					var str;
+					switch(what,
+						\value, {
+							str = "value: %".format(theChanged.value);
+						},
+						\properties, {
+							str = "property: % - %".format(
+								args[0], theChanged.get(args[0])
+							);
+						},
+						{
+							str = [what] ++ args;
+						}
+					);
+					"trace: % - %".format(this.fullPath, str).postln
+				};
+				valueObj.addDependant(traceResponder);
+			});
+		}, {
+			if(traceResponder.notNil, {
+				valueObj.removeDependant(traceResponder);
+			})
+		});
 	}
 }

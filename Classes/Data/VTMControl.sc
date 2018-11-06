@@ -49,6 +49,9 @@ VTMControl : VTMData {
 		super.free;
 	}
 
+	trace{arg bool = true;
+	}
+
 	makeView{| parent, bounds, viewDef, settings |
 		^this.class.viewClass.new(parent, bounds, viewDef, settings, this);
 	}

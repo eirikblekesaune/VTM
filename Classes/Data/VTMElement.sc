@@ -135,5 +135,9 @@ VTMElement : VTMData {
 		^\VTMElementView.asClass;
 	}
 
+	trace{arg bool = true;
+		controls.trace(bool);
+	}
+
 }
 
