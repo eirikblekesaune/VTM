@@ -45,6 +45,11 @@ VTMContext : VTMElement {
 		^manager.parent === VTM.local;
 	}
 
+	addControl{arg newCtrl;
+		controls.addItem( newCtrl );
+		this.changed(\controls);
+	}
+
 	//The context that calls prepare can issue a condition to use for
     //handling asynchronous events. If no condition is passed as
     //argument the context will make its own condition instance.
