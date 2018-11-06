@@ -40,7 +40,6 @@ VTMContextDefinition {
 
 	initContextDefinition{| env_, name_ |
 		name = name_;
-		definition = env_.deepCopy;
 		definition = Environment[
 			\name -> name,
 			\parameters -> VTMOrderedIdentityDictionary.new,
@@ -53,6 +52,8 @@ VTMContextDefinition {
 			\mappings -> VTMOrderedIdentityDictionary.new,
 			\scores -> VTMOrderedIdentityDictionary.new
 		];
+
+		definition.putAll(env_.deepCopy);
 		"init: %".format(name).vtmdebug(4, thisMethod);
 	}
 
