@@ -60,7 +60,7 @@ VTMContext : VTMElement {
 			var cond = condition ?? {Condition.new};
 			this.prChangeState(\willPrepare);
 			if(envir.includesKey(\prepare), {
-				this.execute(\prepare, cond);
+				this.execute(\prepare, envir, definition, cond);
 			});
 			//this.controls.select(_.notNil).do({| it | it.prepare(cond)});
 			//this.enableOSC;
@@ -77,7 +77,7 @@ VTMContext : VTMElement {
 		forkIfNeeded{
 			var cond = condition ?? {Condition.new};
 			if(envir.includesKey(\free), {
-				this.execute(\free, cond);
+				this.execute(\free, envir, definition, cond);
 			});
 			this.prChangeState(\didFree);
 			action.value(this);
