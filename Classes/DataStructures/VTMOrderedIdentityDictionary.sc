@@ -51,4 +51,8 @@ VTMOrderedIdentityDictionary : IdentityDictionary {
 		});
 		^super.removeAt(key);
 	}
+
+	first{
+		^this.at(this.order.first);
+	}
 }
