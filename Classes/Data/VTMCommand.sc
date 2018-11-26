@@ -1,8 +1,8 @@
 VTMCommand : VTMValueControl {
 	classvar <isAbstractClass=false;
 
-	*new{| name, declaration |
-		^super.new(name, declaration ).initCommand;
+	*new{| name, declaration, manager |
+		^super.new(name, declaration, manager ).initCommand;
 	}
 
 	initCommand{}

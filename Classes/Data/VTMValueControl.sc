@@ -4,9 +4,9 @@ VTMValueControl : VTMControl {
 	var forwarder;
 	var traceResponder;
 
-	*new{| name, declaration |
+	*new{| name, declaration, manager |
 		var action = declaration[\action];
-		^super.new(name, declaration ).initValueControl(action);
+		^super.new(name, declaration, manager).initValueControl(action);
 	}
 
 	initValueControl{| action_ |

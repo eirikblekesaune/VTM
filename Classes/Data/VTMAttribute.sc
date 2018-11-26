@@ -1,8 +1,8 @@
 VTMAttribute : VTMValueControl {
 	classvar <isAbstractClass=false;
 
-	*new{| name, declaration |
-		^super.new(name, declaration ).initAttribute;
+	*new{| name, declaration, manager |
+		^super.new(name, declaration, manager ).initAttribute;
 	}
 
 	initAttribute{}

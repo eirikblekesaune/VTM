@@ -4,8 +4,8 @@ VTMModule : VTMComposableContext {
 
 	*managerClass{ ^VTMModuleHost; }
 
-	*new{| name, declaration, definition |
-		^super.new(name, declaration, definition).initModule;
+	*new{| name, declaration, manager, definition, onInit|
+		^super.new(name, declaration, manager, definition, onInit).initModule;
 	}
 
 	initModule{

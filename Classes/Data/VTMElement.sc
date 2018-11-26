@@ -4,8 +4,8 @@ An Element is an object that has controls.
 VTMElement : VTMData {
 	var <controls;
 
-	*new{| name, declaration |
-		^super.new(name, declaration).initElement;
+	*new{| name, declaration, manager |
+		^super.new(name, declaration, manager).initElement;
 	}
 
 	initElement{
@@ -17,11 +17,10 @@ VTMElement : VTMData {
 		controls = VTMControlManager(this);
 		this.class.controlDescriptions.keysValuesDo({|ctrlKey, ctrlDesc|
 			var newCtrl;
-			newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc);
 			if(declaration.includesKey(ctrlKey), {
-				newCtrl.set(\value, declaration[ctrlKey]);
+				ctrlDesc.put(\value, declaration[ctrlKey]);
 			});
-			controls.addItem(ctrlKey, newCtrl);
+			newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc, controls);
 		});
 		this.changed(\controls);
 	}

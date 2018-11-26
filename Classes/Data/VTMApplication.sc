@@ -7,8 +7,8 @@ VTMApplication : VTMContext {
 
 	*managerClass{ ^VTMApplicationManager; }
 
-	*new{| name, declaration, definition |
-		^super.new(name, declaration, definition).initApplication;
+	*new{| name, declaration, manager, definition, onInit|
+		^super.new(name, declaration, manager, definition, onInit).initApplication;
 	}
 
 	initApplication{

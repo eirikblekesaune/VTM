@@ -7,15 +7,17 @@ VTMControl : VTMData {
 	}
 	*managerClass{ ^VTMControlManager; }
 
-	*new{| name, declaration |
-		^super.new(name, declaration).initControl;
+	*new{| name, declaration, manager |
+		manager = manager ?? { VTM.local.findManagerForContextClass(this) };
+		"got amanager: %".format(manager.fullPath).postln;
+		^super.new(name, declaration, manager).initControl;
 	}
 
-	*makeFromDescription{| name, description |
+	*makeFromDescription{| name, description, manager |
 		var result;
 		var mode;
 		mode = description.removeAt(\mode);
-		result = this.perform(mode ? \attribute, name, description);
+		result = this.perform(mode ? \attribute, name, description, manager);
 
 		^result;
 	}

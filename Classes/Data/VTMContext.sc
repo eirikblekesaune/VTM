@@ -11,8 +11,9 @@ VTMContext : VTMElement {
 	var stateChangeCallbacks;
 	var library;
 
-	*new{| name, declaration, definition, onInit |
-		^super.new(name, declaration).initContext(
+	*new{| name, declaration, manager, definition, onInit |
+		manager = manager ?? { VTM.local.findManagerForContextClass(this) };
+		^super.new(name, declaration, manager).initContext(
 			definition, onInit);
 	}
 
@@ -36,11 +37,6 @@ VTMContext : VTMElement {
 
 		stateChangeCallbacks = IdentityDictionary.new;
 		this.prChangeState(\loadedDefinition);
-
-
-		//register with default manager here for now. This will become troublesome when already
-		//have determined manager from the outside.
-		VTM.local.findManagerForContextClass(this).addItem(this);
 
 		//initialize the envir, this is async so register the init callback
 		this.on(\didInit, onInit_);

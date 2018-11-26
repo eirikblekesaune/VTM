@@ -9,8 +9,8 @@ VTMScene : VTMComposableContext {
 
 	*managerClass{ ^VTMSceneOwner; }
 
-	*new{| name, declaration, definition |
-		^super.new(name, declaration, definition).initScene;
+	*new{| name, declaration, manager, definition, onInit |
+		^super.new(name, declaration, manager, definition, onInit).initScene;
 	}
 
 	initScene{

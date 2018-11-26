@@ -16,18 +16,28 @@ VTMData {
 	}
 
 	//name is mandatory, must be defined in arg or declaration
-	*new{| name, declaration |
+	*new{| name, declaration, manager |
         var decl;
 		if(name.isNil, {
 			VTMError(
 				"% - 'name' not defined".format(this)
 			).throw;
 		});
-        ^super.new.initData(name.asSymbol, declaration);
+        ^super.new.initData(name.asSymbol, declaration, manager);
 	}
 
-	initData{| name_, declaration_ |
+	initData{| name_, declaration_, manager_ |
 		name = name_;
+		manager = manager_;
+
+		//manager must not rely on the item to be fully initalized
+		if(manager.notNil, {
+			"Adding to manager: % - %".format(name, manager.fullPath).postln;
+			manager.addItem(this);
+		}, {
+			"No manager found: % - %".format(name_, declaration_).postln;
+		});
+
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
 		this.prInitParameters;
 	}

@@ -5,8 +5,8 @@ e.g a Module can submodules.
 VTMComposableContext : VTMContext {
 	var <children;
 
-	*new{| name, declaration, definition |
-		^super.new(name, declaration, definition).initComposableContext;
+	*new{| name, declaration, manager, definition, onInit|
+		^super.new(name, declaration, manager, definition, onInit).initComposableContext;
 	}
 
 	initComposableContext{
