@@ -150,8 +150,6 @@ VTMDataManager {
 		^items.select({| it | it.isKindOf(VTMScore)});
 	}
 
-
-
 	path{
 		^'/';
 	}
