@@ -1,6 +1,30 @@
 VTMOrderedIdentityDictionary : IdentityDictionary {
 	var <order;
 
+	*newFromAssociationArray{arg arr, recursive = true;
+		var result = this.new;
+		if(recursive, {
+			if(arr.isTrulyAssociationArray, {
+				arr.do({arg assoc;
+					var val = assoc.value;
+					if(val.isKindOf(SequenceableCollection) and: {val.isTrulyAssociationArray}, {
+						val = this.newFromAssociationArray(assoc.value);
+					}, {
+						val = assoc.value;
+					});
+					result.put(assoc.key, val);
+				});
+			});
+		}, {
+			if(arr.isTrulyAssociationArray, {
+				arr.do({arg assoc;
+					result.put(assoc.key, assoc.value);
+				});
+			});
+		});
+		^result;
+	}
+
 	put{| key, value |
 		if(this.includesKey(key).not, {
 			order = order.add(key);
