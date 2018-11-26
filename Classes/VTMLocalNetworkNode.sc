@@ -435,15 +435,15 @@ VTMLocalNetworkNode {
 		});
 	}
 
-	findManagerForContextClass{| obj |
+	findManagerForContextClass{| class |
 		var managerObj;
 		case
-		{obj.isKindOf(VTMModule) } {managerObj =  moduleHost; }
-		{obj.isKindOf(VTMHardwareDevice) } {managerObj =  hardwareSetup; }
-		{obj.isKindOf(VTMScene) } {managerObj =  sceneOwner; }
-		{obj.isKindOf(VTMApplication) } {managerObj =  applicationManager; }
-		{obj.isKindOf(VTMControl) } {managerObj = controls; }
-		{obj.isKindOf(VTMRemoteNetworkNode) } {managerObj =  networkNodeManager; };
+		{class.isKindOf(VTMModule.class) } {managerObj =  moduleHost; }
+		{class.isKindOf(VTMHardwareDevice.class) } {managerObj =  hardwareSetup; }
+		{class.isKindOf(VTMScene.class) } {managerObj =  sceneOwner; }
+		{class.isKindOf(VTMApplication.class) } {managerObj =  applicationManager; }
+		{class.isKindOf(VTMControl.class) } {managerObj = controls; }
+		{class.isKindOf(VTMRemoteNetworkNode.class) } {managerObj =  networkNodeManager; };
 		^managerObj;
 	}
 
