@@ -35,10 +35,10 @@ VTMContext : VTMElement {
 		envir = definition.makeEnvir;
 
 		stateChangeCallbacks = IdentityDictionary.new;
-		manager = VTM.local.findManagerForContextClass(this);
 
 		condition = Condition.new;
 		this.prChangeState(\loadedDefinition);
+		VTM.local.findManagerForContextClass(this).addItem(this);
 	}
 
 	isUnmanaged{
