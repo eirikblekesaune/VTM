@@ -2,24 +2,23 @@
 A Context is comething that manages an inner runtime environment
 */
 VTMContext : VTMElement {
-	var definition;
+	var <definition;//TEMP getter
 	var buildFunction;
 	var fullPathThunk;
-	var envir;
+	var <envir; //TEMP getter
 	var <addr; //the address for this object instance.
 	var <state;
 	var stateChangeCallbacks;
-	var condition;
 	var library;
 
-	*new{| name, declaration, definition |
+	*new{| name, declaration, definition, onInit |
 		^super.new(name, declaration).initContext(
-			definition);
+			definition, onInit);
 	}
 
 	//definition argument can be either nil, an instance of
 	//VTMContextDefinition,  or Environment.
-	initContext{| definition_ |
+	initContext{| definition_, onInit_ |
 		var def;
 		if(definition_.isNil, {
 			def = Environment.new;
@@ -27,18 +26,25 @@ VTMContext : VTMElement {
 			def = definition_;
 		});
 		if(def.isKindOf(Environment), {
+
 			def = VTMContextDefinition.newFromEnvir(def);
 		});
 
 		//in any case we copy the def
 		definition = def.deepCopy;
-		envir = definition.makeEnvir;
+		envir = definition.makeEnvir(this);
 
 		stateChangeCallbacks = IdentityDictionary.new;
-
-		condition = Condition.new;
 		this.prChangeState(\loadedDefinition);
+
+
+		//register with default manager here for now. This will become troublesome when already
+		//have determined manager from the outside.
 		VTM.local.findManagerForContextClass(this).addItem(this);
+
+		//initialize the envir, this is async so register the init callback
+		this.on(\didInit, onInit_);
+		this.init;
 	}
 
 	isUnmanaged{
@@ -49,6 +55,32 @@ VTMContext : VTMElement {
 		controls.addItem( newCtrl );
 		this.changed(\controls);
 	}
+
+	//All calls to envir are async, i.e init, prepare, run, free
+	init{| condition, action |
+		forkIfNeeded{
+			var cond = condition ?? {Condition.new};
+			this.prChangeState(\willInit);
+			if(envir.includesKey(\init), {
+				this.execute(\init, envir, definition, cond);
+			});
+			//at this point it is assumed that control descripitons are
+			// ready to be used for building controls
+			"THE control: %".format(controls.items).postln;
+			envir[\controls].keysValuesDo({arg ctrlKey, ctrlDesc;
+				var newCtrl;
+				newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc);
+				if(newCtrl.action.notNil, {
+					newCtrl.action = newCtrl.action.inEnvir(envir);
+				});
+				this.addControl(newCtrl);
+			});
+
+			this.prChangeState(\didInit);
+			action.value(this);
+		};
+	}
+
 
 	//The context that calls prepare can issue a condition to use for
     //handling asynchronous events. If no condition is passed as
@@ -172,6 +204,15 @@ VTMContext : VTMElement {
 		super.disableOSC();
 	}
 
+	definitionControls{
+		var result = VTMOrderedIdentityDictionary.new;
+		var defControlKeys = definition.controls.keys;
+		defControlKeys.do({arg ctrlKey;
+			result.put(ctrlKey, controls.at(ctrlKey));
+		});
+		^result;
+	}
+
 	*controlDescriptions{
 		^super.controlDescriptions.putAll( VTMOrderedIdentityDictionary[
 			\prepare -> (type: \none, mode: \command),
@@ -195,15 +236,4 @@ VTMContext : VTMElement {
 		^result;
 	}
 
-	//Make a function that evaluates in the envir.
-	//This method opens a gaping hole into the context's
-	//innards, so it should not be used by other classes
-	//than VTMControlManager
-	prContextualizeFunction{| func |
-		var result;
-		envir.use{
-			result = func.inEnvir;
-		};
-		^result;
-	}
 }

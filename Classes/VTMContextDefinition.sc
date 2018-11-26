@@ -39,21 +39,28 @@ VTMContextDefinition {
 	}
 
 	initContextDefinition{| env_, name_ |
+		var env = VTMOrderedIdentityDictionary.newFrom(env_);
+		var ctrls, params;
 		name = name_;
+
 		definition = Environment[
-			\name -> name,
-			\parameters -> VTMOrderedIdentityDictionary.new,
-			\attributes -> VTMOrderedIdentityDictionary.new,
-			\commands -> VTMOrderedIdentityDictionary.new,
-			\presets -> VTMOrderedIdentityDictionary.new,
-			\returns -> VTMOrderedIdentityDictionary.new,
-			\signals -> VTMOrderedIdentityDictionary.new,
-			\cues -> VTMOrderedIdentityDictionary.new,
-			\mappings -> VTMOrderedIdentityDictionary.new,
-			\scores -> VTMOrderedIdentityDictionary.new
+			\name -> name
 		];
 
-		definition.putAll(env_.deepCopy);
+		[\controls, \parameters].do{arg item;
+			var cc;
+			if(env.includesKey(item), {
+				cc = env.removeAt(item);
+				cc = VTMOrderedIdentityDictionary.newFromAssociationArray(cc, true);
+			}, {
+				cc = VTMOrderedIdentityDictionary.new;
+			});
+			definition.put(item, cc);
+		};
+
+		//now put in the rest
+		definition.putAll(env);
+
 		"init: %".format(name).vtmdebug(4, thisMethod);
 	}
 
@@ -78,39 +85,16 @@ VTMContextDefinition {
 	parameters{
 		^definition[\parameters];
 	}
-	attributes{
-		^definition[\attributes];
-	}
-	commands{
-		^definition[\command];
-	}
-	returns{
-		^definition[\returns];
-	}
-	presets{
-		^definition[\presets];
-	}
-	cues{
-		^definition[\cues];
-	}
-	mappings{
-		^definition[\mappings];
-	}
-	scores{
-		^definition[\scores];
+
+	controls{
+		^definition[\controls];
 	}
 
 	description{
 		var result = VTMOrderedIdentityDictionary[
 			\name -> this.name,
 			\parameters -> this.parameters,
-			\attributes -> this.attributes,
-			\commands -> this.commands,
-			\returns -> this.returns,
-			\presets -> this.presets,
-			\cues -> this.cues,
-			\mappings -> this.mappings,
-			\scores -> this.scores
+			\controls -> this.controls
 		];
 		^result;
 	}
