@@ -15,7 +15,7 @@ VTMControl : VTMData {
 		var result;
 		var mode;
 		mode = description.removeAt(\mode);
-		this.perform(mode ? \attribute, name, description);
+		result = this.perform(mode ? \attribute, name, description);
 
 		^result;
 	}
@@ -54,5 +54,13 @@ VTMControl : VTMData {
 
 	makeView{| parent, bounds, viewDef, settings |
 		^this.class.viewClass.new(parent, bounds, viewDef, settings, this);
+	}
+
+	action{
+		^{}; //TEMP getter, cheat mode
+	}
+
+	action_{//TEMP setter, cheat mode
+		//
 	}
 }
