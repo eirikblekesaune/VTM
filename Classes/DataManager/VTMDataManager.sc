@@ -86,6 +86,8 @@ VTMDataManager {
 		^items.size;
 	}
 
+	keys{ ^this.names; }
+
 	at{| key |
 		^items.at(key);
 	}

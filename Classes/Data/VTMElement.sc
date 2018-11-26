@@ -50,12 +50,12 @@ VTMElement : VTMData {
 
 	//set attribute values.
 	set{| key...args |
-		controls[key].set(*args);
+		controls[key].valueAction_(*args);
 	}
 
 	//get attribute(init or run-time) or parameter(init-time) values.
 	get{| key |
-		var result = controls[key].get;
+		var result = controls[key].value;
 		if(result.notNil, {
 			^result;
 		});
