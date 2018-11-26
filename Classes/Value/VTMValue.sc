@@ -70,6 +70,9 @@ VTMValue {
 			if(properties.includesKey(\enum), {
 				this.enum_(properties[\enum]);
 			});
+			if(properties.includesKey(\action), {
+				action = properties[\action];
+			});
 		});
 
 	}

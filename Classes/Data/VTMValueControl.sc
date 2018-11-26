@@ -5,10 +5,11 @@ VTMValueControl : VTMControl {
 	var traceResponder;
 
 	*new{| name, declaration |
-		^super.new(name, declaration ).initValueControl;
+		var action = declaration[\action];
+		^super.new(name, declaration ).initValueControl(action);
 	}
 
-	initValueControl{
+	initValueControl{| action_ |
 		var valueClass = VTMValue.typeToClass(
 			declaration[\type]
 		) ? VTMValue;
@@ -22,6 +23,7 @@ VTMValueControl : VTMControl {
 		valueObj = VTMValue.makeFromType(
 			declaration[\type], valueProperties
 		);
+		this.action = action_;
 
 		forwardings = VTMOrderedIdentityDictionary.new;
 		this.enableForwarding;
@@ -36,6 +38,10 @@ VTMValueControl : VTMControl {
 
 	action_{| func |
 		valueObj.action_(func);
+	}
+
+	action{
+		^valueObj.action;
 	}
 
 	*parameterDescriptions{
