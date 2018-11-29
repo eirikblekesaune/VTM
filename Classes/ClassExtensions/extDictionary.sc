@@ -25,6 +25,7 @@
 		};
 		^this.deepCopy.keysValuesChange(changeValue).asIdentityDictionaryWithSymbolKeys;
 	}
+
 	asIdentityDictionaryWithSymbolKeys {
 		var d = IdentityDictionary();
 		var maybeRecurseValue = {|val|

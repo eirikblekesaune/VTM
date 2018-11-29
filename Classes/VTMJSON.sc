@@ -73,10 +73,20 @@ VTMJSON : JSON {
 		if(result.isKindOf(Symbol), {
 			result = result.asString;
 		});
-		result = result.parseYAML;
-		case
-		{result.isString;} {result = this.parseYAMLValue(result);}
-		{result.isKindOf(Collection)} {result = result.collect({| item | this.parse(item);})}
+		if(result.isArray and: {result.isString.not}, {
+			result = result.collect({| item |
+				this.parse(item);
+			})
+		}, {
+			result = result.parseYAML;
+			case
+			{result.isString;} {result = this.parseYAMLValue(result);}
+			{result.isKindOf(Collection)} {
+				result = result.collect({| item |
+					this.parse(item);
+				})
+			};
+		});
 		^result;
 	}
 
@@ -115,6 +125,7 @@ VTMJSON : JSON {
 		{"^0[xX][0-9a-fA-F]+$".matchRegexp(str)} {result = str.interpret; } //hex notation
 		{"^true$".matchRegexp(str)} { result = true; }// yaml1.2 /json compatible booleans
 		{"^false$".matchRegexp(str)} { result = false; }
+		// {"^\\{.+\\}$".matchRegexp(str)} { result = str.parseYAML; }
 		{ result = str.asString; };//convert to symbol by default
 		^result;
 	}
