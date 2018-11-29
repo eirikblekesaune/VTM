@@ -25,7 +25,7 @@ VTMLocalNetwork{
 		var result;
 		result = (
 			hostname: hostname,
-			ipString: addr.makeIPString,
+			ip: addr.makeIPString,
 			mac: mac,
 			port: this.port
 		);

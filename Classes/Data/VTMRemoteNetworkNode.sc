@@ -13,7 +13,7 @@ VTMRemoteNetworkNode : VTMElement {
 		if(manager.notNil, {
 			localNetworks = localNetworks.add(manager);
 		});
-		addr = NetAddr.newFromIPString(this.get(\ipString));
+		addr = NetAddr.newFromIPString(this.get(\ip));
 	}
 
 	//when a computer is available both on WIFI and Cable LAN
@@ -24,7 +24,7 @@ VTMRemoteNetworkNode : VTMElement {
 
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll(VTMOrderedIdentityDictionary[
-			\ipString -> (type: \string, optional: false),
+			\ip -> (type: \string, optional: false),
 			\mac -> (type: \string, optional: false)
 		]);
 	}

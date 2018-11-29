@@ -10,4 +10,11 @@ VTMControlManager : VTMDataManager{
 			item.trace(bool);
 		});
 	}
+
+	path{
+		if(this.parent.notNil, {
+			^this.parent.fullPath;
+		});
+		^'/';
+	}
 }

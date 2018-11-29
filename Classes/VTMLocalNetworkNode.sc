@@ -70,7 +70,7 @@ VTMLocalNetworkNode {
 				var senderHostname, senderAddr, registered = false;
 				var localNetwork;
 				senderHostname = jsonData['hostname'].asSymbol;
-				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
+				senderAddr = NetAddr.newFromIPString(jsonData['ip'].asString);
 
 				//find which network the node is sending on
 				localNetwork = localNetworks.detect({| net |
@@ -95,7 +95,7 @@ VTMLocalNetworkNode {
 							newNetworkNode = VTMRemoteNetworkNode(
 								senderHostname,
 								(
-									ipString: jsonData['ipString'].asString,
+									ip: jsonData['ip'].asString,
 									mac: jsonData['mac'].asString
 								),
 								networkNodeManager,
@@ -126,7 +126,7 @@ VTMLocalNetworkNode {
 				var senderHostname, senderAddr, registered = false;
 				var localNetwork;
 				senderHostname = jsonData['hostname'].asSymbol;
-				senderAddr = NetAddr.newFromIPString(jsonData['ipString'].asString);
+				senderAddr = NetAddr.newFromIPString(jsonData['ip'].asString);
 				//find which network the node is sending on
 
 				localNetwork = localNetworks.detect({| net |
@@ -146,7 +146,7 @@ VTMLocalNetworkNode {
 						newNetworkNode = VTMRemoteNetworkNode(
 							senderHostname,
 							(
-								ipString: jsonData['ipString'].asString,
+								ip: jsonData['ip'].asString,
 								mac: jsonData['mac'].asString
 							),
 							networkNodeManager,
