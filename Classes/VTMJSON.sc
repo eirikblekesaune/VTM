@@ -82,9 +82,13 @@ VTMJSON : JSON {
 			case
 			{result.isString;} {result = this.parseYAMLValue(result);}
 			{result.isKindOf(Collection)} {
-				result = result.collect({| item |
-					this.parse(item);
-				})
+				if(result.isKindOf(Dictionary), {
+					result = result;
+				}, {
+					result = result.collect({| item |
+						this.parse(item);
+					});
+				});
 			};
 		});
 		^result;
