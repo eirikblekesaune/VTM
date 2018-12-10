@@ -12,7 +12,6 @@
 + MIDIDeviceComponent {
 	makeControlDescription{
 		var result;
-		"hello".postln;
 		result = (
 			type: \integer,
 			range: [0, 127]
