@@ -62,10 +62,9 @@ VTMContext : VTMElement {
 			});
 			//at this point it is assumed that control descripitons are
 			// ready to be used for building controls
-			"THE control: %".format(controls.items).postln;
 			envir[\controls].keysValuesDo({arg ctrlKey, ctrlDesc;
 				var newCtrl;
-				newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc);
+				newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc, controls);
 				if(newCtrl.action.notNil, {
 					newCtrl.action = newCtrl.action.inEnvir(envir);
 				});
