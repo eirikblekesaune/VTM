@@ -1,6 +1,12 @@
 ~prototypes =  [\MIDIDevice];
-~prepare = {arg device, cond;
-	"Preparing XTOUCH".postln;
+~init = {arg device, cond;
+	"Initializing XTOUCH".postln;
+	~midiDevice = MIDIDevice(
+		"X-TOUCH COMPACT", "X-TOUCH COMPACT",
+		"X-TOUCH COMPACT", "X-TOUCH COMPACT",
+		'xtouch'
+	);
+	~controls = VTMOrderedIdentityDictionary.new;
 	[
 		[
 			'layer.A/fader.1' -> (number: 1),
@@ -193,7 +199,11 @@
 		})
 	].flat.collect({arg item; item.key -> (item.value ++ (chan: 0))}).do({arg item;
 		var data = item.value;
-		~device.addControl(item.key, data[\chan], data[\number], data[\msgType]);
+		~midiDevice.addComponent(item.key, data[\chan], data[\number], data[\msgType]);
+		~midiDevice.components[item.key].action = {| comp |
+			device.set(item.key, comp.value);
+		};
 	});
-	// ~device.trace(true);
+	~controls = ~midiDevice.makeControlDescriptions;
+
 };
