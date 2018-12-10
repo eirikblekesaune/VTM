@@ -15,8 +15,10 @@ VTMControl : VTMData {
 
 	*makeFromDescription{| name, description, manager |
 		var result;
-		var mode;
+		var mode, descName;
 		mode = description.removeAt(\mode);
+		descName = description.removeAt(\name);
+		name = name ? descName;
 		result = this.perform(mode ? \attribute, name, description, manager);
 
 		^result;
