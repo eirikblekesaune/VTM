@@ -67,6 +67,7 @@ VTMJSON : JSON {
 		^VTMJSON.stringify(obj.asCompileString)
 	}
 
+	//parse yaml json string.
 	*parse{| str |
 		var result;
 		result = str;
@@ -76,7 +77,7 @@ VTMJSON : JSON {
 		if(result.isArray and: {result.isString.not}, {
 			result = result.collect({| item |
 				this.parse(item);
-			})
+			});
 		}, {
 			result = result.parseYAML;
 			case
@@ -94,6 +95,7 @@ VTMJSON : JSON {
 		^result;
 	}
 
+	//parse the value part in a yaml object
 	*parseYAMLValue{| str |
 		var result = str;
 		case
@@ -129,7 +131,7 @@ VTMJSON : JSON {
 		{"^0[xX][0-9a-fA-F]+$".matchRegexp(str)} {result = str.interpret; } //hex notation
 		{"^true$".matchRegexp(str)} { result = true; }// yaml1.2 /json compatible booleans
 		{"^false$".matchRegexp(str)} { result = false; }
-		// {"^\\{.+\\}$".matchRegexp(str)} { result = str.parseYAML; }
+		{"^\\{.+\\}$".matchRegexp(str)} {"Parse JSON object".postln; result = str.parseYAML; }
 		{ result = str.asString; };//convert to symbol by default
 		^result;
 	}
