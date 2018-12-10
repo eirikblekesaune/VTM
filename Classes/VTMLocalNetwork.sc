@@ -27,7 +27,8 @@ VTMLocalNetwork{
 			hostname: hostname,
 			ip: addr.makeIPString,
 			mac: mac,
-			port: this.port
+			port: this.port,
+			netmask: netmask
 		);
 		^result;
 	}
