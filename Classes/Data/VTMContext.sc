@@ -52,6 +52,10 @@ VTMContext : VTMElement {
 		this.changed(\controls);
 	}
 
+	declaration{
+		^declaration;
+	}
+
 	//All calls to envir are async, i.e init, prepare, run, free
 	init{| condition, action |
 		forkIfNeeded{
