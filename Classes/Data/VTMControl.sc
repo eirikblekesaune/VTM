@@ -8,8 +8,10 @@ VTMControl : VTMData {
 	*managerClass{ ^VTMControlManager; }
 
 	*new{| name, declaration, manager |
-		manager = manager ?? { VTM.local.findManagerForContextClass(this) };
-		"got amanager: %".format(manager.fullPath).postln;
+		manager = manager ?? {
+			VTM.local.findManagerForContextClass(this)
+		};
+		"got a manager: %".format(manager.fullPath).postln;
 		^super.new(name, declaration, manager).initControl;
 	}
 
@@ -24,26 +26,26 @@ VTMControl : VTMData {
 		^result;
 	}
 
-	*attribute{| name, declaration |
-		^VTMAttribute(name, declaration);
+	*attribute{| name, declaration, manager |
+		^VTMAttribute(name, declaration, manager);
 	}
-	*command{| name, declaration |
-		^VTMCommand(name, declaration);
+	*command{| name, declaration, manager |
+		^VTMCommand(name, declaration, manager);
 	}
-	*signal{| name, declaration |
-		^VTMSignal(name, declaration);
+	*signal{| name, declaration, manager |
+		^VTMSignal(name, declaration, manager);
 	}
-	*return{| name, declaration |
-		^VTMReturn(name, declaration);
+	*return{| name, declaration, manager |
+		^VTMReturn(name, declaration, manager);
 	}
-	*score{| name, declaration |
-		^VTMScore(name, declaration);
+	*score{| name, declaration, manager |
+		^VTMScore(name, declaration, manager);
 	}
-	*cue{| name, declaration |
-		^VTMCue(name, declaration);
+	*cue{| name, declaration, manager |
+		^VTMCue(name, declaration, manager);
 	}
-	*mapping{| name, declaration |
-		^VTMMapping(name, declaration);
+	*mapping{| name, declaration, manager |
+		^VTMMapping(name, declaration, manager);
 	}
 
 	initControl{
