@@ -16,7 +16,7 @@ VTMElementView : VTMDataView {
 		"These are children: %".format(model.controls).vtmdebug(3, thisMethod);
 		controlsView.layout_(
 			VLayout(
-				*model.controls.reject(_.isNil).collect({| item |
+				*model.controls.items.collect({| item |
 					[
 						item.makeView,
 						\align,
