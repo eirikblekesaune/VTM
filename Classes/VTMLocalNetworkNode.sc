@@ -395,6 +395,8 @@ VTMLocalNetworkNode {
 		^'/';
 	}
 
+	*leadingSeparator { ^$/; }
+
 	discover {| targetHostname |
 		//Broadcast discover to all network connections
 		if(localNetworks.isNil, { ^this; });
@@ -419,8 +421,6 @@ VTMLocalNetworkNode {
 			);
 		});
 	}
-
-	*leadingSeparator { ^$/; }
 
 	sendMsg{| targetHostname, port, path ...data |
 		//sending eeeeverything as typed YAML for now.
