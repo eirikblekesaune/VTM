@@ -151,11 +151,17 @@ VTMDataManager {
 	}
 
 	path{
-		^'/';
+		^parent.fullPath;
 	}
 
 	fullPath{
-		^(this.path ++ this.leadingSeparator ++	this.name).asSymbol;
+		var result;
+		result = this.path;
+		if(parent !== VTM.local, {
+			result = result ++ "/";
+		});
+		result = result ++ this.leadingSeparator ++ this.name;
+		^result.asSymbol;
 	}
 
 	leadingSeparator{ ^':'; }
