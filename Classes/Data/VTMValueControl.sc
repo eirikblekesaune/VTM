@@ -145,7 +145,7 @@ VTMValueControl : VTMControl {
 							str = [what] ++ args;
 						}
 					);
-					"trace: % - %".format(this.fullPath, str).postln
+					"control trace: % - %".format(this.fullPath, str).postln
 				};
 				valueObj.addDependant(traceResponder);
 			});

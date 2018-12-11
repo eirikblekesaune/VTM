@@ -11,7 +11,6 @@ VTMControl : VTMData {
 		manager = manager ?? {
 			VTM.local.findManagerForContextClass(this)
 		};
-		"got a manager: %".format(manager.fullPath).postln;
 		^super.new(name, declaration, manager).initControl;
 	}
 
