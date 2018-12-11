@@ -47,11 +47,6 @@ VTMContext : VTMElement {
 		^manager.parent === VTM.local;
 	}
 
-	addControl{arg newCtrl;
-		controls.addItem( newCtrl );
-		this.changed(\controls);
-	}
-
 	declaration{
 		^declaration;
 	}
@@ -72,7 +67,6 @@ VTMContext : VTMElement {
 				if(newCtrl.action.notNil, {
 					newCtrl.action = newCtrl.action.inEnvir(envir);
 				});
-				this.addControl(newCtrl);
 			});
 
 			this.prChangeState(\didInit);
