@@ -66,9 +66,9 @@ VTMDataManager {
 
 	freeItem{| itemName |
 		var removedItem;
-		items[itemName].disable;//dissable actions and messages
 		removedItem = this.removeItem(itemName);
 		if(removedItem.notNil, {
+			removedItem.disable;//dissable actions and messages
 			"% freeing item: %".format(this.fullPath, itemName).vtmdebug(2, thisMethod);
 			removedItem.free;
 		});
