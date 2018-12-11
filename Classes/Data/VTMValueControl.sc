@@ -90,6 +90,10 @@ VTMValueControl : VTMControl {
 		valueObj.enable;
 	}
 
+	enabled{
+		^valueObj.enabled;
+	}
+
 	enableForwarding{
 		forwarder = SimpleController(valueObj).put(\value, {| theChanged |
 			forwardings.do({| item |
