@@ -68,6 +68,7 @@ VTMContext : VTMElement {
 					newCtrl.action = newCtrl.action.inEnvir(envir);
 				});
 			});
+			this.changed(\controls);
 
 			this.prChangeState(\didInit);
 			action.value(this);
