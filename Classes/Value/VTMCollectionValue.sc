@@ -4,8 +4,8 @@ VTMCollectionValue : VTMValue {
 	var <maxLength;
 	var <minLength;
 
-	*new{| name, properties |
-		^super.new(name, properties).initCollectionValue;
+	*new{| properties |
+		^super.new(properties).initCollectionValue;
 	}
 
 	initCollectionValue{
