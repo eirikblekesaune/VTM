@@ -452,5 +452,35 @@ VTMLocalNetworkNode {
 		//override class if defined in settings.
 		^viewClass.new(parent, bounds, viewDef, settings, this);
 	}
+
+	find{arg key;
+		var str = key.asString;
+		var result, numToDrop = 0;
+		//check if it is one of the managers keys
+		if(str.first == $:, {
+			var managerKey, aChar, manager;
+			str = str.iter;
+			aChar = str.next; //away with the colon
+			aChar = str.next;
+			numToDrop = 2;
+			while({aChar != $/}, {
+				managerKey = managerKey.add;
+				aChar = str.next;
+				numToDrop = numToDrop + 1;
+			});
+			switch(managerKey.asSymbol,
+				\controls, { manager = controls; },
+				\modules, { manager = moduleHost; },
+				\applications, { manager = applicationManager; },
+				\scenes, { manager = sceneOwner; },
+				\networkNodes, { manager = networkNodeManager; },
+				\devices, { manager = hardwareSetup; }
+			);
+			result = manager.find(key.asString.drop(numToDrop));
+		}, {
+
+		});
+		^result;
+	}
 }
 

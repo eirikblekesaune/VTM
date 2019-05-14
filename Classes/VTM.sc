@@ -2,6 +2,7 @@ VTM{
 	classvar <systemConfiguration;
 	classvar <>debugLevel = 0;
 	classvar <>debugFilterFunction;
+	classvar <>throwpoint = false;
 
 	*initClass{
 		var configFilePath = "~/.vtm.conf.yaml".standardizePath;
@@ -15,6 +16,19 @@ VTM{
 			systemConfiguration = IdentityDictionary.new;
 		});
 	}
+
+	// *new{arg key;
+	// 	var str = key.asString;
+	// 	var result;
+	// 	"Find node at key: %".format(key).postln;
+	// 	//check if it a path for the local network node
+	// 	if(str.first == $/, {
+	// 		"Find in local".postln;
+	// 		result = this.local.find(str.drop(1));
+	// 		}, {
+	// 	});
+	// 	^result;
+	// }
 
 	*local{
 		^VTMLocalNetworkNode.singleton;

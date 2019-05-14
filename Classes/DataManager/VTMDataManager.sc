@@ -248,4 +248,13 @@ VTMDataManager {
 		result = result ++ "\tpath: %\n".format(this.fullPath);
 		^result;
 	}
+
+	find{arg key;
+		var str = key.asString;
+		var result;
+		if(str.beginsWith(":control"), {
+			result = items[str.drop(9).asSymbol];
+		});
+		^result;
+	}
 }
