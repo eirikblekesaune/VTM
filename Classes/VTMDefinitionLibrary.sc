@@ -26,6 +26,7 @@ VTMDefinitionLibrary {
 	}
 
 	initDefinitionLibrary{| folderPaths_ |
+
 		folderPaths = folderPaths_;
 		if(folderPaths.isString, {
 			folderPaths = [folderPaths];
@@ -66,6 +67,7 @@ VTMDefinitionLibrary {
 								entryPathName
 							)).throw;
 						}, {
+							"Added definition '%' from file '%'".format(definitionName, entryPathName.fullPath).vtmdebug(2, thisMethod);
 							res.put(definitionName, loadedEnvir);
 						});
 					} {
