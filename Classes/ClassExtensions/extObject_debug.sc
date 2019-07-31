@@ -9,12 +9,19 @@
 + Object {
 	vtmdebug{arg level = 0, aMethod;
 		if(VTM.debugLevel >= level, {
+			var ownerClass = aMethod.ownerClass;
+			var methodName = aMethod.name;
 			if(VTM.debugFilterFunction.notNil, {
 				if(VTM.debugFilterFunction.value(this, level, aMethod), {
 					^this; //early return
 				});
 			});
-			this.debug("[VTM debug %] %::%".format(level, aMethod.ownerClass, aMethod.name));
+			if(ownerClass.isMetaClass, { //if is it a class method
+				//turn into class method syntax
+				methodName = "*%".format(methodName);
+				ownerClass = ownerClass.name.asString.drop(5); //this trick gives us the classmethods classname again
+			});
+			this.debug("[VTM debug %] %::%".format(level, ownerClass, methodName));
 		});
 	}
 }
