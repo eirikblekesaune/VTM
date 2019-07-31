@@ -7,10 +7,6 @@ VTMContextDefinition {
 		^super.new.initContextDefinition(envir, name);
 	}
 
-	*newFromEnvir{| envir, name |
-		^this.new(envir, name);
-	}
-
 	*newFromFile{| filepath |
 		var pathName = PathName(filepath);
 		var definitionName = pathName.fileName.findRegexp("(.+)_definition.scd$")[1][1].asSymbol;

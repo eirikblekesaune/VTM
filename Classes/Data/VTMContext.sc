@@ -28,7 +28,7 @@ VTMContext : VTMElement {
 		});
 		if(def.isKindOf(Environment), {
 
-			def = VTMContextDefinition.newFromEnvir(def);
+			def = VTMContextDefinition.new(def);
 		});
 
 		//in any case we copy the def
