@@ -9,9 +9,8 @@ VTMContextDefinition {
 
 	*newFromFile{| filepath |
 		var pathName = PathName(filepath);
-		var definitionName = pathName.fileName.findRegexp("(.+)_definition.scd$")[1][1].asSymbol;
-		var loadedEnvir;
 		try{
+			var loadedEnvir;
 			"filepath to load: %".format(pathName.fullPath).vtmdebug(4, thisMethod);
 			if(File.exists(pathName.fullPath).not, {
 				VTMError(
@@ -26,7 +25,16 @@ VTMContextDefinition {
 					)
 				).throw;
 			}, {
-				^this.new(loadedEnvir, definitionName).filepath_(filepath);
+				var definitionName;
+				//FIXME: Do better testing of string here
+				definitionName = pathName.fileName.findRegexp("(.+)_definition.scd$");
+				if(definitionName.notNil and: {definitionName.notEmpty}, {
+					definitionName = definitionName[1];
+				});
+				if(definitionName.notNil and: {definitionName.notEmpty}, {
+					definitionName = definitionName[1].asSymbol;
+				});
+				^this.new(loadedEnvir, definitionName).filepath_(pathName.fullPath);
 			});
 		} {|err|
 			"Could not compile definition file: '%'".format(pathName).warn;
