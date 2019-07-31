@@ -19,10 +19,14 @@ VTMApplication : VTMContext {
 
 		//always add the local path for the application definition path
 		if(definition.filepath.notNil, {
-			var appDefFolder = "%/Definitions".format(definition.filepath);
+			var appDefFolder = "%/Definitions".format(PathName(definition.filepath).pathOnly);
 			if(File.exists(appDefFolder), {
 				defPaths = defPaths.add(appDefFolder);
+			}, {
+				"Did not find definitions folder '%' for application: %".format(appDefFolder, name).vtmwarn(1, thisMethod);
 			});
+		}, {
+			"Did not find folder app defintion: %".format(name).vtmwarn(1, thisMethod);
 		});
 		definitionlibrary = VTMDefinitionLibrary.new(defPaths, this);
 
