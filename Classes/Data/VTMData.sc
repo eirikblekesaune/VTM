@@ -220,7 +220,7 @@ VTMData {
 			"'%'\n\ttheChanged: %".format(this.name, theChanged) ++
 			"\n\twhatChanged: %".format(whatChanged) ++
 			"\n\targs: %".format(args)
-		).vtmdebug( 2, thisMethod);
+		).vtmdebug( 3, thisMethod);
 
 		switch(whatChanged,
 			\items, {
