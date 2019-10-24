@@ -52,4 +52,8 @@ VTMApplication : VTMContext {
 	components{
 		^[modules, hardwareDevices, scenes].collect(_.items).flat;
 	}
+
+	findDefinition{arg defName;
+		^definitionLibrary.findDefinition(defName);
+	}
 }

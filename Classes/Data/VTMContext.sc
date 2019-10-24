@@ -230,4 +230,8 @@ VTMContext : VTMElement {
 		^result;
 	}
 
+	findDefinition{arg defName;
+		^VTM.local.library.findDefinition(defName);
+	}
+
 }
