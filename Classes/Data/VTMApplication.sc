@@ -43,9 +43,7 @@ VTMApplication : VTMContext {
 		});
 	}
 
-
-
-	// components{
-	// 	^super.components;// ++ [hardwareDevices, modules, scenes/*, library*/];
-	// }
+	components{
+		^[modules, hardwareDevices, scenes].collect(_.items).flat;
+	}
 }
