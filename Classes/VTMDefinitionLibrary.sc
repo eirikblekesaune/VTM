@@ -18,6 +18,8 @@ VTMDefinitionLibrary {
 			sysDefPaths = sysDefPaths.collect(_.standardizePath);
 			systemPaths = sysDefPaths;
 			system = this.readLibrary(systemPaths);
+		}, {
+			system = VTMOrderedIdentityDictionary.new;
 		});
 	}
 
