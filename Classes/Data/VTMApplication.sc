@@ -37,7 +37,6 @@ VTMApplication : VTMContext {
 	}
 
 	initComponents{
-		"Declaration: %".format(declaration).postln;
 		if(declaration.includesKey(\modules), {
 			"Adding module to module host".vtmdebug(2, thisMethod);
 			modules.addItemsFromItemDeclarations(declaration[\modules]);
