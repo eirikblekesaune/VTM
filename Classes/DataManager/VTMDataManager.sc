@@ -37,7 +37,7 @@ VTMDataManager {
 	}
 
 	addItem{| newItem |
-		"% added item: %".format(this.fullPath, newItem).vtmdebug(2, thisMethod);
+		"% added item: % name: % path: %".format(this.fullPath, newItem, newItem.name, newItem.path).vtmdebug(2, thisMethod);
 
 		if(newItem.isKindOf(this.class.dataClass), {//check argument type
 			//If the manager has already registered a context of this name then
@@ -57,7 +57,7 @@ VTMDataManager {
 		var removedItem;
 		removedItem = items.removeAt(itemName);
 		if(removedItem.notNil, {
-			"% removed item: %".format(this.fullPath, removedItem).vtmdebug(2, thisMethod);
+			"% added item: % name: % path: %".format(this.fullPath, removedItem, removedItem.name, removedItem.path).vtmdebug(2, thisMethod);
 			this.changed(\items, \removed, removedItem);
 			this.removeDependant(removedItem);
 		})
