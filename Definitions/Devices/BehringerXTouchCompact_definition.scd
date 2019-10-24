@@ -1,10 +1,10 @@
-~prototypes =  [\MIDIDevice];
+// ~prototypes =  [\MIDIDevice];
 ~init = {arg device, cond;
 	"Initializing XTOUCH".postln;
 	~midiDevice = MIDIDevice(
 		"X-TOUCH COMPACT", "X-TOUCH COMPACT",
 		"X-TOUCH COMPACT", "X-TOUCH COMPACT",
-		~name
+		~self.fullPath
 	);
 	~controls = VTMOrderedIdentityDictionary.new;
 	[
@@ -205,5 +205,5 @@
 		};
 	});
 	~controls = ~midiDevice.makeControlDescriptions;
-
+	~midiDevice.trace(true);
 };
