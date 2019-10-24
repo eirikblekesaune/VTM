@@ -4,7 +4,7 @@
 	~midiDevice = MIDIDevice(
 		"X-TOUCH COMPACT", "X-TOUCH COMPACT",
 		"X-TOUCH COMPACT", "X-TOUCH COMPACT",
-		'xtouch'
+		~name
 	);
 	~controls = VTMOrderedIdentityDictionary.new;
 	[
