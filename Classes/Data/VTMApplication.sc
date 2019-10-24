@@ -33,13 +33,19 @@ VTMApplication : VTMContext {
 		hardwareDevices = VTMHardwareSetup(this);
 		modules = VTMModuleHost(this);
 		scenes = VTMSceneOwner(this);
-		this.initComponents;
+		this.on(\didInit, {
+			this.makeComponents;
+		});
 	}
 
-	initComponents{
-		if(declaration.includesKey(\modules), {
-			"Adding module to module host".vtmdebug(2, thisMethod);
-			modules.addItemsFromItemDeclarations(declaration[\modules]);
+	makeComponents{
+		// if(declaration.includesKey(\modules), {
+		// 	"Adding module to module host".vtmdebug(2, thisMethod);
+		// 	modules.addItemsFromItemDeclarations(declaration[\modules]);
+		// });
+		if(declaration.includesKey(\hardwareDevices), {
+			"Adding module to hardware devices".vtmdebug(2, thisMethod);
+			hardwareDevices.addItemsFromItemDeclarations(declaration[\hardwareDevices]);
 		});
 	}
 
