@@ -2,7 +2,7 @@ VTMApplication : VTMContext {
 	var <scenes;
 	var <modules;
 	var <hardwareDevices;
-	var <definitionlibrary;
+	var <definitionLibrary;
 	classvar <isAbstractClass=false;
 
 	*managerClass{ ^VTMApplicationManager; }
@@ -28,7 +28,7 @@ VTMApplication : VTMContext {
 		}, {
 			"Did not find folder app defintion: %".format(name).vtmwarn(1, thisMethod);
 		});
-		definitionlibrary = VTMDefinitionLibrary.new(defPaths, this);
+		definitionLibrary = VTMDefinitionLibrary.new(defPaths, this);
 
 		hardwareDevices = VTMHardwareSetup(this);
 		modules = VTMModuleHost(this);
