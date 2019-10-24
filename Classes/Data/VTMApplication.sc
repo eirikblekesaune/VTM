@@ -33,7 +33,18 @@ VTMApplication : VTMContext {
 		hardwareDevices = VTMHardwareSetup(this);
 		modules = VTMModuleHost(this);
 		scenes = VTMSceneOwner(this);
+		this.initComponents;
 	}
+
+	initComponents{
+		"Declaration: %".format(declaration).postln;
+		if(declaration.includesKey(\modules), {
+			"Adding module to module host".vtmdebug(2, thisMethod);
+			modules.addItemsFromItemDeclarations(declaration[\modules]);
+		});
+	}
+
+
 
 	// components{
 	// 	^super.components;// ++ [hardwareDevices, modules, scenes/*, library*/];
