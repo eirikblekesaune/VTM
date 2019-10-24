@@ -29,7 +29,7 @@ VTMContextManager : VTMDataManager {
 			//Therefor we extract the action here and wrap it into a function
 			//that also includes the context as the second argument.
 			itemAction = itemDeclaration.removeAt(\action);
-			newItem = this.class.dataClass.new(itemName, itemDeclaration, this);
+			newItem = this.class.dataClass.new(itemName, itemDeclaration);
 			if(itemAction.notNil, {
 				//If this object is in a context we bind the item action
 				//to the context environment so that environment variables
