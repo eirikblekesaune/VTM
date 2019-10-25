@@ -39,13 +39,30 @@ VTMApplication : VTMContext {
 	}
 
 	makeComponents{
-		// if(declaration.includesKey(\modules), {
-		// 	"Adding module to module host".vtmdebug(2, thisMethod);
-		// 	modules.addItemsFromItemDeclarations(declaration[\modules]);
-		// });
-		if(declaration.includesKey(\hardwareDevices), {
-			"Adding module to hardware devices".vtmdebug(2, thisMethod);
-			hardwareDevices.addItemsFromItemDeclarations(declaration[\hardwareDevices]);
+		var meth = thisMethod; //for the vtmwarning method in the catch block
+		[
+			[\modules, modules],
+			[\hardwareDevices, hardwareDevices],
+			[\scenes, scenes]
+		].do({arg args;
+			var compKey, comp;
+			#compKey, comp = args;
+			"Making components: %".format(compKey).vtmdebug(2, thisMethod);
+			if(declaration.includesKey(compKey), {
+				declaration[compKey].keysValuesDo({arg itemName, itemDeclaration;
+					var newItem;
+					try{
+						newItem = comp.makeItemFromDeclaration(itemName, itemDeclaration);
+						"ADDDING: % to %".format(newItem, comp).postln;
+						comp.addItem(newItem);
+					} {|err|
+						"Failed making component named: % with declaration: %".format(
+							itemName, itemDeclaration
+						).vtmwarn(0, meth);
+						err.errorString.postln;
+					}
+				});
+			});
 		});
 	}
 
