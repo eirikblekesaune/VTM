@@ -35,6 +35,20 @@ VTMContext : VTMElement {
 		definition = def.deepCopy;
 		envir = definition.makeEnvir(this);
 
+		//Check the parameters from the definition
+		"defintion parameters: %".format(definition.parameters).vtmdebug(2, thisMethod);
+		if(definition.parameters.notNil, {
+			definition.parameters.keysValuesDo({| paramKey, paramProps |
+				var tempVal;
+				tempVal = this.class.validateParameterValue(paramProps, paramKey, declaration);
+				if(tempVal.isKindOf(Error), {
+					tempVal.throw;
+				}, {
+					parameters.put(paramKey, tempVal.deepCopy);
+				});
+			});
+		});
+
 		stateChangeCallbacks = IdentityDictionary.new;
 		this.prChangeState(\loadedDefinition);
 
@@ -77,10 +91,10 @@ VTMContext : VTMElement {
 
 
 	//The context that calls prepare can issue a condition to use for
-    //handling asynchronous events. If no condition is passed as
-    //argument the context will make its own condition instance.
+	//handling asynchronous events. If no condition is passed as
+	//argument the context will make its own condition instance.
 	//The ~prepare stage is where the module definition defines and
-    //creates its parameters.
+	//creates its parameters.
 	prepare{| condition, action |
 		forkIfNeeded{
 			var cond = condition ?? {Condition.new};
