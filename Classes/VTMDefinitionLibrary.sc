@@ -48,6 +48,7 @@ VTMDefinitionLibrary {
 			//Then lastly try the global library
 			result = this.class.global[defName];
 		});
+
 		^result.deepCopy;
 	}
 
@@ -63,15 +64,9 @@ VTMDefinitionLibrary {
 					var definitionName = entryPathName.fileName.findRegexp(
 						"(.+)_definition.scd$")[1][1].asSymbol;
 					try{
-						loadedEnvir = File.loadEnvirFromFile(entryPathName.fullPath);
-						if(loadedEnvir.isNil, {
-							VTMError("Could not load environment from definition file: '%'".format(
-								entryPathName
-							)).throw;
-						}, {
-							"Added definition '%' from file '%'".format(definitionName, entryPathName.fullPath).vtmdebug(2, thisMethod);
-							res.put(definitionName, loadedEnvir);
-						});
+						var contextDef = VTMContextDefinition.newFromFile(entryPathName.fullPath);
+						"Added definition '%' from file '%'".format(definitionName, entryPathName.fullPath).vtmdebug(2, thisMethod);
+						res.put(contextDef.name, contextDef);
 					} {
 						"Could not compile definition file: '%'".format(entryPathName).warn;
 					};
