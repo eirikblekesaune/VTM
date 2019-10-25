@@ -17,13 +17,13 @@ VTMData {
 
 	//name is mandatory, must be defined in arg or declaration
 	*new{| name, declaration, manager |
-        var decl;
+		var decl;
 		if(name.isNil, {
 			VTMError(
 				"% - 'name' not defined".format(this)
 			).throw;
 		});
-        ^super.new.initData(name.asSymbol, declaration, manager);
+		^super.new.initData(name.asSymbol, declaration, manager);
 	}
 
 	initData{| name_, declaration_, manager_ |
@@ -42,14 +42,26 @@ VTMData {
 		this.prInitParameters;
 	}
 
-	//get the parameter values from the declaration
+	//get the parameter values from the class declaration
 	//Check for missing mandatory parameter values
 	prInitParameters{
 		parameters = VTMOrderedIdentityDictionary.new;
 
-		this.class.parameterDescriptions.keysValuesDo({
-			| key, props |
+		this.class.parameterDescriptions.keysValuesDo({| key, props |
 			var tempVal;
+			tempVal = this.class.validateParameterValue(props, key, declaration);
+			if(tempVal.isKindOf(Error).not, {
+				parameters.put(key, tempVal.deepCopy);
+				}, {
+					tempVal.throw;
+			});
+		});
+	}
+
+	*validateParameterValue{arg props, key, declaration;
+		var tempVal, result;
+		"props: %, key: %, declaration: %".format(props, key, declaration).vtmdebug(2, thisMethod);
+		try{
 			//check if parameter is defined in parameter values
 			if(declaration.includesKey(key), {
 				var checkType;
@@ -61,7 +73,7 @@ VTMData {
 					if(tempVal.isValidType(declaration[key]).not, {
 						VTMError(
 							"Parameter value '%' must be of type '%'"
-                            "value: %".format(
+							"value: %".format(
 								key,
 								tempVal.type,
 								tempVal.value.asCompileString
@@ -74,30 +86,33 @@ VTMData {
 				if(checkValue, {
 					if(tempVal.isValidValue(declaration[key]).not, {
 						VTMError("Parameter value '%' is invalid"
-							.format(key)).throw;
+						.format(key)).throw;
 					});
 				});
 				tempVal.value = declaration[key];
-			}, {
-				var optional;
-				//if not check if it is optional, true by default
-				optional = props[\optional] ? true;
-				if(optional.not, {
-					VTMError(
-                      "Parameters is missing non-optional value '%'"
-						.format(key)).throw;
 				}, {
-					tempVal = VTMValue.makeFromProperties(props)
+					var optional;
+					//if not check if it is optional, true by default
+					optional = props[\optional] ? true;
+					if(optional.not, {
+						VTMError(
+							"Parameters is missing non-optional value '%'"
+						.format(key)).throw;
+						}, {
+							tempVal = VTMValue.makeFromProperties(props)
+					});
 				});
-			});
 
-			if(tempVal.isNil, {
+				if(tempVal.isNil, {
 				VTMError("Building Parameter '%' failed!".format(
 					key
 				)).throw
-			});
-			parameters.put(key, tempVal.deepCopy);
-		});
+				});
+			result = tempVal;
+		} {|err|
+			result = err;
+		}
+		^result;
 	}
 
 	disable{
@@ -186,8 +201,8 @@ VTMData {
 	enableOSC {
 		oscInterface !? { oscInterface.enable(); };
 		oscInterface ?? {
-          oscInterface = VTMOSCInterface(this).enable()
-        };
+			oscInterface = VTMOSCInterface(this).enable()
+		};
 	}
 
 
@@ -211,7 +226,7 @@ VTMData {
 		result = "\n'%' [%]\n".format(this.name, this.class);
 		result = result ++ "\t'fullPath': %\n".format(this.fullPath);
 		result = result ++ "\t'description':\n %".format(
-          this.description.makeTreeString(3));
+			this.description.makeTreeString(3));
 		^result;
 	}
 
@@ -229,18 +244,18 @@ VTMData {
 				switch(cmd,
 					\added, {
 						if(theChanged.isKindOf(this.class.managerClass)
-						and: {obj === this}, {
-							manager = theChanged;
-							this.addDependant(manager);
-							this.changed(\addedToManager, theChanged);
+							and: {obj === this}, {
+								manager = theChanged;
+								this.addDependant(manager);
+								this.changed(\addedToManager, theChanged);
 						});
 					},
 					\removed, {
 						if(theChanged.isKindOf(this.class.managerClass)
-						and: {obj === this}, {
-							this.removeDependant(manager);
-							manager = nil;
-							this.changed(\removedFromManager, theChanged);
+							and: {obj === this}, {
+								this.removeDependant(manager);
+								manager = nil;
+								this.changed(\removedFromManager, theChanged);
 						});
 					}
 				);
