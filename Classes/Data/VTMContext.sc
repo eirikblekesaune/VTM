@@ -222,6 +222,10 @@ VTMContext : VTMElement {
 		]);
 	}
 
+	parameters{
+		^super.parameters.putAll(definition.parameters);
+	}
+
 	description{| includeDeclaration = false |
 		var result;
 		result = super.description(includeDeclaration).put(
