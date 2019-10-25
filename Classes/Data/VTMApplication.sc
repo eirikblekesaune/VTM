@@ -19,7 +19,7 @@ VTMApplication : VTMContext {
 
 		//always add the local path for the application definition path
 		if(definition.filepath.notNil, {
-			var appDefFolder = "%/Definitions".format(PathName(definition.filepath).pathOnly);
+			var appDefFolder = "%Definitions".format(PathName(definition.filepath).pathOnly);
 			if(File.exists(appDefFolder), {
 				defPaths = defPaths.add(appDefFolder);
 			}, {
