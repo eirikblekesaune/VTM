@@ -52,8 +52,8 @@ VTMPath{
 		^breadcrumbs.size;
 	}
 
-	parent{
-		if(this.hasParent, {
+	parentPath{
+		if(this.hasParentPath, {
 			^VTMPath.newFromList(breadcrumbs.drop(-1));
 		}, {
 			//Returns itself if it has no parent;
@@ -69,7 +69,7 @@ VTMPath{
 		^pathStr;
 	}
 
-	hasParent{
+	hasParentPath{
 		^this.length > 1;
 	}
 }
