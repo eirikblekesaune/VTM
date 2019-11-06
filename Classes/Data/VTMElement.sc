@@ -64,7 +64,12 @@ VTMElement : VTMData {
 
 	//do command with possible value args. Only run-time.
 	doCommand{| key ...args |
-		controls[key].doCommand(*args);
+		var ctrl = controls[key];
+		if(ctrl.notNil, {
+			ctrl.doCommand(*args);
+		}, {
+			"No command named: '%' for '%'".format(key, this.fullPath).vtmwarn(1, thisMethod);
+		});
 	}
 
 	//get return results. Only run-time
