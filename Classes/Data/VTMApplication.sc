@@ -73,4 +73,14 @@ VTMApplication : VTMContext {
 	findDefinition{arg defName;
 		^definitionLibrary.findDefinition(defName);
 	}
+
+	free{| condition, action |
+		forkIfNeeded{
+			var cond = condition ?? {Condition.new};
+			this.components.do({arg comp;
+				comp.free(condition, action);
+			});
+			super.free(condition, action);
+		}
+	}
 }
