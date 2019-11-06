@@ -2,8 +2,10 @@
 ~init = {arg device, cond;
 	"Initializing XTOUCH".postln;
 	~midiDevice = MIDIDevice(
-		"X-TOUCH COMPACT", "X-TOUCH COMPACT",
-		"X-TOUCH COMPACT", "X-TOUCH COMPACT",
+		"X-TOUCH COMPACT",
+		"X-TOUCH COMPACT",
+		"X-TOUCH COMPACT",
+		"X-TOUCH COMPACT",
 		~self.fullPath
 	);
 	~controls = VTMOrderedIdentityDictionary.new;
@@ -206,4 +208,8 @@
 	});
 	~controls = ~midiDevice.makeControlDescriptions;
 	~midiDevice.trace(true);
+};
+~free = {arg cond;
+	"Freeing Behringer XTouch Compact: %".format(~self.fullPath).postln;
+	~midiDevice.free;
 };
