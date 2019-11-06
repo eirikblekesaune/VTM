@@ -209,7 +209,7 @@ VTMValue {
 	value{ ^this.get(\value) ? this.defaultValue; }
 	value_{| val |
 		if(this.restrictValueToEnum, {
-			if(this.enum.includes(val), {
+			if(this.enum.includesEqual(val), {
 				this.set(\value, val);
 				this.changed(\value);
 			});
