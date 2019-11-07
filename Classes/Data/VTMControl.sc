@@ -68,4 +68,8 @@ VTMControl : VTMData {
 	action_{//TEMP setter, cheat mode
 		//
 	}
+
+	find{arg vtmPath;
+		^manager.find(vtmPath);
+	}
 }
