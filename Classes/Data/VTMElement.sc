@@ -144,11 +144,15 @@ VTMElement : VTMData {
 	}
 
 	hasChildKey{arg key;
-		^controls.hasItemNamed(key);
+		^(controls.hasItemNamed(key) or: {key == ':controls'});
 	}
 
 	getChild{arg key;
-		^controls.at(key);
+		if(key == ':controls', {
+			^controls;
+		}, {
+			^controls.at(key);
+		});
 	}
 
 }
