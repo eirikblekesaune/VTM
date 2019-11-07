@@ -506,12 +506,10 @@ VTMLocalNetworkNode {
 			});
 			child = this;
 			while({i < vtmPath.length}, {
-				var childKey = vtmPath.at(i);
-				"Child key: %".format(childKey).vtmdebug(0, thisMethod);
-				"\t has child key: %".format(child.hasChildKey(childKey)).vtmdebug(0, thisMethod);
+				var childKey = vtmPath.at(i).asSymbol;
 				if(child.hasChildKey(childKey), {
 					child = child.getChild(childKey);
-					"Next Child key: %".format(child).vtmdebug(0, thisMethod);
+					childKey = vtmPath.at(i).asSymbol;
 					i = i + 1;
 					if(i == vtmPath.length, {
 						^child;

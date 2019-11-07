@@ -89,18 +89,22 @@ VTMApplication : VTMContext {
 	}
 
 	hasChildKey{arg key;
+		if(this.class.childKeys.includes(key), {
+			^true;
+		}, {
+			^super.hasChildKey(key);
+		});
+	}
+
+	getChild{arg key;
 		var result;
 		switch(key,
 			':scenes', {^scenes},
 			':modules', {^modules},
 			':hardwareDevices', {^hardwareDevices}
 		);
-		result = super.hasChildKey(key);
+		result = super.getChild(key);
 		^result;
-	}
-
-	getChild{arg key;
-		^controls.items.at(key);
 	}
 
 }

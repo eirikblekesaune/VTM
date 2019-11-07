@@ -148,7 +148,7 @@ VTMElement : VTMData {
 	}
 
 	getChild{arg key;
-		^controls.items.at(key);
+		^controls.at(key);
 	}
 
 }
