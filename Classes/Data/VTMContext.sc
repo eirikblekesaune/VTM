@@ -125,34 +125,6 @@ VTMContext : VTMElement {
 		};
 	}
 
-	//	//Determine if this is a root context, i.e. having no parent.
-	//	isRoot{
-	//		//^parent.isNil;
-	//	}
-	//
-	//	//Determine is this a lead context, i.e. having no children.
-	//	isLeaf{
-	//		^children.isEmpty;
-	//	}
-	//
-	//	children{
-	//		if(children.isEmpty, {
-	//			^nil;
-	//		}, {
-	//			^children.keys.asArray;// safer to return only the children. not the dict.
-	//		});
-	//	}
-	//Find the root for this context.
-	//	root{
-	//		var result;
-	//		//search for context root
-	//		result = this;
-	//		while({result.isRoot.not}, {
-	//			result = result.parent;
-	//		});
-	//		^result;
-	//	}
-
 	prChangeState{ | val |
 		var newState;
 		var callback;

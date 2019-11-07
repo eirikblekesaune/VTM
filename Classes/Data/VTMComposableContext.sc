@@ -3,18 +3,18 @@ A ComposableContext is something that can manage instances of its own kind.
 e.g a Module can submodules.
 */
 VTMComposableContext : VTMContext {
-	var <children;
+	var <subContexts;
 
 	*new{| name, declaration, manager, definition, onInit|
 		^super.new(name, declaration, manager, definition, onInit).initComposableContext;
 	}
 
 	initComposableContext{
-		//TODO: init children here
+		//TODO: init subContexts here
 	}
 
 	free{
-		children.do(_.free);
+		subContexts.do(_.free);
 		super.free;
 	}
 
