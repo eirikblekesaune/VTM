@@ -109,6 +109,16 @@ VTMElement : VTMData {
 
 	scores { ^controls.scores; }
 
+	disable{
+		this.disableForwarding;
+		super.disable;
+	}
+
+	enable{
+		super.enable;
+		this.enableForwarding;
+	}
+
 	addForwarding{| key, itemName,  addr, path, vtmJson = false, mapFunc |
 		controls[key].addForwarding(addr, path, vtmJson, mapFunc);
 	}

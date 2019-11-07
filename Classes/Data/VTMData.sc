@@ -116,12 +116,10 @@ VTMData {
 	}
 
 	disable{
-		this.disableForwarding;
 		this.disableOSC;
 	}
 
 	enable{
-		this.enableForwarding;
 		this.enableOSC;
 	}
 
