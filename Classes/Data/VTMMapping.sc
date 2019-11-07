@@ -8,9 +8,7 @@ VTMMapping : VTMControl {
 	}
 
 	initMapping{
-		var sourceObj, destinationObj;
-		sourceObj = this.find(this.get(\source));
-		source = VTMMappingSource.from(sourceObj);
+		source = VTMMappingSource(this.get(\source));
 		destination = VTMMappingDestination(this.get(\destination));
 		source.map(destination);
 	}
