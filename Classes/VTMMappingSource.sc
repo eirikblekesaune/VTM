@@ -1,12 +1,14 @@
 VTMMappingSource{
+	var obj;
 
-	/*
-	//Formats:
-	//  remote source prepends with a '@' sign: '@1.2.3.111:57120/my/path'
-	//    - some already receices data, other may need to subscribe to the value
-	//  local source prepends with a leading slash: '/my/path'
-	*/
-	map{| destination |
+	map{arg destination;}
 
+	*from{arg obj;
+		^super.new.init(obj);
 	}
+
+	init{arg obj_;
+		obj = obj_;
+	}
+
 }

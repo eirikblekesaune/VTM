@@ -249,22 +249,43 @@ VTMDataManager {
 		^result;
 	}
 
-	//this method may be obsolete?
-	find{arg key;
-		var str = key.asString;
-		var result;
-		if(str.beginsWith(":control"), {
-			result = items[str.drop(9).asSymbol];
-		});
-		^result;
-	}
-
 	hasChildKey{arg key;
 		^items.includesKey(key);
 	}
 
 	getChild{arg key;
 		^items.at(key);
+	}
+
+	find{arg vtmPath;
+		^nil;
+		// if(vtmPath.isKindOf(VTMPath), {
+		// 	if(vtmPath.isGlobal, {
+		// 		^VTM.local.find(vtmPath);
+		// 		}, {
+		// 			var i = 0, result;
+		// 			var child;
+		// 			child = this;
+		// 			while({i < vtmPath.length}, {
+		// 				var childKey = vtmPath.at(i).asSymbol;
+		// 				if(child.hasChildKey(childKey), {
+		// 					child = child.getChild(childKey);
+		// 					childKey = vtmPath.at(i).asSymbol;
+		// 					i = i + 1;
+		// 					if(i == vtmPath.length, {
+		// 						^child;
+		// 					});
+		// 					}, {
+		// 						i = vtmPath.length; //this stops the while loop
+		// 				});
+		// 			});
+		// 			^nil; //return nil here if not found
+		// 	});
+		// 	}, {
+		// 		"Not a VTMPath: %[%]".format(
+		// 		vtmPath, vtmPath.class).vtmwarn(0, thisMethod);
+		// 		^nil;
+		// });
 	}
 
 }

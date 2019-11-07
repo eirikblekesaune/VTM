@@ -268,4 +268,8 @@ VTMData {
 	getChild{arg key;
 		^nil;
 	}
+
+	find{arg vtmPath;
+		^this.subclassResponsibility(thisMethod);
+	}
 }

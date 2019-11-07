@@ -165,5 +165,34 @@ VTMElement : VTMData {
 		});
 	}
 
+	find{arg vtmPath;
+		if(vtmPath.isKindOf(VTMPath), {
+			if(vtmPath.isGlobal, {
+				^VTM.local.find(vtmPath);
+			}, {
+				var i = 0, result;
+				var child;
+				child = this;
+				while({i < vtmPath.length}, {
+					var childKey = vtmPath.at(i).asSymbol;
+					if(child.hasChildKey(childKey), {
+						child = child.getChild(childKey);
+						childKey = vtmPath.at(i).asSymbol;
+						i = i + 1;
+						if(i == vtmPath.length, {
+							^child;
+						});
+					}, {
+						i = vtmPath.length; //this stops the while loop
+					});
+				});
+				^nil; //return nil here if not found
+			});
+		}, {
+			"Not a VTMPath: %[%]".format(
+				vtmPath, vtmPath.class).vtmwarn(0, thisMethod);
+			^nil;
+		});
+	}
 }
 
