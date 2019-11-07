@@ -249,6 +249,7 @@ VTMDataManager {
 		^result;
 	}
 
+	//this method may be obsolete?
 	find{arg key;
 		var str = key.asString;
 		var result;
@@ -257,4 +258,13 @@ VTMDataManager {
 		});
 		^result;
 	}
+
+	hasChildKey{arg key;
+		^items.includesKey(key);
+	}
+
+	getChild{arg key;
+		^items.at(key);
+	}
+
 }

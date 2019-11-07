@@ -72,4 +72,21 @@ VTMPath{
 	hasParentPath{
 		^this.length > 1;
 	}
+
+	at{arg index;
+		^breadcrumbs[index];
+	}
+
+	first{
+		^breadcrumbs.first;
+	}
+
+	last{
+		^breadcrumbs.last;
+	}
+
+	*isManagerCrumb{arg crumb;
+		^crumb.first == $:;
+	}
+
 }

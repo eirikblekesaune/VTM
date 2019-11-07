@@ -143,5 +143,13 @@ VTMElement : VTMData {
 		controls.trace(bool);
 	}
 
+	hasChildKey{arg key;
+		^controls.hasItemNamed(key);
+	}
+
+	getChild{arg key;
+		^controls.items.at(key);
+	}
+
 }
 

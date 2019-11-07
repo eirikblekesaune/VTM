@@ -262,4 +262,12 @@ VTMData {
 			}
 		)
 	}
+
+	hasChildKey{arg key;
+		^false;
+	}
+
+	getChild{arg key;
+		^nil;
+	}
 }

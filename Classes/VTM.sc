@@ -76,4 +76,8 @@ VTM{
 		);
 		^result;
 	}
+
+	*find{arg vtmPath;
+		VTM.local.find(vtmPath);
+	}
 }

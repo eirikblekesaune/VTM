@@ -2,6 +2,7 @@
 VTMLocalNetworkNode {
 	classvar <singleton;
 	classvar <discoveryBroadcastPort = 57500;
+	classvar <childKeys;
 	var <hostname;
 	var <localNetworks;
 	var discoveryResponder;
@@ -25,6 +26,15 @@ VTMLocalNetworkNode {
 		Class.initClassTree(VTMData);
 		Class.initClassTree(VTMDataManager);
 		Class.initClassTree(VTMDefinitionLibrary);
+		Class.initClassTree(IdentitySet);
+		childKeys = [
+			':controls',
+			':applications',
+			':networkNodes',
+			':hardwareDevices',
+			':modules',
+			':scenes'
+		];
 		singleton = super.new.initLocalNetworkNode;
 	}
 
@@ -37,7 +47,7 @@ VTMLocalNetworkNode {
 		networkNodeManager = VTMNetworkNodeManager.new(this);
 		hardwareSetup = VTMHardwareSetup.new(this);
 		moduleHost = VTMModuleHost.new(this);
-        sceneOwner = VTMSceneOwner.new(this);
+		sceneOwner = VTMSceneOwner.new(this);
 		controls = VTMControlManager(this);
 
 		hostname = Pipe("hostname", "r").getLine();
@@ -453,34 +463,99 @@ VTMLocalNetworkNode {
 		^viewClass.new(parent, bounds, viewDef, settings, this);
 	}
 
-	find{arg key;
-		var str = key.asString;
-		var result, numToDrop = 0;
-		//check if it is one of the managers keys
-		if(str.first == $:, {
-			var managerKey, aChar, manager;
-			str = str.iter;
-			aChar = str.next; //away with the colon
-			aChar = str.next;
-			numToDrop = 2;
-			while({aChar != $/}, {
-				managerKey = managerKey.add;
-				aChar = str.next;
-				numToDrop = numToDrop + 1;
-			});
-			switch(managerKey.asSymbol,
-				\controls, { manager = controls; },
-				\modules, { manager = moduleHost; },
-				\applications, { manager = applicationManager; },
-				\scenes, { manager = sceneOwner; },
-				\networkNodes, { manager = networkNodeManager; },
-				\devices, { manager = hardwareSetup; }
-			);
-			result = manager.find(key.asString.drop(numToDrop));
-		}, {
+	// find{arg key;
+	// 	var str = key.asString;
+	// 	var result, numToDrop = 0;
+	// 	//check if it is one of the managers keys
+	// 	if(str.first == $:, {
+	// 		var managerKey, aChar, manager;
+	// 		str = str.iter;
+	// 		aChar = str.next; //away with the colon
+	// 		aChar = str.next;
+	// 		numToDrop = 2;
+	// 		while({aChar != $/}, {
+	// 			managerKey = managerKey.add;
+	// 			aChar = str.next;
+	// 			numToDrop = numToDrop + 1;
+	// 		});
+	// 		switch(managerKey.asSymbol,
+	// 			\controls, { manager = controls; },
+	// 			\modules, { manager = moduleHost; },
+	// 			\applications, { manager = applicationManager; },
+	// 			\scenes, { manager = sceneOwner; },
+	// 			\networkNodes, { manager = networkNodeManager; },
+	// 			\devices, { manager = hardwareSetup; }
+	// 		);
+	// 		result = manager.find(key.asString.drop(numToDrop));
+	// 		}, {
+	//
+	// 	});
+	// 	^result;
+	// }'/ :applications / PinneInstallasjon / :modules / pinne.2'
 
+	find{arg vtmPath;
+		if(vtmPath.isKindOf(VTMPath), {
+			var i = 0, result;
+			var child;
+			if(vtmPath.isGlobal, {
+				i = 1;
+				//special case if it is the global network node path
+				if(i == vtmPath.length, {
+					^this;
+				});
+			});
+			child = this;
+			while({i < vtmPath.length}, {
+				var childKey = vtmPath.at(i);
+				"Child key: %".format(childKey).vtmdebug(0, thisMethod);
+				"\t has child key: %".format(child.hasChildKey(childKey)).vtmdebug(0, thisMethod);
+				if(child.hasChildKey(childKey), {
+					child = child.getChild(childKey);
+					"Next Child key: %".format(child).vtmdebug(0, thisMethod);
+					i = i + 1;
+					if(i == vtmPath.length, {
+						^child;
+					});
+				}, {
+					i = vtmPath.length; //this stops the while loop
+				});
+			});
+			^nil; //return nil here if not found
+		}, {
+			"Not a VTMPath: %[%]".format(vtmPath, vtmPath.class).vtmwarn(0, thisMethod);
+			^nil;
 		});
-		^result;
+	}
+
+	hasChildKey{arg key;
+		^this.childKeys.includes(key.asSymbol);
+	}
+
+	childKeys{
+		^this.class.childKeys;
+	}
+
+	parentKey{
+		^'/'
+	}
+
+	getChild{arg childKey;
+		^this.children[childKey.asSymbol];
+	}
+
+	hasChildren{
+		^true;
+	}
+
+	children{
+		^VTMOrderedIdentityDictionary[
+			':controls' -> controls,
+			':applications' -> applicationManager,
+			':networkNodes' -> networkNodeManager,
+			':hardwareDevices' -> hardwareSetup,
+			':modules' -> moduleHost,
+			':scenes' -> sceneOwner
+		];
 	}
 }
 

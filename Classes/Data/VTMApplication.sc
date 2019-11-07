@@ -83,4 +83,24 @@ VTMApplication : VTMContext {
 			super.free(condition, action);
 		}
 	}
+
+	*childKeys{
+		^#[':scenes', ':hardwareDevices', ':modules'];
+	}
+
+	hasChildKey{arg key;
+		var result;
+		switch(key,
+			':scenes', {^scenes},
+			':modules', {^modules},
+			':hardwareDevices', {^hardwareDevices}
+		);
+		result = super.hasChildKey(key);
+		^result;
+	}
+
+	getChild{arg key;
+		^controls.items.at(key);
+	}
+
 }
