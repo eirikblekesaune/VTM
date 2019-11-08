@@ -74,7 +74,7 @@ VTMContext : VTMElement {
 				this.execute(\init, envir, definition, cond);
 			});
 			//at this point it is assumed that control descripitons are
-			// ready to be used for building controls
+			// ready to be used for building controls. Not this happens after the envir init.
 			envir[\controls].keysValuesDo({arg ctrlKey, ctrlDesc;
 				var newCtrl;
 				newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc, controls);
