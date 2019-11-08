@@ -121,6 +121,19 @@ VTMNumberValue : VTMValue {
 
 	*defaultViewType{ ^\slider; }
 
+	*parameterDescriptions{
+		^super.parameterDescriptions.putAll(
+			VTMOrderedIdentityDictionary[
+				\clipmode -> (
+					type: \string,
+					enum: ["none", "low", "high", "both"],
+					restrictValueToEnum: true,
+					defaultValue: "both")
+			]
+		);
+	}
+
+
 	//Properties setters and getters
 	minVal_{ | val |
 		if(val.isNil, {

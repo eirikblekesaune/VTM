@@ -41,4 +41,15 @@ VTMDecimalValue : VTMNumberValue {
 	}
 
 	*defaultViewType{ ^\slider; }
+
+	*parameterDescriptions{
+		^super.parameterDescriptions.putAll(
+			VTMOrderedIdentityDictionary[
+				\minVal -> ( type: \decimal, defaultValue: 0.0),
+				\maxVal -> ( type: \decimal, defaultValue: 1.0),
+				\stepsize -> ( type: \decimal, defaultValue: 0.01),
+				\defaultValue -> ( type: \decimal, defaultValue: 0.0)
+			]
+		);
+	}
 }

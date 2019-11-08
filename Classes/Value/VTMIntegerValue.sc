@@ -40,4 +40,15 @@ VTMIntegerValue : VTMNumberValue {
 		});
 		super.defaultValue_(val);
 	}
+
+	*parameterDescriptions{
+		^super.parameterDescriptions.putAll(
+			VTMOrderedIdentityDictionary[
+				\minVal -> ( type: \integer, defaultValue: 0),
+				\maxVal -> ( type: \integer, defaultValue: 127),
+				\stepsize -> ( type: \integer, defaultValue: 1),
+				\defaultValue -> ( type: \integer, defaultValue: 0),
+			]
+		);
+	}
 }
