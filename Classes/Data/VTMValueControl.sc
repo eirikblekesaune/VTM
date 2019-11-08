@@ -1,5 +1,6 @@
 VTMValueControl : VTMControl {
 	var <valueObj;
+	var valueListener;
 	var forwardings;
 	var forwarder;
 	var traceResponder;
@@ -24,6 +25,10 @@ VTMValueControl : VTMControl {
 			declaration[\type], valueProperties
 		);
 		this.action = action_;
+
+		valueListener = SimpleController(valueObj).put(\value, {
+			this.changed(\value, valueObj.value);
+		});
 
 		forwardings = VTMOrderedIdentityDictionary.new;
 		this.enableForwarding;
