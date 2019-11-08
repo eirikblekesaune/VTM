@@ -1,6 +1,7 @@
 VTMMappingSource{
-	var obj;
+	var <obj;
 	var destination;
+	var mappingFunc;
 
 	map{arg destination;}
 
@@ -10,11 +11,18 @@ VTMMappingSource{
 
 	init{arg obj_;
 		obj = obj_;
-		"AAA".vtmdebug(0, thisMethod);
 	}
 
 	forwardTo{arg destination;
-		"AAA".vtmdebug(0, thisMethod);
+		var inMin, inMax, outMin, outMax;
+		inMin = obj.get(\minVal);
+		inMax = obj.get(\maxVal);
+		outMin = destination.obj.get(\minVal);
+		outMax = destination.obj.get(\maxVal);
+		mappingFunc = {arg inVal;
+			var outVal = inVal.linlin(inMin, inMax, outMin, outMax);
+			destination.obj.valueAction_(outVal);
+		};
 		obj.addDependant(this);
 	}
 
@@ -22,9 +30,10 @@ VTMMappingSource{
 		obj.removeDependant(this);
 	}
 
-	update{arg ...args;
-		"AAA".vtmdebug(0, thisMethod);
-		"Got update: %".format(args).vtmdebug(0, thisMethod);
+	update{arg whoChanged, whatChanged, val;
+		if(whatChanged == \value, {
+			mappingFunc.value(val);
+		});
 	}
 
 }

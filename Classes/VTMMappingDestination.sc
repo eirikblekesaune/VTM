@@ -1,5 +1,5 @@
 VTMMappingDestination{
-	var obj;
+	var <obj;
 
 	map{arg source;}
 
