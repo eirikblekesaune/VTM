@@ -9,12 +9,15 @@ VTMMapping : VTMControl {
 
 	enable{
 		var src, dest;
-		src = this.prFindSource(VTMPath(this.get(\source)));
-		dest = this.prFindDestination(VTMPath(this.get(\destination)));
+		src = this.prFindSourceObj(VTMPath(this.get(\source).value));
+		dest = this.prFindDestinationObj(VTMPath(this.get(\destination).value));
 		if(src.notNil and: {dest.notNil}, {
-			switch(this.get(\type),
+			source = src;
+			destination = dest;
+			switch(this.get(\type).value.asSymbol,
 				\forwarding, {
 					//send the data from the source to the destination
+					"AAA".vtmdebug(0, thisMethod);
 					source.forwardTo(destination);
 				}/*,
 				\subscription, {
@@ -33,17 +36,18 @@ VTMMapping : VTMControl {
 				}*/
 			);
 		}, {
-			"Could not enable mapping for source: % and destination: %".format(
-				this.get(\source), this.get(\destination)
+			"Could not enable mapping for \n\tsource: % [found: %] \n\tdestination: % [found: %]".format(
+				this.get(\source).value, src.notNil,
+				this.get(\destination).value, dest.notNil
 			).vtmwarn(0, thisMethod);
 		});
 		super.enable;
 	}
 
-	prFindSource{arg vtmPath;
+	prFindSourceObj{arg vtmPath;
 		var result, sourceObj;
-		sourceObj = this.find(this.get(\source).value);
-		if(sourceObj.isNil, {
+		sourceObj = this.find(vtmPath);
+		if(sourceObj.notNil, {
 			result = VTMMappingSource(sourceObj);
 		});
 		^result;
@@ -51,7 +55,7 @@ VTMMapping : VTMControl {
 
 	prFindDestinationObj{arg vtmPath;
 		var result, destinationObj;
-		destinationObj = this.find(this.get(\destination).value);
+		destinationObj = this.find(vtmPath);
 		if(destinationObj.notNil, {
 			result = VTMMappingDestination.from(destinationObj);
 		});
