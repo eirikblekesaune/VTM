@@ -23,16 +23,16 @@
 					mode: \attribute
 				));
 			},
-			// \noteOn, {
-			// 	result.putAll((
-			// 		mode: \signal
-			// 	));
-			// },
-			// \noteOff, {
-			// 	result.putAll((
-			// 		mode: \signal
-			// 	));
-			// },
+			\noteOn, {
+				result.putAll((
+					mode: \signal
+				));
+			},
+			\noteOff, {
+				result.putAll((
+					mode: \signal
+				));
+			},
 			{
 				result.putAll((
 					mode: \attribute

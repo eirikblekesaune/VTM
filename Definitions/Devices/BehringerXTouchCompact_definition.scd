@@ -1,5 +1,6 @@
 // ~prototypes =  [\MIDIDevice];
 ~init = {arg device, cond;
+	var deviceControls;
 	"Initializing XTOUCH".postln;
 	~midiDevice = MIDIDevice(
 		~self.get('inDeviceName').value,
@@ -202,11 +203,23 @@
 	].flat.collect({arg item; item.key -> (item.value ++ (chan: 0))}).do({arg item;
 		var data = item.value;
 		~midiDevice.addComponent(item.key, data[\chan], data[\number], data[\msgType]);
-		~midiDevice.components[item.key].action = {| comp |
-			device.set(item.key, comp.value);
-		};
+		// ~midiDevice.components[item.key].action = {| comp |
+		// 	device.set(item.key, comp.value);
+		// };
 	});
-	~controls = ~midiDevice.makeControlDescriptions;
+	deviceControls = ~midiDevice.makeControlDescriptions;
+	deviceControls.keysValuesDo({arg ctrlKey, ctrlDesc;
+		var func = switch(ctrlDesc[\mode],
+			\attribute, {
+				{| comp | device.set(ctrlKey, comp.value);	}
+			},
+			\signal, {
+				{| comp | device.emit(ctrlKey, comp.value); }
+			}
+		);
+		~midiDevice.components[ctrlKey].action = func;
+	});
+	~controls = ~controls.putAll(deviceControls);
 	~midiDevice.trace(true);
 };
 ~free = {arg cond;
