@@ -14,7 +14,8 @@
 		var result;
 		result = (
 			type: \integer,
-			range: [0, 127]
+			minVal: 0,
+			maxVal: 127
 		);
 		switch(msgType,
 			\control, {
