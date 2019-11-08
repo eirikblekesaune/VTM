@@ -56,7 +56,7 @@ VTMView : View {
 		.string_(labelStr)
 		.background_(this.background)
 		.mouseDownAction_({
-			model.debugString.postln;
+			model.debugString.vitmdebug(0, thisMethod);
 		})
 		.font_(this.font);
 

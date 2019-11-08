@@ -20,10 +20,8 @@ VTM{
 	// *new{arg key;
 	// 	var str = key.asString;
 	// 	var result;
-	// 	"Find node at key: %".format(key).postln;
 	// 	//check if it a path for the local network node
 	// 	if(str.first == $/, {
-	// 		"Find in local".postln;
 	// 		result = this.local.find(str.drop(1));
 	// 		}, {
 	// 	});

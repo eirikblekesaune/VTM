@@ -32,10 +32,9 @@ VTMData {
 
 		//manager must not rely on the item to be fully initalized
 		if(manager.notNil, {
-			// "Adding to manager: % - %".format(name, manager.fullPath).postln;
 			manager.addItem(this);
 		}, {
-			"No manager found: % - %".format(name_, declaration_).postln;
+			"No manager found: % - %".format(name_, declaration_).vtmwarn(0, thisMethod);
 		});
 
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);

@@ -113,7 +113,7 @@ VTMContextManager : VTMDataManager {
 				this.addItem(newItem);
 			});
 		} {|err|
-			"OOOPS".postln;
+			"Failed adding items: %".format(itemDecls).vtmdebug(1, thisMethod);
 			err.throw;
 		};
 	}

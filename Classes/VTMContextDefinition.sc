@@ -38,7 +38,7 @@ VTMContextDefinition {
 			});
 		} {|err|
 			"Could not compile definition file: '%'".format(pathName).warn;
-			err.errorString.postln;
+			err.errorString.vtmdebug(1, thisMethod);
 			err.throw;
 		};
 	}

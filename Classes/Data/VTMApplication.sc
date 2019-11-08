@@ -53,13 +53,13 @@ VTMApplication : VTMContext {
 					var newItem;
 					try{
 						newItem = comp.makeItemFromDeclaration(itemName, itemDeclaration);
-						"ADDDING: % to %".format(newItem, comp).postln;
+						"ADDDING: % to %".format(newItem, comp).vtmdebug(2, thisMethod);
 						comp.addItem(newItem);
 					} {|err|
 						"Failed making component named: % with declaration: %".format(
 							itemName, itemDeclaration
 						).vtmwarn(0, meth);
-						err.errorString.postln;
+						err.errorString.vtmdebug(1, thisMethod);
 					}
 				});
 			});

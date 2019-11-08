@@ -45,7 +45,7 @@
 //
 // 			virtualMKtl.free;
 // 		});
-// 		"VTMMKtlDevice initialized".postln;
+// 		"VTMMKtlDevice initialized".vtmdebug(4, thisMethod);
 // 	}
 //
 // 	prepare {
