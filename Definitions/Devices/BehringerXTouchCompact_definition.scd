@@ -1,4 +1,3 @@
-// ~prototypes =  [\MIDIDevice];
 ~init = {arg device, cond;
 	var deviceControls;
 	"Initializing XTOUCH".postln;
