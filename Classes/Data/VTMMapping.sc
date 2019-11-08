@@ -4,37 +4,58 @@ VTMMapping : VTMControl {
 	var destination;
 
 	*new{| name, declaration, manager |
-		^super.new(name, declaration, manager ).initMapping;
-	}
-
-	initMapping{
-		source = VTMMappingSource(this.get(\source));
-		destination = VTMMappingDestination(this.get(\destination));
-		source.map(destination);
+		^super.new(name, declaration, manager );
 	}
 
 	enable{
-		switch(this.get(\type),
-			\forwarding, {
-				//send the data from the source to the destination
-				source.addForwarding(destination);
-			},
-			\subscription, {
-				//subscribe to the data from the destination
-				source.addSubscription(destination);
-			},
-			\bind, {
-				//both source and destination subscribes to eachother
-				source.addForwarding(destination);
-				source.addSubscriptions(destination);
-			},
-			\exclusiveBind, {
-				//both source and destination subscribes to eachother exclusively
-				source.addForwarding(destination, exclusive: true);
-				source.addSubscriptions(destination, exclusive: true);
-			}
-		);
+		var src, dest;
+		src = this.prFindSource(VTMPath(this.get(\source)));
+		dest = this.prFindDestination(VTMPath(this.get(\destination)));
+		if(src.notNil and: {dest.notNil}, {
+			switch(this.get(\type),
+				\forwarding, {
+					//send the data from the source to the destination
+					source.forwardTo(destination);
+				}/*,
+				\subscription, {
+					//subscribe to the data from the destination
+					source.addSubscription(destination);
+				},
+				\bind, {
+					//both source and destination subscribes to eachother
+					source.addForwarding(destination);
+					source.addSubscriptions(destination);
+				},
+				\exclusiveBind, {
+					//both source and destination subscribes to eachother exclusively
+					source.addForwarding(destination, exclusive: true);
+					source.addSubscriptions(destination, exclusive: true);
+				}*/
+			);
+		}, {
+			"Could not enable mapping for source: % and destination: %".format(
+				this.get(\source), this.get(\destination)
+			).vtmwarn(0, thisMethod);
+		});
 		super.enable;
+	}
+
+	prFindSource{arg vtmPath;
+		var result, sourceObj;
+		sourceObj = this.find(this.get(\source).value);
+		if(sourceObj.isNil, {
+			result = VTMMappingSource(sourceObj);
+		});
+		^result;
+	}
+
+	prFindDestinationObj{arg vtmPath;
+		var result, destinationObj;
+		destinationObj = this.find(this.get(\destination).value);
+		if(destinationObj.notNil, {
+			result = VTMMappingDestination.from(destinationObj);
+		});
+		^result;
 	}
 
 	*parameterDescriptions{
@@ -65,5 +86,11 @@ VTMMapping : VTMControl {
 				)
 			]
 		);
+	}
+
+	buildDependsOn{
+		^[
+			this.get(\source), this.get(\destination)
+		];
 	}
 }
