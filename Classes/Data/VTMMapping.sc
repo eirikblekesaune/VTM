@@ -17,7 +17,6 @@ VTMMapping : VTMControl {
 			switch(this.get(\type).value.asSymbol,
 				\forwarding, {
 					//send the data from the source to the destination
-					"AAA".vtmdebug(0, thisMethod);
 					source.forwardTo(destination);
 				}/*,
 				\subscription, {
