@@ -37,7 +37,7 @@ VTMNumberValue : VTMValue {
 	}
 
 	isRamping{
-		^scheduler.notNil
+		^scheduler.notNil and: {scheduler.isPlaying()}
 	}
 
 	ramp{| targetValue, time, curve = \lin |
@@ -196,6 +196,19 @@ VTMNumberValue : VTMValue {
 		});
 	}
 	clipmode{ ^this.get(\clipmode) ? \none; }
+
+	valueAction_{| val ...args|
+		if(args.notNil and: {args.notEmpty}, {
+			if(args.first == \ramp and: {args.size > 1} and: {args[1].isKindOf(SimpleNumber)}, {
+				if(this.isRamping, {
+					this.stopRamp();
+				});
+				this.ramp(val, args[1]);
+			})
+		}, {
+			super.valueAction_(val);
+		})
+	}
 
 	value_{| val |
 		super.value_(
