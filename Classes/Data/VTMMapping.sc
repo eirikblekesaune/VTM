@@ -1,7 +1,7 @@
 VTMMapping : VTMControl {
 	classvar <isAbstractClass=false;
-	var source;
-	var destination;
+	var <source;
+	var <destination;
 
 	*new{| name, declaration, manager |
 		^super.new(name, declaration, manager );
@@ -17,17 +17,18 @@ VTMMapping : VTMControl {
 			switch(this.get(\type).value.asSymbol,
 				\forwarding, {
 					//send the data from the source to the destination
-					source.forwardTo(destination);
-				}/*,
+					source.startForwarding;
+				},
+				\bind, {
+					//both source and destination subscribes to eachother
+					source.startForwarding;
+					source.startObserving;
+				},/*
 				\subscription, {
 					//subscribe to the data from the destination
 					source.addSubscription(destination);
 				},
-				\bind, {
-					//both source and destination subscribes to eachother
-					source.addForwarding(destination);
-					source.addSubscriptions(destination);
-				},
+
 				\exclusiveBind, {
 					//both source and destination subscribes to eachother exclusively
 					source.addForwarding(destination, exclusive: true);
@@ -47,7 +48,7 @@ VTMMapping : VTMControl {
 		var result, sourceObj;
 		sourceObj = this.find(vtmPath);
 		if(sourceObj.notNil, {
-			result = VTMMappingSource(sourceObj);
+			result = VTMMappingSource(sourceObj, this);
 		});
 		^result;
 	}
@@ -56,7 +57,7 @@ VTMMapping : VTMControl {
 		var result, destinationObj;
 		destinationObj = this.find(vtmPath);
 		if(destinationObj.notNil, {
-			result = VTMMappingDestination.from(destinationObj);
+			result = VTMMappingDestination.from(destinationObj, this);
 		});
 		^result;
 	}
@@ -68,7 +69,8 @@ VTMMapping : VTMControl {
 				\destination -> (type: \string, optional: false),
 				\type -> (type: \string, optional: true,
 					default: \forwarding,
-					enum: [\forwarding, \subscription, \bind, \exclusiveBind])
+					enum: [\forwarding, \subscription, \bind, \exclusiveBind]),
+				\destinationValue -> ( type: \list, optional: true )
 			]
 		);
 	}
