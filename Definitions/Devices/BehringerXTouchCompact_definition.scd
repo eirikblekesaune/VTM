@@ -1,5 +1,6 @@
-~init = {arg device, cond;
+~init = {arg self, envir, definition, cond;
 	var deviceControls;
+	var midiDevice;
 	"Initializing XTOUCH".postln;
 	~midiDevice = MIDIDevice(
 		~self.get('inDeviceName').value,
@@ -8,6 +9,7 @@
 		~self.get('outDevicePort').value,
 		~self.fullPath
 	);
+	midiDevice = ~midiDevice;
 	~controls = VTMOrderedIdentityDictionary.new;
 	[
 		[
@@ -19,6 +21,15 @@
 			'layer.A_fader.6' -> (number: 6),
 			'layer.A_fader.7' -> (number: 7),
 			'layer.A_fader.8' -> (number: 8),
+			'layer.B_fader.1' -> (number: 28),
+			'layer.B_fader.2' -> (number: 29),
+			'layer.B_fader.3' -> (number: 30),
+			'layer.B_fader.4' -> (number: 31),
+			'layer.B_fader.5' -> (number: 32),
+			'layer.B_fader.6' -> (number: 33),
+			'layer.B_fader.7' -> (number: 34),
+			'layer.B_fader.8' -> (number: 35),
+			'layer.B_fader.main' -> (number: 36),
 			'layer.A_fader.main' -> (number: 9),
 			'layer.A_faderTouch.1' -> (number: 101),
 			'layer.A_faderTouch.2' -> (number: 102),
@@ -45,15 +56,6 @@
 			'layer.A_rotary.14' -> (number: 23),
 			'layer.A_rotary.15' -> (number: 24),
 			'layer.A_rotary.16' -> (number: 25),
-			'layer.B_fader.1' -> (number: 28),
-			'layer.B_fader.2' -> (number: 29),
-			'layer.B_fader.3' -> (number: 30),
-			'layer.B_fader.4' -> (number: 31),
-			'layer.B_fader.5' -> (number: 32),
-			'layer.B_fader.6' -> (number: 33),
-			'layer.B_fader.7' -> (number: 34),
-			'layer.B_fader.8' -> (number: 35),
-			'layer.B_fader.main' -> (number: 36),
 			'layer.B_faderTouch.1' -> (number: 111),
 			'layer.B_faderTouch.2' -> (number: 112),
 			'layer.B_faderTouch.3' -> (number: 113),
@@ -202,27 +204,46 @@
 	].flat.collect({arg item; item.key -> (item.value ++ (chan: 0))}).do({arg item;
 		var data = item.value;
 		~midiDevice.addComponent(item.key, data[\chan], data[\number], data[\msgType]);
-		// ~midiDevice.components[item.key].action = {| comp |
-		// 	device.set(item.key, comp.value);
-		// };
 	});
 	deviceControls = ~midiDevice.makeControlDescriptions;
 	deviceControls.keysValuesDo({arg ctrlKey, ctrlDesc;
 		var func = switch(ctrlDesc[\mode],
 			\attribute, {
-				{| comp | device.set(ctrlKey, comp.value);	}
+				{| comp |
+					self.set(ctrlKey, comp.value);
+				}
 			},
 			\signal, {
-				{| comp | device.emit(ctrlKey, comp.value); }
+				{| comp |
+					self.emit(ctrlKey, comp.value);
+				}
 			}
 		);
 		~midiDevice.components[ctrlKey].action = func;
+		~midiDevice.components[ctrlKey].action = func;
 	});
+	~syncListeners = [];
+	~self.on(\didInit, {
+		deviceControls.keysValuesDo({arg ctrlKey, ctrlDesc;
+			~syncListeners = ~syncListeners.add(
+				SimpleController(~self.controls[ctrlKey]).put(\value, {|...args|
+					var newVal = args[2];
+					if(midiDevice.components[ctrlKey].value != newVal, {
+						midiDevice.components[ctrlKey].value = newVal;
+						midiDevice.components[ctrlKey].refresh;
+					});
+				}.inEnvir);
+			);
+		});
+	}.inEnvir);
 	~controls = ~controls.putAll(deviceControls);
-	~midiDevice.trace(true);
+	// ~midiDevice.trace(true);
 };
 ~free = {arg cond;
 	"Freeing Behringer XTouch Compact: %".format(~self.fullPath).postln;
+	~syncListeners.do({arg item;
+		item.remove;
+	});
 	~midiDevice.free;
 };
 ~parameters = [
