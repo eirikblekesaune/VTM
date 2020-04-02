@@ -57,19 +57,21 @@ VTMLocalNetworkNode {
 		hostname = hostname.asSymbol;
 		this.findLocalNetworks;
 		NetAddr.broadcastFlag = true;
-		StartUp.add({
-			//Make remote activate responder
-			remoteActivateResponder = OSCFunc({| msg, time, addr, port |
-				var hostnames = VTMJSON.parse(msg[1]);
-				if(hostnames.detect({| item |
-					item == this.name;
-				}).notNil, {
-					"Remote VTM activation from: %".format(addr).vtmdebug(2, thisMethod);
-					this.activate(doDiscovery: true);
-				})
-			}, '/activate', recvPort: this.class.discoveryBroadcastPort);
-		});
+		if(File.exists("~/.vtmconfig.yaml".standardizePath), {
+			StartUp.add({
+				//Make remote activate responder
+				remoteActivateResponder = OSCFunc({| msg, time, addr, port |
+					var hostnames = VTMJSON.parse(msg[1]);
+					if(hostnames.detect({| item |
+						item == this.name;
+					}).notNil, {
+						"Remote VTM activation from: %".format(addr).vtmdebug(2, thisMethod);
+						this.activate(doDiscovery: true);
+					})
+				}, '/activate', recvPort: this.class.discoveryBroadcastPort);
+			});
 
+		});
 	}
 
 	activate{| doDiscovery = false, remoteNetworkNodesToActivate |
