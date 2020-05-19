@@ -15,6 +15,7 @@ VTMValueControl : VTMControl {
 			declaration[\type]
 		) ? VTMValue;
 		var valueProperties = VTMOrderedIdentityDictionary.new;
+
 		//extract property values from declaration
 		valueClass.propertyKeys.do({| propKey |
 			if(declaration.includesKey(propKey), {
