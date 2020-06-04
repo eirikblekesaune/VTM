@@ -1,7 +1,7 @@
 ~init = {arg self, envir, definition, cond;
 	var deviceControls;
 	var midiDevice;
-	"Initializing XTOUCH".postln;
+	"Initializing XTOUCH Compact".postln;
 	~midiDevice = MIDIDevice(
 		~self.get('inDeviceName').value,
 		~self.get('inDevicePort').value,
@@ -237,7 +237,7 @@
 		});
 	}.inEnvir);
 	~controls = ~controls.putAll(deviceControls);
-	// ~midiDevice.trace(true);
+	~midiDevice.trace(true);
 };
 ~free = {arg cond;
 	"Freeing Behringer XTouch Compact: %".format(~self.fullPath).postln;
