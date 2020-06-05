@@ -20,7 +20,31 @@ VTMControl : VTMData {
 		mode = description.removeAt(\mode);
 		descName = description.removeAt(\name);
 		name = name ? descName;
-		result = this.perform(mode ? \attribute, name, description, manager);
+		//result = this.perform(mode ? \attribute, name, description, manager);
+		mode = mode ? \attribute;
+		switch(mode, 
+			\attribute, {
+				result = VTMAttribute(name, description, manager);
+			}, 
+			\command, {
+				result = VTMCommand(name, description, manager);
+			},
+			\signal, {
+				result = VTMSignal(name, description, manager);
+			},
+			\return, {
+				result = VTMReturn(name, description, manager);
+			},
+			\score, {
+				result = VTMScore(name, description, manager);
+			},
+			\cue, {
+				result = VTMCue(name, description, manager);
+			},
+			\mapping, {
+				result = VTMMapping(name, description, manager);
+			}
+		);
 
 		^result;
 	}
