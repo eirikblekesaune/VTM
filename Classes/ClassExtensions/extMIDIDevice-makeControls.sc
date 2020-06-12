@@ -69,3 +69,16 @@
 		^result;
 	}
 }
+
++ MIDIDeviceIncrementComponent {
+	makeControlDescription{
+		var result;
+		result = (
+			type: \integer,
+			minVal: spec.minval,
+			maxVal: spec.maxval,
+			mode: \attribute
+		);
+		^result;
+	}
+}
