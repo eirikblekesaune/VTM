@@ -41,6 +41,10 @@ VTMIntegerValue : VTMNumberValue {
 		super.defaultValue_(val);
 	}
 
+	parseStringValue{|str|
+		^str.asInteger;
+	}
+
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll(
 			VTMOrderedIdentityDictionary[

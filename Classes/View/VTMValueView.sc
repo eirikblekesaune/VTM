@@ -61,7 +61,16 @@ VTMValueView : VTMView {
 		.object_(model.value)
 		.background_(Color.white.alpha_(0.0))
 		.action_({| v |
-			model.valueAction_(v.string);
+			var val = v.string;
+			//Parse the string for the given value type
+			val = model.parseStringValue(val);
+			if(model.isValidValue(val), {
+				model.valueAction_(val);
+			}, {
+				"Invalid input value type format: '%'".format(
+					v.string;
+				).warn;
+			})
 		});
 	}
 

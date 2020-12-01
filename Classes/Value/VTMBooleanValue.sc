@@ -33,5 +33,13 @@ VTMBooleanValue : VTMValue {
 		});
 	}
 
+	parseStringValue{|str|
+		^switch(str,
+			"true", true,
+			"false", false,
+			nil //return if neither option matches
+		);
+	}
+
 	*defaultViewType{ ^\toggle; }
 }

@@ -89,6 +89,10 @@ VTMStringValue : VTMValue {
 		});
 	}
 
+	parseStringValue{|str|
+		^str;
+	}
+
 	value_{| val |
 		var inval = val.copy.asString;
 		if(inval.class == Symbol, {//Symbols are accepted and converted into strings
