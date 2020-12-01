@@ -59,12 +59,15 @@ VTMOSCInterface {
 	}
 
 	enable {
-		enabled = true;
-		this.makeResponderFromParent();
+		if( enabled.not, {
+			enabled = true;
+			this.makeResponderFromParent();
+		});
 	}
 
 	disable {
 		enabled = false;
+		responder.free;
 	}
 
 	free {

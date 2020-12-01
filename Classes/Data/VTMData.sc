@@ -196,10 +196,11 @@ VTMData {
 	leadingSeparator{ ^'/'; }
 
 	enableOSC {
-		oscInterface !? { oscInterface.enable(); };
-		oscInterface ?? {
+		if( oscInterface.notNil, {
+			oscInterface.enable();
+		}, {
 			oscInterface = VTMOSCInterface(this).enable()
-		};
+		});
 	}
 
 
