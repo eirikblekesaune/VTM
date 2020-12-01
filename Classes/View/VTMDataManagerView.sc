@@ -35,7 +35,7 @@ VTMDataManagerView : VTMView {
 			["[+]", Color.black, Color.white.alpha_(0.1)],
 			["[—]", Color.black, Color.white.alpha_(0.1)]
 		])
-		.value_(showItems.asInt)
+		.value_(showItems.asInteger)
 		.action_({| butt | this.showItems_(butt.value.booleanValue); })
 		.font_(this.font)
 		.background_(labelView.background)

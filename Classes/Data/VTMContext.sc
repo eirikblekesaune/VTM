@@ -204,7 +204,8 @@ VTMContext : VTMElement {
 
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll( VTMOrderedIdentityDictionary[
-			\definition -> (type: \string, optional: true)
+			\definition -> (type: \string, optional: true),
+			\definitionPath -> (type: \string, optional: true)
 		]);
 	}
 
@@ -222,6 +223,18 @@ VTMContext : VTMElement {
 
 	findDefinition{arg defName;
 		^VTM.local.library.findDefinition(defName);
+	}
+
+	makeView{| parent, bounds, viewDef, settings |
+		var result;
+		if(definition.includesKey(\makeView), {
+			result = this.execute(\makeView,
+				parent, bounds, viewDef, settings
+			);
+		}, {
+			result = super.makeView(parent, bounds, viewDef, settings);
+		});
+		^result;
 	}
 
 }
