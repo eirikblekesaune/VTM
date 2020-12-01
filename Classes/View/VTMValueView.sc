@@ -22,7 +22,8 @@ VTMValueView : VTMView {
 	prMakeLayout{
 		^VLayout(
 			backgroundView,
-			valueView
+			valueView,
+			nil
 		);
 	}
 

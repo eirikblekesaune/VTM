@@ -65,7 +65,8 @@ VTMView : View {
 
 	prMakeLayout{
 		^VLayout(
-			labelView
+			labelView,
+			nil
 		)
 	}
 }

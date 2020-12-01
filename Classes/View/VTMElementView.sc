@@ -36,7 +36,7 @@ VTMElementView : VTMDataView {
 			["[+]", Color.black, Color.white.alpha_(0.1)],
 			["[—]", Color.black, Color.white.alpha_(0.1)]
 		])
-		.value_(showControls.asInt)
+		.value_(showControls.asInteger)
 		.action_({| butt | this.showControls_(butt.value.booleanValue); })
 		.font_(this.font)
 		.background_(labelView.background)
@@ -61,7 +61,8 @@ VTMElementView : VTMDataView {
 			)
 			.maxHeight_(15)
 			.background_(labelView.background),
-			controlsView.visible_(showControls)
+			controlsView.visible_(showControls),
+			nil
 		);
 	}
 

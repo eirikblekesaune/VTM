@@ -56,7 +56,8 @@ VTMDataManagerView : VTMView {
 					[labelView, \align: \left],
 					nil,
 					[showNumItemsLabel, \align: \right]
-				).spacing_(0).margins_(1)
+				).spacing_(0).margins_(1),
+				nil
 			)
 			.maxHeight_(15)
 			.background_(labelView.background),
