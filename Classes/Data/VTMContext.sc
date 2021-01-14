@@ -17,6 +17,13 @@ VTMContext : VTMElement {
 			definition, onInit);
 	}
 
+	*fromFile{|name, filepath, declaration, manager, onInit|
+		var def = VTMContextDefinition.newFromFile(
+			filepath
+		);
+		^this.new(name, declaration, manager, def, onInit);
+	}
+
 	//definition argument can be either nil, an instance of
 	//VTMContextDefinition,  or Environment.
 	initContext{| definition_, onInit_ |
@@ -224,4 +231,11 @@ VTMContext : VTMElement {
 		^VTM.local.library.findDefinition(defName);
 	}
 
+	makeView{| parent, bounds, viewDef, settings |
+		if(envir.includesKey(\makeView), {
+			^this.execute(\makeView, parent, bounds, viewDef, settings);
+		}, {
+			^super.makeView(parent, bounds, viewDef, settings);
+		});
+	}
 }
