@@ -24,14 +24,29 @@ VTMContextManager : VTMDataManager {
 		var newItem;
 		var itemDefinition;
 		try{
-			if(itemDeclaration.includesKey(\definition), {
+			case 
+			{itemDeclaration.includesKey(\definition)} {
 				var defName = itemDeclaration[\definition].asSymbol;
 				"context: %".format(this.context.fullPath).vtmdebug(2, thisMethod);
 				itemDefinition = this.context.findDefinition(defName);
-				"Definition name: %[%]".format(defName, defName.class).vtmdebug(2, thisMethod);
-			}, {
-				"No definition for item: %".format(itemDeclaration).vtmdebug(2, thisMethod);
-			});
+				"Definition name: %[%]".format(
+					defName, defName.class
+				).vtmdebug(2, thisMethod);
+			}
+			{itemDeclaration.includesKey(\definitionPath)} {
+				var defName;
+				"Tryinging to load definition path: %".format(
+					itemDeclaration[\definitionPath]
+				).vtmdebug(2, thisMethod);
+				itemDefinition = VTMContextDefinition.newFromFile(
+					itemDeclaration[\definitionPath].resolveRelative
+				);
+			}
+			{
+				"No definition for item: %".format(
+					itemDeclaration
+				).vtmdebug(2, thisMethod);
+			};
 			"Definition: %".format(itemDefinition).vtmdebug(2, thisMethod);
 			newItem = this.class.dataClass.new(
 				name: itemName,

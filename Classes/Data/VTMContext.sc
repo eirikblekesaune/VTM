@@ -211,7 +211,8 @@ VTMContext : VTMElement {
 
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll( VTMOrderedIdentityDictionary[
-			\definition -> (type: \string, optional: true)
+			\definition -> (type: \string, optional: true),
+			\definitionPath -> (type: \string, optional: true)
 		]);
 	}
 

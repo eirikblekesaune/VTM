@@ -40,6 +40,10 @@ VTMDecimalValue : VTMNumberValue {
 		super.defaultValue_(val);
 	}
 
+	parseStringValue{|str|
+		str.asFloat;
+	}
+
 	*defaultViewType{ ^\slider; }
 
 	*parameterDescriptions{

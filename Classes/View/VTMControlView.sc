@@ -13,7 +13,8 @@ VTMControlView : VTMDataView {
 
 	prMakeLayout{
 		^VLayout(
-			valueView
+			valueView,
+			nil
 		);
 	}
 }

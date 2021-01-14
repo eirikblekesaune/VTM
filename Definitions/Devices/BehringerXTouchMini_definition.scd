@@ -1,8 +1,6 @@
 ~init = {arg device, cond;
 	var deviceControls;
-	"Initializing XTOUCH".postln;
-	MIDIClient.init;
-	MIDIIn.connectAll;
+	"Initializing XTOUCH MINI".postln;
 	~midiDevice = MIDIDevice(
 		~self.get('inDeviceName').value,
 		~self.get('inDevicePort').value,

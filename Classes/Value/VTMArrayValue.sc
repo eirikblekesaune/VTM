@@ -37,5 +37,13 @@ VTMArrayValue : VTMCollectionValue {
 		});
 	}
 
+	value_{| val |
+		if(fixedSize, {
+			if(val.size != this.size, {
+				^this; // return early
+			})
+		});
+		super.value_(val);
+	}
 
 }

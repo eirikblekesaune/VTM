@@ -42,3 +42,43 @@
 		^result;
 	}
 }
+
++ MIDIDeviceNoteComponent {
+	makeControlDescription{
+		var result;
+		result = (
+			type: \array,
+			size: 2,
+			fixedSize: true,
+			itemType: \integer,
+			mode: \signal
+		);
+		^result;
+	}
+}
+
++ MIDIDevicePolytouchComponent {
+	makeControlDescription{
+		var result;
+		result = (
+			type: \integer,
+			minVal: 0,
+			maxVal: 127,
+			mode: \return
+		);
+		^result;
+	}
+}
+
++ MIDIDeviceIncrementComponent {
+	makeControlDescription{
+		var result;
+		result = (
+			type: \integer,
+			minVal: spec.minval,
+			maxVal: spec.maxval,
+			mode: \attribute
+		);
+		^result;
+	}
+}

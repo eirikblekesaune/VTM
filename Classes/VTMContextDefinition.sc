@@ -95,6 +95,14 @@ VTMContextDefinition {
 		^definition[\controls];
 	}
 
+	makeView{|parent, bounds, viewDef, settings|
+		^definition[\makeView].value(parent, bounds, viewDef, settings);
+	}
+
+	includesKey{|k|
+		^definition.includesKey(k);
+	}
+
 	description{
 		var result = VTMOrderedIdentityDictionary[
 			\name -> this.name,

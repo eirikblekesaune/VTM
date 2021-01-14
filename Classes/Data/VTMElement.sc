@@ -86,7 +86,7 @@ VTMElement : VTMData {
 	}
 
 	return{| key ...args |
-		controls[key].return;
+		controls[key].value_(*args);
 	}
 
 	onSignal{| key, func |

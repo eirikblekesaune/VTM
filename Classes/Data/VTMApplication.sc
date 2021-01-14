@@ -41,8 +41,8 @@ VTMApplication : VTMContext {
 	makeComponents{
 		var meth = thisMethod; //for the vtmwarning method in the catch block
 		[
-			[\modules, modules],
 			[\hardwareDevices, hardwareDevices],
+			[\modules, modules],
 			[\scenes, scenes]
 		].do({arg args;
 			var compKey, comp;
@@ -50,17 +50,45 @@ VTMApplication : VTMContext {
 			"Making components: %".format(compKey).vtmdebug(2, thisMethod);
 			if(declaration.includesKey(compKey), {
 				declaration[compKey].keysValuesDo({arg itemName, itemDeclaration;
-					var newItem;
-					try{
-						newItem = comp.makeItemFromDeclaration(itemName, itemDeclaration);
-						"ADDDING: % to %".format(newItem, comp).vtmdebug(2, thisMethod);
-						comp.addItem(newItem);
-					} {|err|
-						"Failed making component named: % with declaration: %".format(
-							itemName, itemDeclaration
-						).vtmwarn(0, meth);
-						err.errorString.vtmdebug(1, thisMethod);
-					}
+					var makeComponent = {|iName, iDecl|
+						var newItem;
+						try{
+							newItem = comp.makeItemFromDeclaration(
+								iName, iDecl
+							);
+							"ADDDING: % to %".format(
+								newItem, comp
+							).vtmdebug(2, thisMethod);
+							comp.addItem(newItem);
+						} {|err|
+							"Failed making component named: % with declaration: %".format(
+								iName, iDecl
+							).vtmwarn(0, meth);
+							err.errorString.vtmdebug(1, thisMethod);
+						}
+					};
+					//check if comp name is in expansion format
+					if( "^.+\.\{.+\}$".matchRegexp(itemName.asString), {
+						var items = itemName.asString.expandNumberingPostfix;
+						var args = itemDeclaration['args'];
+						//we parse the expansion here.
+						items.do({|subItem|
+							var name, subName, subDecl;
+							#name, subName = subItem.split($.).collect(_.asSymbol);
+							subDecl = itemDeclaration.deepCopy.reject({|v,k|
+								[\args].matchItem(k);
+							});
+							//The declaration can optionally have an 'args' value
+							//with individual declaration values for each component.
+							//This arg value should be stored by the subname.
+							if(args.notNil and: {args.includesKey(subName)}, {
+								subDecl.putAll(args[subName]);
+							});
+							makeComponent.value(subItem, subDecl);
+						});
+					}, {
+						makeComponent.value(itemName, itemDeclaration);
+					});
 				});
 			});
 		});

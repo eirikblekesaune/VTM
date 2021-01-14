@@ -228,6 +228,9 @@ VTMValue {
 	restrictValueToEnum{ ^this.get(\restrictValueToEnum) ? false; }
 	restrictValueToEnum_{| val | this.set(\restrictValueToEnum, val); }
 
+	parseStringValue{|str|
+		this.subclassResponsibility(thisMethod);
+	}
 
 	//views
 	*getViewClass{
