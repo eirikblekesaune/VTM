@@ -44,7 +44,11 @@ VTMPath{
 	}
 
 	isLocal{
-		^this.isGlobal().not;
+		^(this.isGlobal() or: {this.isApplicationLocal}).not;
+	}
+
+	isApplicationLocal {
+		^breadcrumbs.first == "~"
 	}
 
 	length{
@@ -61,7 +65,7 @@ VTMPath{
 	}
 
 	asSymbol{
-		this.asString.asSymbol;
+		^this.pathStr;
 	}
 
 	hasParentPath{
