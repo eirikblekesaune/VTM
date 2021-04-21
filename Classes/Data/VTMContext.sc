@@ -83,24 +83,30 @@ VTMContext : VTMElement {
 	//All calls to envir are async, i.e init, prepare, run, free
 	init{| condition, action |
 		forkIfNeeded{
-			var cond = condition ?? {Condition.new};
-			this.prChangeState(\willInit);
-			if(envir.includesKey(\init), {
-				this.execute(\init, envir, definition, cond);
-			});
-			//at this point it is assumed that control descripitons are
-			// ready to be used for building controls. Not this happens after the envir init.
-			envir[\controls].keysValuesDo({arg ctrlKey, ctrlDesc;
-				var newCtrl;
-				newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc, controls);
-				if(newCtrl.action.notNil, {
-					newCtrl.action = newCtrl.action.inEnvir(envir);
+			try{
+				var cond = condition ?? {Condition.new};
+				this.prChangeState(\willInit);
+				if(envir.includesKey(\init), {
+					this.execute(\init, envir, definition, cond);
 				});
-			});
-			this.changed(\controls);
+				//at this point it is assumed that control descripitons are
+				// ready to be used for building controls. Not this happens after the envir init.
+				envir[\controls].keysValuesDo({arg ctrlKey, ctrlDesc;
+					var newCtrl;
+					newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc, controls);
+					if(newCtrl.action.notNil, {
+						newCtrl.action = newCtrl.action.inEnvir(envir);
+					});
+				});
+				this.changed(\controls);
 
-			this.prChangeState(\didInit);
-			action.value(this);
+				this.prChangeState(\didInit);
+				action.value(this);
+			} {|err|
+				"init failed:".postln;
+				err.postProtectedBacktrace;
+				err.errorString.postln;
+			}
 		};
 	}
 
@@ -253,8 +259,9 @@ VTMContext : VTMElement {
 	find{|vtmPath|
 		var result;
 		if(vtmPath.isLocal, {
-			if(controls.names.includes(vtmPath.first.asSymbol), {
-				result = controls[vtmPath.first.asSymbol];
+			var pathSym = vtmPath.first.asSymbol;
+			if(controls.names.includes(pathSym), {
+				result = controls[pathSym];
 			});
 		});
 		^result;
