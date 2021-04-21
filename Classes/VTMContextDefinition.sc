@@ -75,7 +75,7 @@ VTMContextDefinition {
 						];
 					}
 					{
-						cueDesc = VTMOrderedIdentityDictionary.newFromAssociationArray(cc, true);
+						cueDesc = VTMOrderedIdentityDictionary.newFromAssociationArray(cueDesc, true);
 					};
 					cueDesc;
 				});
@@ -85,6 +85,27 @@ VTMContextDefinition {
 			});
 			definition.put(item, cc);
 		};
+		if(env.includesKey(\controlMappings), {
+			var cc;
+			cc = env.removeAt(\controlMappings);
+			cc = VTMOrderedIdentityDictionary.newFromAssociationArray(cc, true);
+			cc.keysValuesChange({|key, desc|
+				case
+				{desc.isKindOf(Symbol)} {
+					desc = VTMOrderedIdentityDictionary[
+						'destination' -> desc,
+					]
+				}
+				{
+					desc = VTMOrderedIdentityDictionary.newFromAssociationArray(desc, true);
+				};
+				desc;
+			});
+
+			definition.put(\controlMappings, cc);
+		}, {
+			definition[\controlMappings] = VTMOrderedIdentityDictionary.new;
+		});
 
 		//now put in the rest
 		definition.putAll(env);
@@ -120,6 +141,10 @@ VTMContextDefinition {
 
 	cues{
 		^definition[\cues];
+	}
+
+	controlMappings{
+		^definition[\controlMappings];
 	}
 
 	makeView{|parent, bounds, viewDef, settings|

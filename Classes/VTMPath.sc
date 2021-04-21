@@ -37,7 +37,6 @@ VTMPath{
 		}, {
 			breadcrumbs = breadcrumbs.addAll(str.split);
 		});
-
 	}
 
 	isGlobal{
@@ -65,12 +64,12 @@ VTMPath{
 		this.asString.asSymbol;
 	}
 
-	asString{
-		^pathStr;
-	}
-
 	hasParentPath{
 		^this.length > 1;
+	}
+
+	printOn{|stream|
+		stream << this.class.asString << "('" << pathStr << "')";
 	}
 
 	at{arg index;

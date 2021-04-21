@@ -250,6 +250,16 @@ VTMContext : VTMElement {
 		^VTM.local.library.findDefinition(defName);
 	}
 
+	find{|vtmPath|
+		var result;
+		if(vtmPath.isLocal, {
+			if(controls.names.includes(vtmPath.first.asSymbol), {
+				result = controls[vtmPath.first.asSymbol];
+			});
+		});
+		^result;
+	}
+
 	makeView{| parent, bounds, viewDef, settings |
 		if(envir.includesKey(\makeView), {
 			^this.execute(\makeView, parent, bounds, viewDef, settings);
