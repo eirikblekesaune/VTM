@@ -62,6 +62,29 @@ VTMContextDefinition {
 			});
 			definition.put(item, cc);
 		};
+		[\cues].do{arg item;
+			var cc;
+			if(env.includesKey(item), {
+				cc = env.removeAt(item);
+				cc = VTMOrderedIdentityDictionary.newFromAssociationArray(cc, true);
+				cc.keysValuesChange({|key, cueDesc|
+					case
+					{cueDesc.isKindOf(Function)} {
+						cueDesc = VTMOrderedIdentityDictionary[
+							'points' -> cueDesc
+						];
+					}
+					{
+						cueDesc = VTMOrderedIdentityDictionary.newFromAssociationArray(cc, true);
+					};
+					cueDesc;
+				});
+
+			}, {
+				cc = VTMOrderedIdentityDictionary.new;
+			});
+			definition.put(item, cc);
+		};
 
 		//now put in the rest
 		definition.putAll(env);
@@ -93,6 +116,10 @@ VTMContextDefinition {
 
 	controls{
 		^definition[\controls];
+	}
+
+	cues{
+		^definition[\cues];
 	}
 
 	makeView{|parent, bounds, viewDef, settings|

@@ -8,6 +8,7 @@ VTMContext : VTMElement {
 	var <envir; //TEMP getter
 	var <addr; //the address for this object instance.
 	var <state;
+	var <cues;
 	var stateChangeCallbacks;
 	var library;
 
@@ -53,6 +54,13 @@ VTMContext : VTMElement {
 				}, {
 					parameters.put(paramKey, tempVal.deepCopy);
 				});
+			});
+		});
+		cues = VTMOrderedIdentityDictionary.new;
+		if(definition.cues.notEmpty, {
+			definition.cues.keysValuesDo({|cueKey, cueDesc|
+				var cue = VTMCue(cueKey, cueDesc);
+				cues.put(cueKey, cue);
 			});
 		});
 
@@ -190,6 +198,16 @@ VTMContext : VTMElement {
 		controls.disableOSC;
 		super.disableOSC();
 	}
+
+	runCue{|key|
+		if(cues.includesKey(key), {
+			"found cue".postln;
+			cues[key].go;
+		}, {
+			"Cue '%' not found".format(key).vtmwarn(0, thisMethod);
+		});
+	}
+
 
 	definitionControls{
 		var result = VTMOrderedIdentityDictionary.new;

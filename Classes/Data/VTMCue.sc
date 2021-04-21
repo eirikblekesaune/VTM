@@ -1,4 +1,4 @@
-VTMCue : VTMControl {
+VTMCue : VTMElement {
 	var routine;
 	var >startAction; //a function
 	var >endAction; //a function
@@ -34,6 +34,8 @@ VTMCue : VTMControl {
 			\hangBetweenPoints -> (type: \boolean, mode: \attribute),
 			\delayBetweenPoints -> (type: \decimal, mode: \attribute),
 			\points -> (type: \array, itemType: \string, mode: \return),
+			\startAction -> (type: \string, mode: \return),
+			\endAction -> (type: \string, mode: \return),
 			\go -> (action: {this.go;}, mode: \command),
 			\signal -> (action: {this.signal;}, mode: \command),
 			\stop -> (action: {this.stop;}, mode: \command),
@@ -42,36 +44,37 @@ VTMCue : VTMControl {
 	}
 
 	go{
-		if(armed, {
-			routine !? {this.stop;};
-			routine = Routine({
-				startAction.value(this);
-				if(this.hangBeforeStart, {
-					var hangtime = this.maxStartHangTime;
-					this.changed(\state, \hangBeforeStart, hangtime);
-					condition.hang(hangtime);
-				}, {
-					var delaytime = this.preDelay;
-					this.changed(\state, \preDelay, delaytime);
-					this.preDelay !? {delaytime.wait;};
-				});
-
-				this.points.do({| point, i |
-					this.changed(\state, \executingPoint, i);
-					point.value;
-				});
-				this.duration !? {this.duration.wait;};
-				if(this.hangBeforeEnd, {
-					var hangtime = this.maxEndHangTime;
-					this.changed(\state, \hangBeforeStart, hangtime);
-					condition.hang(hangtime);
-				}, {
-					this.preDelay !? {this.preDelay.wait;};
-				});
-				this.changed(\ended);
-				endAction.value(this);
+		forkIfNeeded{
+			if(armed, {
+				routine !? {this.stop;};
+				routine = Routine({
+					startAction.value(this);
+					if(this.hangBeforeStart, {
+						var hangtime = this.maxStartHangTime;
+						this.changed(\state, \hangBeforeStart, hangtime);
+						condition.hang(hangtime);
+					}, {
+						var delaytime = this.preDelay;
+						this.changed(\state, \preDelay, delaytime);
+						this.preDelay !? {delaytime.wait;};
+					});
+					this.points.do({| point, i |
+						this.changed(\state, \executingPoint, i);
+						point.value;
+					});
+					this.duration !? {this.duration.wait;};
+					if(this.hangBeforeEnd, {
+						var hangtime = this.maxEndHangTime;
+						this.changed(\state, \hangBeforeStart, hangtime);
+						condition.hang(hangtime);
+					}, {
+						this.preDelay !? {this.preDelay.wait;};
+					});
+					this.changed(\ended);
+					endAction.value(this);
+				}).play;
 			});
-		});
+		};
 	}
 
 	signal{

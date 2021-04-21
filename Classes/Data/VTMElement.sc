@@ -105,8 +105,6 @@ VTMElement : VTMData {
 
 	mappings { ^controls.mappings; }
 
-	cues { ^controls.cues; }
-
 	scores { ^controls.scores; }
 
 	disable{

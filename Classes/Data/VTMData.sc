@@ -37,6 +37,7 @@ VTMData {
 			"No manager found: % - %".format(name_, declaration_).vtmwarn(0, thisMethod);
 		});
 
+		"initData: %".format([declaration_]).postln;
 		declaration = VTMDeclaration.newFrom(declaration_ ? []);
 		this.prInitParameters;
 	}
