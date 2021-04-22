@@ -149,7 +149,7 @@ VTMNumberValue : VTMValue {
 			});
 		});
 	}
-	minVal{ ^this.get(\minVal); }
+	minVal{ ^this.get(\minVal) ? this.class.minValDefault; }
 
 	maxVal_{ | val |
 		if(val.isNil, {
@@ -166,7 +166,7 @@ VTMNumberValue : VTMValue {
 
 		});
 	}
-	maxVal{ ^this.get(\maxVal); }
+	maxVal{ ^this.get(\maxVal) ? this.class.maxValDefault; }
 
 	stepsize_{ | val |
 		var newVal = val;

@@ -55,4 +55,7 @@ VTMIntegerValue : VTMNumberValue {
 			]
 		);
 	}
+
+	*minValDefault { ^0; }
+	*maxValDefault { ^127; }
 }

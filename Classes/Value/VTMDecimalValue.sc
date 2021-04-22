@@ -56,4 +56,7 @@ VTMDecimalValue : VTMNumberValue {
 			]
 		);
 	}
+
+	*minValDefault { ^0.0; }
+	*maxValDefault { ^1.0; }
 }

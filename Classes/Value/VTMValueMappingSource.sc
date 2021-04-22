@@ -27,7 +27,6 @@ VTMValueMappingSource{
 		forwardingListener = SimpleController(valueObj).put(\value, {
 			| theChanged, whatChanged |
 			if(isUpdatingListeningValue.not, {
-				"Feelings: % %".format(theChanged, whatChanged).postln;
 				isForwardingValue = true;
 				forwardingFunc.value(theChanged.value);
 				isForwardingValue = false;
@@ -45,7 +44,8 @@ VTMValueMappingSource{
 			outMin = valueObj.minVal;
 			outMax = valueObj.maxVal;
 			listenFunc = {arg inVal;
-				var outVal = inVal.linlin(inMin, inMax, outMin, outMax);
+				var outVal;
+				outVal = inVal.linlin(inMin, inMax, outMin, outMax);
 				if(isForwardingValue.not, {
 					isUpdatingListeningValue = true;
 					valueObj.valueAction_(outVal);
@@ -70,18 +70,17 @@ VTMValueMappingSource{
 
 	*getForwardingFunc{arg mapping;
 		var result;
-		"Source: %".format(mapping.source.valueObj).postln;
-		"Destination: %".format(mapping.destination.valueObj).postln;
 
 		case
 		{mapping.source.valueObj.isKindOf(VTMNumberValue)} {
-			var inMin, inMax, outMin, outMax;
-			inMin = mapping.source.valueObj.minVal;
-			inMax = mapping.source.valueObj.maxVal;
-			outMin = mapping.destination.valueObj.minVal;
-			outMax = mapping.destination.valueObj.maxVal;
 			result = {arg inVal;
-				var outVal = inVal.linlin(inMin, inMax, outMin, outMax);
+				var outVal;
+				var inMin, inMax, outMin, outMax;
+				inMin = mapping.source.valueObj.minVal;
+				inMax = mapping.source.valueObj.maxVal;
+				outMin = mapping.destination.valueObj.minVal;
+				outMax = mapping.destination.valueObj.maxVal;
+				outVal = inVal.linlin(inMin, inMax, outMin, outMax);
 				// "bbb: %".format([outVal]).vtmdebug(0, thisMethod);
 				mapping.destination.valueObj.valueAction_(outVal);
 			};
