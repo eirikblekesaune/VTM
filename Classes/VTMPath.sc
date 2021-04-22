@@ -92,4 +92,15 @@ VTMPath{
 		^crumb.first == $:;
 	}
 
+	resolve{|context|
+		var result;
+		if(context.isNil, {
+			if(this.isGlobal, {
+				result = VTM.find(this);
+			});
+		}, {
+			result = context.find(this)
+		});
+		^result;
+	}
 }

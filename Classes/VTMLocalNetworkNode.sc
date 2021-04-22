@@ -19,6 +19,7 @@ VTMLocalNetworkNode {
 	var <moduleHost;
 	var <sceneOwner;
 	var <controls;
+	var <controlPageManager;
 
 	var <active = false;
 
@@ -33,7 +34,8 @@ VTMLocalNetworkNode {
 			':networkNodes',
 			':hardwareDevices',
 			':modules',
-			':scenes'
+			':scenes',
+			':controlPages'
 		];
 		singleton = super.new.initLocalNetworkNode;
 	}
@@ -49,6 +51,7 @@ VTMLocalNetworkNode {
 		moduleHost = VTMModuleHost.new(this);
 		sceneOwner = VTMSceneOwner.new(this);
 		controls = VTMControlManager(this);
+		controlPageManager = VTMControlPageManager.new(this);
 
 		hostname = Pipe("hostname", "r").getLine();
 		if(".local$".matchRegexp(hostname), {
@@ -72,6 +75,9 @@ VTMLocalNetworkNode {
 			});
 
 		});
+	}
+
+	prInitControlPages{
 	}
 
 	activate{| doDiscovery = false, remoteNetworkNodesToActivate |
@@ -455,7 +461,8 @@ VTMLocalNetworkNode {
 		{class.isKindOf(VTMScene.class) } {managerObj =  sceneOwner; }
 		{class.isKindOf(VTMApplication.class) } {managerObj =  applicationManager; }
 		{class.isKindOf(VTMControl.class) } {managerObj = controls; }
-		{class.isKindOf(VTMRemoteNetworkNode.class) } {managerObj =  networkNodeManager; };
+		{class.isKindOf(VTMRemoteNetworkNode.class) } {managerObj =  networkNodeManager; }
+		{class.isKindOf(VTMControlPage.class) } {managerObj =  controlPageManager; };
 		^managerObj;
 	}
 
@@ -554,7 +561,8 @@ VTMLocalNetworkNode {
 			':networkNodes' -> networkNodeManager,
 			':hardwareDevices' -> hardwareSetup,
 			':modules' -> moduleHost,
-			':scenes' -> sceneOwner
+			':scenes' -> sceneOwner,
+			':controlPages' -> controlPageManager
 		];
 	}
 }
