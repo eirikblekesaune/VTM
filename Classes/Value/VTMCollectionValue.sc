@@ -9,11 +9,6 @@ VTMCollectionValue : VTMValue {
 	}
 
 	initCollectionValue{
-		if(properties.notEmpty, {
-			if(properties.includesKey(\itemDescription), {
-				itemDescription = properties[\itemDescription];
-			});
-		});
 	}
 
 	addItem{| val |

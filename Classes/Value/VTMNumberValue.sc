@@ -82,7 +82,7 @@ VTMNumberValue : VTMValue {
 	}
 
 	*propertyKeys{
-		^(super.propertyKeys ++ [\minVal, \maxVal, \stepsize, \clipmode/*, \dataspace*/]);
+		^super.propertyKeys.addAll([\minVal, \maxVal, \stepsize, \clipmode/*, \dataspace*/]);
 	}
 
 

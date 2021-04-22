@@ -25,6 +25,9 @@ VTMListValue : VTMCollectionValue {
 			if(properties.includesKey(\itemType), {
 				itemType = properties[\itemType];
 			});
+			if(properties.includesKey(\itemDescription), {
+				itemDescription = properties[\itemDescription];
+			});
 		});
 		//Using decimal as default item type so
 		//that list Value can be made using empty properties.
@@ -41,6 +44,10 @@ VTMListValue : VTMCollectionValue {
 		items.do({| item |
 			prItemDict.put(item.name, item);
 		});
+	}
+
+	*propertyKeys{
+		^super.propertyKeys.addAll([\itemDescription, \itemType]);
 	}
 
 	prBuildItemValues{

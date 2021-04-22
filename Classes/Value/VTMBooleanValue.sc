@@ -14,7 +14,17 @@ VTMBooleanValue : VTMValue {
 	}
 
 	initBooleanValue{
+		if(properties.notEmpty, {
+			if(properties.includesKey(\doActionOn), {
+				size = properties[\doActionOn];
+			});
+		});
+	}
 
+	*propertyKeys{
+		^super.propertyKeys.addAll([
+			\doActionOn
+		]);
 	}
 
 	toggle{

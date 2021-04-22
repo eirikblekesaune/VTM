@@ -38,6 +38,12 @@ VTMArrayValue : VTMCollectionValue {
 		properties[\value] = this.get(\defaultValue) ! size;
 	}
 
+	*propertyKeys{
+		^super.propertyKeys.addAll([
+			\size, \fixedSize, \itemType
+		]);
+	}
+
 	value_{| val |
 		if(fixedSize, {
 			if(val.size != this.size, {
