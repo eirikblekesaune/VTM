@@ -1,50 +1,23 @@
-VTMControlPage : VTMData {
-	var <faders;
-	var <knobs;
-	var <buttons;
-	const <numSlots = 3;
-	const <numFadersPerSlot = 8;
-	const <numButtonsPerChannel = 3;
+VTMControlPage {
+	var manager;
+	var <controlValues;
 	var <mappedScene;
+	var >viewBuilder;
 
-	*managerClass{ ^VTMControlPageManager; }
-
-	*new{| name, declaration, manager |
-		manager = manager ?? {
-			VTM.local.findManagerForContextClass(this)
-		};
-		^super.new(name, declaration, manager).initControlPage;
+	*new{| manager, pageSetup |
+		^super.new.initControlPage(manager, pageSetup);
 	}
 
-	initControlPage{
-		//init the faders and knobs
-		faders = this.numChannels.collect({|i|
-			var faderNum = i + 1;
-			VTMValue.decimal((
-				minVal: 0.0,
-				maxVal: 1.0,
-				defaultValue: 0.0,
-				clipmode: \both,
-			));
+	initControlPage{|manager_, pageSetup|
+		manager = manager_;
+		pageSetup = VTMOrderedIdentityDictionary.newFromAssociationArray(pageSetup, true);
+		controlValues = VTMOrderedIdentityDictionary.new;
+		pageSetup.keysValuesDo({|ctrlKey, ctrlDesc|
+			controlValues.put(
+				ctrlKey,
+				VTMValue.makeFromProperties(ctrlDesc);
+			);
 		});
-		knobs = this.numChannels.collect({|i|
-			var knobNum = i + 1;
-			VTMValue.decimal((
-				minVal: 0.0,
-				maxVal: 1.0,
-				defaultValue: 0.0,
-				clipmode: \both,
-			));
-		});
-
-		buttons = (this.numChannels * numButtonsPerChannel).collect({|i|
-			var buttonNum = i + 1;
-			VTMValue.boolean((doActionOn: \change, defaultValue: false));
-		});
-	}
-
-	numChannels{
-		^numSlots * numFadersPerSlot;
 	}
 
 	mapToScene{|scene|
@@ -94,5 +67,16 @@ VTMControlPage : VTMData {
 					this.unmapFromScene(theChanged);
 				});
 		});
+	}
+
+	makeView{|parent, bounds, viewSettings|
+		var result;
+		if(viewBuilder.notNil, {
+			result = viewBuilder.value(
+				parent, bounds, viewSettings,
+				this
+			);
+		});
+		^result;
 	}
 }
