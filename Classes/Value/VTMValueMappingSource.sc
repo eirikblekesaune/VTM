@@ -66,6 +66,9 @@ VTMValueMappingSource{
 		if(forwardingListener.notNil, {
 			forwardingListener.remove;
 		});
+		if(destinationListener.notNil, {
+			destinationListener.remove;
+		});
 	}
 
 	*getForwardingFunc{arg mapping;

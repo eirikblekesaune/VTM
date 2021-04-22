@@ -56,4 +56,8 @@ VTMValueMapping {
 			"Both source and destination must not be nil".warn;
 		});
 	}
+
+	disable{
+		source.free;
+	}
 }
