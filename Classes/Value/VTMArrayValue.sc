@@ -35,6 +35,7 @@ VTMArrayValue : VTMCollectionValue {
 				itemType = properties[\itemType];
 			});
 		});
+		properties[\value] = this.get(\defaultValue) ! size;
 	}
 
 	value_{| val |
