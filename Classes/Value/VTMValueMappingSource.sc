@@ -56,9 +56,9 @@ VTMValueMappingSource{
 			"No know the thing: %".format(valueObj).vtmwarn(0, thisMethod);
 		};
 
-		destinationListener = SimpleController(this.destination.valueObj).put(\value, {|whoChanged, whatChanged, val|
+		destinationListener = SimpleController(this.destination.valueObj).put(\value, {|whoChanged, whatChanged|
 			// "pysa majore: %".format([whoChanged, whatChanged, val]).vtmdebug(0, thisMethod);
-			listenFunc.value(val);
+			listenFunc.value(whoChanged.value);
 		});
 	}
 
