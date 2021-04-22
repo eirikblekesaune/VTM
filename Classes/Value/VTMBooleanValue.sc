@@ -16,7 +16,7 @@ VTMBooleanValue : VTMValue {
 	initBooleanValue{
 		if(properties.notEmpty, {
 			if(properties.includesKey(\doActionOn), {
-				size = properties[\doActionOn];
+				doActionOn = properties[\doActionOn];
 			});
 		});
 	}
