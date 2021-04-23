@@ -60,4 +60,60 @@ VTMValueMapping {
 	disable{
 		source.free;
 	}
+
+	//the destination value mapped to
+	//the source value range
+	unmappedValue{
+		var result;
+		var destinationValueObj = destination.valueObj;
+		var sourceValueObj = source.valueObj;
+		case
+		{destinationValueObj.isKindOf(VTMNumberValue)} {
+			var inMin, inMax, outMin, outMax;
+			inMin = destinationValueObj.minVal;
+			inMax = destinationValueObj.maxVal;
+			outMin = sourceValueObj.minVal;
+			outMax = sourceValueObj.maxVal;
+			result = destinationValueObj.value.linlin(inMin, inMax, outMin, outMax);
+		} {
+			"No know the thing: %".format(destinationValueObj).vtmwarn(0, thisMethod);
+		};
+		^result;
+	}
+
+	//the source value mapped to
+	//the destination value range
+	mappedValue{
+		var result;
+		var destinationValueObj = destination.valueObj;
+		var sourceValueObj = source.valueObj;
+		case
+		{sourceValueObj.isKindOf(VTMNumberValue)} {
+			var inMin, inMax, outMin, outMax;
+			outMin = destinationValueObj.minVal;
+			outMax = destinationValueObj.maxVal;
+			inMin = sourceValueObj.minVal;
+			inMax = sourceValueObj.maxVal;
+			result = sourceValueObj.value.linlin(inMin, inMax, outMin, outMax);
+		} {
+			"No know the thing: %".format(destinationValueObj).vtmwarn(0, thisMethod);
+		};
+		^result;
+	}
+
+	pushToDestination{
+		destination.valueObj.value = this.mappedValue;
+	}
+
+	pullFromDestination{
+		source.valueObj.value = this.unmappedValue;
+	}
+
+	pushToSource{
+		this.pullFromDestination;
+	}
+
+	pullFromSource{
+		this.pushToDestination;
+	}
 }
