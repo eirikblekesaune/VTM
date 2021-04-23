@@ -43,6 +43,9 @@ VTMControl : VTMData {
 			},
 			\mapping, {
 				result = VTMMapping(name, description, manager);
+			},
+			{
+				Error("Uknown VTMControl type: '%'".format(mode)).throw;
 			}
 		);
 
