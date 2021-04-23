@@ -11,6 +11,7 @@ VTMLocalNetworkNode {
 	var shutdownResponder;
 
 	var <library;
+	var <controlPages;
 
 	//global data managers for unnamed contexts
 	var <applicationManager;
@@ -19,7 +20,6 @@ VTMLocalNetworkNode {
 	var <moduleHost;
 	var <sceneOwner;
 	var <controls;
-	var <controlPageManager;
 
 	var <active = false;
 
@@ -51,7 +51,8 @@ VTMLocalNetworkNode {
 		moduleHost = VTMModuleHost.new(this);
 		sceneOwner = VTMSceneOwner.new(this);
 		controls = VTMControlManager(this);
-		controlPageManager = VTMControlPageManager.new(this);
+		
+		this.prInitControlPages;
 
 		hostname = Pipe("hostname", "r").getLine();
 		if(".local$".matchRegexp(hostname), {
@@ -77,7 +78,119 @@ VTMLocalNetworkNode {
 		});
 	}
 
+	*prDefaultControlPageSetup{|numChannels|
+		var pageSetup;
+		pageSetup = pageSetup.add(
+			{|i| "fader.%".format(i+1).asSymbol -> (
+				type: \decimal, minVal: 0.0, maxVal: 1.0, clipmode: 'both'
+			) } ! numChannels
+		);
+		pageSetup = pageSetup.add(
+			{|i| "knob.%".format(i+1).asSymbol -> (
+				type: \decimal, minVal: 0.0, maxVal: 1.0, clipmode: 'both'
+			) } ! numChannels
+		);
+		pageSetup = pageSetup.add(
+			{|i| ['A', 'B', 'C'].collect({|buttonKey|
+				"button.%/%".format(i+1, buttonKey).asSymbol -> (
+					type: \decimal, minVal: 0.0, maxVal: 1.0, clipmode: 'both' 
+				);
+			}); } ! numChannels
+		);
+		pageSetup = pageSetup.flat;
+		^pageSetup;
+	}
+
+	*prDefaulControlPageViewBuilder{|numChannels, pageName|
+		^{|parent, bounds, viewSettings, page|
+			var v = View();
+			var channelViews;
+			var listeners;
+			numChannels.do({|i|
+				var channelNum = i + 1;
+				var makeKnobView = {
+					var knobKey = "knob.%".format(channelNum).asSymbol;
+					var cv = page.controlValues[knobKey];
+					var knobView = Knob()
+					.action_({|k| 
+						var val = k.value;
+						cv.value_(val);
+					});
+					listeners = listeners.add(
+						SimpleController(cv).put(\value, {
+							{ knobView.value_(cv.value) }.defer;
+						});
+					);
+					knobView;
+				};
+				var makeButtonViews = {
+					[\A, \B, \C].collect({|buttonLetter|
+						var buttonKey = "button.%/%".format(
+							channelNum, buttonLetter
+						).asSymbol;
+						var cv = page.controlValues[buttonKey];
+						var buttonView = Button()
+						.states_([[buttonLetter], [buttonLetter, nil, Color.red]])
+						.action_({|k| 
+							var val = k.value;
+							cv.value_(val);
+						});
+						listeners = listeners.add(
+							SimpleController(cv).put(\value, {
+								{ buttonView.value_(cv.value) }.defer;
+							});
+						);
+						buttonView;
+					});
+				};
+				var makeFaderView = {
+					var faderKey = "fader.%".format(channelNum).asSymbol;
+					var cv = page.controlValues[faderKey];
+					var faderView = Slider()
+					.action_({|k| 
+						var val = k.value;
+						cv.value_(val);
+					});
+					listeners = listeners.add(
+						SimpleController(cv).put(\value, {
+							{ faderView.value_(cv.value) }.defer;
+						});
+					);
+					faderView.minHeight_(200);
+				};
+				channelViews = channelViews.add(
+					VLayout(
+						StaticText().string_(channelNum),
+						makeKnobView.value,
+						VLayout(*makeButtonViews.value),
+						makeFaderView.value
+					)
+				);
+			});
+			v.layout_(VLayout(
+				StaticText().string_("Control Page %".format(pageName ? "")).maxHeight_(50),
+				HLayout(*channelViews)
+			));
+			v.onClose = {
+				listeners.do(_.remove);
+			};
+			v;
+		}
+	}
+
 	prInitControlPages{
+		var numChannels = 24;
+		controlPages = VTMOrderedIdentityDictionary.new;
+		"ABCDEFGH".do({|pageName|
+			var pageSetup = this.class.prDefaultControlPageSetup(numChannels);
+			if(pageSetup.notNil, {
+				var ctrlPage = VTMControlPage(pageSetup: pageSetup);
+				ctrlPage.viewBuilder = this.class.prDefaulControlPageViewBuilder(numChannels, pageName);
+				controlPages.put(pageName.asSymbol, ctrlPage);
+			}, {
+				"Something wrong happened to making page setup".postln;
+			});
+		});
 	}
 
 	activate{| doDiscovery = false, remoteNetworkNodesToActivate |
@@ -461,8 +574,7 @@ VTMLocalNetworkNode {
 		{class.isKindOf(VTMScene.class) } {managerObj =  sceneOwner; }
 		{class.isKindOf(VTMApplication.class) } {managerObj =  applicationManager; }
 		{class.isKindOf(VTMControl.class) } {managerObj = controls; }
-		{class.isKindOf(VTMRemoteNetworkNode.class) } {managerObj =  networkNodeManager; }
-		{class.isKindOf(VTMControlPage.class) } {managerObj =  controlPageManager; };
+		{class.isKindOf(VTMRemoteNetworkNode.class) } {managerObj =  networkNodeManager; };
 		^managerObj;
 	}
 
@@ -562,7 +674,6 @@ VTMLocalNetworkNode {
 			':hardwareDevices' -> hardwareSetup,
 			':modules' -> moduleHost,
 			':scenes' -> sceneOwner,
-			':controlPages' -> controlPageManager
 		];
 	}
 }
