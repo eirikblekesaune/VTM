@@ -90,15 +90,11 @@ VTMContextDefinition {
 			cc = env.removeAt(\controlMappings);
 			cc = VTMOrderedIdentityDictionary.newFromAssociationArray(cc, true);
 			cc.keysValuesChange({|key, desc|
-				case
-				{desc.isKindOf(Symbol)} {
+				if(desc.isKindOf(Symbol), {
 					desc = VTMOrderedIdentityDictionary[
 						'destination' -> desc,
 					]
-				}
-				{
-					desc = VTMOrderedIdentityDictionary.newFromAssociationArray(desc, true);
-				};
+				});
 				desc;
 			});
 
