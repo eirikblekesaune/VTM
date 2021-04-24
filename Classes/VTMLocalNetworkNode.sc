@@ -101,11 +101,12 @@ VTMLocalNetworkNode {
 		^pageSetup;
 	}
 
-	*prDefaulControlPageViewBuilder{|numChannels, pageName|
+	*prDefaulControlPageViewBuilder{|numChannels, pageName, controlPage|
 		^{|parent, bounds, viewSettings, page|
 			var v = View();
 			var channelViews;
 			var listeners;
+			var headerView, updateHeaderView;
 			numChannels.do({|i|
 				var channelNum = i + 1;
 				var makeKnobView = {
@@ -167,8 +168,23 @@ VTMLocalNetworkNode {
 					)
 				);
 			});
+			headerView = StaticText().string_("Control Page %".format(pageName ? ""));
+			updateHeaderView = {
+				var str = "Control Page %".format(pageName ? "");
+				if(controlPage.isMapped, {
+					str = str ++ " - Mapped to scene '%'".format(controlPage.mappedScene.fullPath);
+				});
+				"UPdated header view: '%'".format(str).postln;
+				headerView.string_(str);
+				headerView.refresh;
+			};
+			listeners = listeners.add(
+				SimpleController(controlPage)
+				.put(\mappedScene, { {updateHeaderView.value}.defer; })
+				.put(\unmappedScene, { {updateHeaderView.value}.defer; })
+			);
 			v.layout_(VLayout(
-				StaticText().string_("Control Page %".format(pageName ? "")).maxHeight_(50),
+				headerView.maxHeight_(50),
 				HLayout(*channelViews)
 			));
 			v.onClose = {
@@ -185,7 +201,9 @@ VTMLocalNetworkNode {
 			var pageSetup = this.class.prDefaultControlPageSetup(numChannels);
 			if(pageSetup.notNil, {
 				var ctrlPage = VTMControlPage(pageSetup: pageSetup);
-				ctrlPage.viewBuilder = this.class.prDefaulControlPageViewBuilder(numChannels, pageName);
+				ctrlPage.viewBuilder = this.class.prDefaulControlPageViewBuilder(
+					numChannels, pageName, ctrlPage
+				);
 				controlPages.put(pageName.asSymbol, ctrlPage);
 			}, {
 				"Something wrong happened to making page setup".postln;

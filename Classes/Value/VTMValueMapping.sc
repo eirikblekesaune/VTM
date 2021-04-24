@@ -61,6 +61,12 @@ VTMValueMapping {
 		source.free;
 	}
 
+	free{
+		this.disable;
+		source = nil;
+		destination = nil;
+	}
+
 	//the destination value mapped to
 	//the source value range
 	unmappedValue{

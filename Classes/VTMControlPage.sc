@@ -3,6 +3,7 @@ VTMControlPage {
 	var <controlValues;
 	var <mappedScene;
 	var >viewBuilder;
+	var controlMappings;
 
 	*new{| manager, pageSetup |
 		^super.new.initControlPage(manager, pageSetup);
@@ -35,19 +36,24 @@ VTMControlPage {
 	}
 
 	unmapFromScene{|scene|
-		if(mappedScene.notNil, {
-			var scene = mappedScene;
+		if(mappedScene.notNil and: {mappedScene === scene}, {
+			mappedScene.removeDependant(this);
 			mappedScene = nil;
-			scene.removeDependant(this);
+			controlMappings.do(_.free);
 			this.changed(\unmappedScene, scene);
 		});
 	}
 
 	prSetupSceneMappings{
-		var controlMappings = mappedScene.controlMappings;
-		controlMappings.keysValuesDo({|ctrlKey, mappingDesc|
-			"Mapping scene control '%' with '%'".format(ctrlKey, mappingDesc).postln;
-		});
+		try{
+			controlMappings = this.prParseControlMappings(
+				mappedScene
+			);
+		} {|err|
+			err.errorString.postln;
+			err.dumpBackTrace;
+			err.throw;
+		}
 	}
 
 	isMapped{
@@ -76,6 +82,40 @@ VTMControlPage {
 				parent, bounds, viewSettings,
 				this
 			);
+		});
+		^result;
+	}
+
+	prParseControlMappings{|scene|
+		var result;
+		var controlMappings = scene.controlMappings;
+		controlMappings.keysValuesDo({|ctrlKey, mappingDesc|
+			var cpCv;
+			var sceneCvKey, sceneCv;
+			var mapping;
+			cpCv = controlValues[ctrlKey];
+			if(cpCv.isNil, {
+				Error("Could not find controlValue cv: '%'".format(ctrlKey)).throw;
+			});
+
+			sceneCvKey = mappingDesc.atFail(\destination, {
+				Error("Mapping destination not defined").throw;
+			});
+			sceneCv = scene.find(VTMPath(sceneCvKey));
+			if(sceneCv.isNil, {
+				Error("Could not find scene cv: '%'".format(sceneCvKey)).throw;
+			});
+			sceneCv = sceneCv.valueObj;
+
+			mapping = VTMValueMapping((
+				source: cpCv,
+				destination: sceneCv,
+				type: \bind
+			));
+			mapping.pushToSource;
+			mapping.enable;
+			"\tMapping scene control '%' with '%'".format(ctrlKey, mappingDesc).postln;
+			result = result.add(mapping);
 		});
 		^result;
 	}

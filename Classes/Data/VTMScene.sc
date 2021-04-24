@@ -7,6 +7,7 @@ Since it is a ComposableContext it also can manage subscenes.
 VTMScene : VTMComposableContext {
 	classvar <isAbstractClass=false;
 	var <controlMappings;
+	var mappedControlPage;
 
 	*managerClass{ ^VTMSceneOwner; }
 
@@ -20,4 +21,24 @@ VTMScene : VTMComposableContext {
 		});
 	}
 
+	mapToControlPage{|pageName|
+		var controlPage = VTM.local.controlPages[pageName];
+		if(controlPage.notNil, {
+			if(mappedControlPage.notNil, {
+				this.unmapControlPage;
+			});
+			mappedControlPage = controlPage;
+			controlPage.mapToScene(this);
+		}, {
+			"Unknown control page: '%'".format(pageName).postln;
+		});
+	}
+
+	unmapControlPage{
+		if(mappedControlPage.notNil, {
+			"\tmappedControlPage was not nil: %".format(mappedControlPage).postln;
+			mappedControlPage.unmapFromScene(this);
+			mappedControlPage = nil;
+		});
+	}
 }
