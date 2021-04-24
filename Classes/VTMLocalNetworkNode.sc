@@ -78,130 +78,14 @@ VTMLocalNetworkNode {
 		});
 	}
 
-	*prDefaultControlPageSetup{|numChannels|
-		var pageSetup;
-		pageSetup = pageSetup.add(
-			{|i| "fader.%".format(i+1).asSymbol -> (
-				type: \decimal, minVal: 0.0, maxVal: 1.0, clipmode: 'both'
-			) } ! numChannels
-		);
-		pageSetup = pageSetup.add(
-			{|i| "knob.%".format(i+1).asSymbol -> (
-				type: \decimal, minVal: 0.0, maxVal: 1.0, clipmode: 'both'
-			) } ! numChannels
-		);
-		pageSetup = pageSetup.add(
-			{|i| ['A', 'B', 'C'].collect({|buttonKey|
-				"button.%/%".format(i+1, buttonKey).asSymbol -> (
-					type: \decimal, minVal: 0.0, maxVal: 1.0, clipmode: 'both' 
-				);
-			}); } ! numChannels
-		);
-		pageSetup = pageSetup.flat;
-		^pageSetup;
-	}
-
-	*prDefaulControlPageViewBuilder{|numChannels, pageName, controlPage|
-		^{|parent, bounds, viewSettings, page|
-			var v = View();
-			var channelViews;
-			var listeners;
-			var headerView, updateHeaderView;
-			numChannels.do({|i|
-				var channelNum = i + 1;
-				var makeKnobView = {
-					var knobKey = "knob.%".format(channelNum).asSymbol;
-					var cv = page.controlValues[knobKey];
-					var knobView = Knob()
-					.action_({|k| 
-						var val = k.value;
-						cv.value_(val);
-					});
-					listeners = listeners.add(
-						SimpleController(cv).put(\value, {
-							{ knobView.value_(cv.value) }.defer;
-						});
-					);
-					knobView;
-				};
-				var makeButtonViews = {
-					[\A, \B, \C].collect({|buttonLetter|
-						var buttonKey = "button.%/%".format(
-							channelNum, buttonLetter
-						).asSymbol;
-						var cv = page.controlValues[buttonKey];
-						var buttonView = Button()
-						.states_([[buttonLetter], [buttonLetter, nil, Color.red]])
-						.action_({|k| 
-							var val = k.value;
-							cv.value_(val);
-						});
-						listeners = listeners.add(
-							SimpleController(cv).put(\value, {
-								{ buttonView.value_(cv.value) }.defer;
-							});
-						);
-						buttonView;
-					});
-				};
-				var makeFaderView = {
-					var faderKey = "fader.%".format(channelNum).asSymbol;
-					var cv = page.controlValues[faderKey];
-					var faderView = Slider()
-					.action_({|k| 
-						var val = k.value;
-						cv.value_(val);
-					});
-					listeners = listeners.add(
-						SimpleController(cv).put(\value, {
-							{ faderView.value_(cv.value) }.defer;
-						});
-					);
-					faderView.minHeight_(200);
-				};
-				channelViews = channelViews.add(
-					VLayout(
-						StaticText().string_(channelNum),
-						makeKnobView.value,
-						VLayout(*makeButtonViews.value),
-						makeFaderView.value
-					)
-				);
-			});
-			headerView = StaticText().string_("Control Page %".format(pageName ? ""));
-			updateHeaderView = {
-				var str = "Control Page %".format(pageName ? "");
-				if(controlPage.isMapped, {
-					str = str ++ " - Mapped to scene '%'".format(controlPage.mappedScene.fullPath);
-				});
-				"UPdated header view: '%'".format(str).postln;
-				headerView.string_(str);
-				headerView.refresh;
-			};
-			listeners = listeners.add(
-				SimpleController(controlPage)
-				.put(\mappedScene, { {updateHeaderView.value}.defer; })
-				.put(\unmappedScene, { {updateHeaderView.value}.defer; })
-			);
-			v.layout_(VLayout(
-				headerView.maxHeight_(50),
-				HLayout(*channelViews)
-			));
-			v.onClose = {
-				listeners.do(_.remove);
-			};
-			v;
-		}
-	}
-
 	prInitControlPages{
 		var numChannels = 24;
 		controlPages = VTMOrderedIdentityDictionary.new;
 		"ABCDEFGH".do({|pageName|
-			var pageSetup = this.class.prDefaultControlPageSetup(numChannels);
+			var pageSetup = VTMControlPage.prDefaultControlPageSetup(numChannels);
 			if(pageSetup.notNil, {
 				var ctrlPage = VTMControlPage(pageSetup: pageSetup);
-				ctrlPage.viewBuilder = this.class.prDefaulControlPageViewBuilder(
+				ctrlPage.viewBuilder = VTMControlPage.prDefaulControlPageViewBuilder(
 					numChannels, pageName, ctrlPage
 				);
 				controlPages.put(pageName.asSymbol, ctrlPage);
