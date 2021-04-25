@@ -25,9 +25,23 @@ VTMValueMapping {
 		if(properties.notEmpty and: {hasMandatoryKeys.value(properties)}, {
 			if(properties.includesKey(\source), {
 				source = properties[\source];
+				if(source.isKindOf(VTMValue).not, {
+					Error(
+						"ValueMapping source must be of kind VTMValue: %[%]".format(
+							source, source.class
+						)
+					).throw;
+				});
 			});
 			if(properties.includesKey(\destination), {
 				destination = properties[\destination];
+				if(destination.isKindOf(VTMValue).not, {
+					Error(
+						"ValueMapping destination must be of kind VTMValue: %[%]".format(
+							destination, destination.class
+						)
+					).throw;
+				});
 			});
 			if(properties.includesKey(\type), {
 				type = properties[\type];
@@ -35,6 +49,16 @@ VTMValueMapping {
 			if(properties.includesKey(\condition), {
 				condition = properties[\condition];
 			});
+			if(properties.includesKey(\forwardingFunc), {
+				forwardingFunc = properties[\forwardingFunc];
+			});
+			if(properties.includesKey(\subscriptionFunc), {
+				subscriptionFunc = properties[\subscriptionFunc];
+			});
+		}, {
+			Error("Value Mapping must have both source: % and destination: %".format(
+				properties[\source], properties[\destination]
+			)).throw;
 		});
 	}
 

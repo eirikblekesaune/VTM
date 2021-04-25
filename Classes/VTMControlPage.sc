@@ -4,7 +4,7 @@ VTMControlPage {
 	var <mappedScene;
 	var >viewBuilder;
 	var controlMappings;
-	var buttons;
+	var <buttons;
 
 	*new{| manager, pageSetup |
 		^super.new.initControlPage(manager, pageSetup);
@@ -19,7 +19,9 @@ VTMControlPage {
 			var cv = VTMValue.makeFromProperties(ctrlDesc);
 			controlValues.put( ctrlKey, cv );
 			if(ctrlKey.asString.contains("button"), {
-				VTMControlPageGateButton.new(cv);
+				buttons.put(ctrlKey,
+					VTMControlPageGateButton.new(cv)
+				);
 			});
 		});
 	}
@@ -50,7 +52,7 @@ VTMControlPage {
 		});
 	}
 
-	setButtonType{|buttonKey, buttonType, args|
+	setButtonType{|buttonKey, buttonType, inverted=false|
 		var buttonClass;
 		if(buttons.includesKey(buttonKey), {
 		}, {
@@ -64,7 +66,7 @@ VTMControlPage {
 		if(buttonClass.notNil, {
 			buttons.put(
 				buttonKey, 
-				buttonClass.new(controlValues[buttonKey], *args)
+				buttonClass.new(controlValues[buttonKey], inverted)
 			);
 			this.changed(\buttonType, buttonKey, buttonType);
 		}, {
@@ -130,7 +132,7 @@ VTMControlPage {
 	}
 
 	handleButtonValue{|buttonKey, val|
-		if(buttons.includes(buttonKey), {
+		if(buttons.includesKey(buttonKey), {
 			buttons[buttonKey].handleButtonValue(val);
 		});
 	}
