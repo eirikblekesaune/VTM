@@ -79,6 +79,7 @@ VTMValueMapping {
 	}
 
 	free{
+		this.disable;
 		source = nil;
 		destination = nil;
 	}
@@ -92,7 +93,7 @@ VTMValueMapping {
 			| theChanged, whatChanged |
 			if(isUpdatingSubscriptionValue.not, {
 				isForwardingValue = true;
-				forwardingFunc.value(theChanged.value);
+				func.value(theChanged.value);
 				isForwardingValue = false;
 			})
 		})
@@ -107,7 +108,8 @@ VTMValueMapping {
 			| theChanged, whatChanged|
 			if(isForwardingValue.not, {
 				isUpdatingSubscriptionValue = true;
-				subscriptionFunc.value(theChanged.value);
+				forwardingFunc.value(theChanged.value);
+				func.value(theChanged.value);
 				isUpdatingSubscriptionValue = false;
 			});
 		});

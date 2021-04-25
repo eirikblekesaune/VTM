@@ -315,7 +315,6 @@ VTMControlPage {
 				if(controlPage.isMapped, {
 					str = str ++ " - Mapped to scene '%'".format(controlPage.mappedScene.fullPath);
 				});
-				"UPdated header view: '%'".format(str).postln;
 				headerView.string_(str);
 				headerView.refresh;
 			};
