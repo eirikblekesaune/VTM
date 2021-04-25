@@ -21,17 +21,14 @@ VTMControlPageMomentaryButton : VTMControlPageButton {
 		if(val.booleanValue == inverted.not, {
 			controlValue.value = val.booleanValue;
 		});
-		"\tmomentary button value after handling: %".format(controlValue.value).postln;
 	}
 }
 
 VTMControlPageToggleButton : VTMControlPageButton {
-	var <>triggerValue = true;
 	handleButtonValue{|val|
 		if(val.booleanValue == inverted.not, {
 			controlValue.value = controlValue.value.not;
 		});
-		"\ttoggle button value after handling: %".format(controlValue.value).postln;
 	}
 }
 
@@ -42,19 +39,5 @@ VTMControlPageGateButton : VTMControlPageButton {
 		}, {
 			controlValue.value = val.booleanValue;
 		});
-		"\tgate button value after handling: %".format(controlValue.value).postln;
-	}
-}
-
-VTMControlPageRadioButtons {
-	var buttons;
-	*new{|buttons|
-		^super.new.init(buttons);
-	}
-	init{|buttons_|
-		buttons = buttons_;
-	}
-	handleButtonValue{|val|
-		this.subclassResponsibility(thisMethod);
 	}
 }

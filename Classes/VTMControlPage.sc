@@ -139,8 +139,8 @@ VTMControlPage {
 
 	prParseControlMappings{|scene|
 		var result;
-		var controlMappings = scene.controlMappings;
-		controlMappings.keysValuesDo({|ctrlKey, mappingDesc|
+		var sceneControlMappings = scene.controlMappings;
+		scene.controlMappings.keysValuesDo({|ctrlKey, mappingDesc|
 			var cpCv;
 			var sceneCvKey, sceneCv;
 			var mapping;
@@ -162,7 +162,10 @@ VTMControlPage {
 			type = mappingDesc[\type];
 			mapping = switch(type,
 				\button, {
-					this.prMakeButtonMapping(cpCv, sceneCv, ctrlKey, mappingDesc);
+					this.prMakeButtonMapping(
+						cpCv, sceneCv, ctrlKey,
+						mappingDesc, sceneCvKey
+					);
 				},
 				{
 					VTMValueMapping((
@@ -172,18 +175,22 @@ VTMControlPage {
 					));
 				}
 			);
-			"\tMapping scene control '%' with '%'".format(ctrlKey, mappingDesc).postln;
 			result = result.add(mapping);
 		});
 		^result;
 	}
 
-	prMakeButtonMapping{|cpCv, sceneCv, cpCvKey, mappingDesc|
+	prMakeButtonMapping{|cpCv, sceneCv, cpCvKey, mappingDesc, sceneCvKey|
 		var result;
+		var type = mappingDesc[\type] ? \gate;
+		var val = mappingDesc[\value];
 		result = VTMValueMapping((
 			source: cpCv,
 			destination: sceneCv,
-			type: \forwarding
+			type: \forwarding,
+			mapFunc: {|v, m|
+				val ? v;
+			}
 		));
 		^result;
 	}

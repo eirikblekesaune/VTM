@@ -4,6 +4,9 @@ VTMValueMapping {
 	var <type = \forwarding;
 	var <condition;
 
+	var mapFunc;
+	var unmapFunc;
+
 	var forwardingFunc;
 	var forwardingListener;
 	var isForwardingValue = false;
@@ -55,10 +58,24 @@ VTMValueMapping {
 			if(properties.includesKey(\subscriptionFunc), {
 				subscriptionFunc = properties[\subscriptionFunc];
 			});
+			if(properties.includesKey(\mapFunc), {
+				mapFunc = properties[\mapFunc];
+			});
+			if(properties.includesKey(\unmapFunc), {
+				unmapFunc = properties[\unmapFunc];
+			});
 		}, {
 			Error("Value Mapping must have both source: % and destination: %".format(
 				properties[\source], properties[\destination]
 			)).throw;
+		});
+
+		if(mapFunc.isNil, {
+			mapFunc = this.class.getDefaultMappingFunc(source, destination);
+		});
+
+		if(unmapFunc.isNil, {
+			unmapFunc = this.class.getDefaultMappingFunc(destination, source);
 		});
 	}
 
@@ -109,70 +126,57 @@ VTMValueMapping {
 	}
 
 	startForwarding{
-		var func = forwardingFunc;
-		if(func.isNil, {
-			func = this.class.getDefaultForwardingFunc(this);
+		var func;
+		if(forwardingFunc.isNil, {
+			func = {|val, m|
+				destination.valueAction_(val);
+			};
+		}, {
+			func = {|val, m|
+				forwardingFunc.value(val, m);
+			};
 		});
 		forwardingListener = SimpleController(source).put(\value, {
 			| theChanged, whatChanged |
 			if(isUpdatingSubscriptionValue.not, {
 				isForwardingValue = true;
-				func.value(theChanged.value);
+				func.value(this.mappedValue, this);
 				isForwardingValue = false;
 			})
 		})
 	}
 
 	startSubscribing{
-		var func = subscriptionFunc;
-		if(func.isNil, {
-			func = this.class.getDefaultSubscriptionFunc(this);
+		var func;
+		if(subscriptionFunc.isNil, {
+			func = {|val, m|
+				source.valueAction_(val);
+			};
+		}, {
+			func = {|val, m|
+				subscriptionFunc.value(val, m);
+			};
 		});
 		subscriptionListener = SimpleController(destination).put(\value, {
 			| theChanged, whatChanged|
 			if(isForwardingValue.not, {
 				isUpdatingSubscriptionValue = true;
-				forwardingFunc.value(theChanged.value);
-				func.value(theChanged.value);
+				func.value(this.unmappedValue, this);
 				isUpdatingSubscriptionValue = false;
 			});
 		});
 	}
 
-	//the destination value mapped to
-	//the source value range
-	unmappedValue{
-		var result;
-		case
-		{destination.isKindOf(VTMNumberValue)} {
-			var inMin, inMax, outMin, outMax;
-			inMin = destination.minVal;
-			inMax = destination.maxVal;
-			outMax = source.maxVal;
-			outMin = source.minVal;
-			result = destination.value.linlin(inMin, inMax, outMin, outMax);
-		} {
-			"No know the thing: %".format(destination).vtmwarn(0, thisMethod);
-		};
-		^result;
-	}
-
 	//the source value mapped to
 	//the destination value range
 	mappedValue{
-		var result;
-		case
-		{source.isKindOf(VTMNumberValue)} {
-			var inMin, inMax, outMin, outMax;
-			outMin = destination.minVal;
-			outMax = destination.maxVal;
-			inMin = source.minVal;
-			inMax = source.maxVal;
-			result = source.value.linlin(inMin, inMax, outMin, outMax);
-		} {
-			"No know the thing: %".format(destination).vtmwarn(0, thisMethod);
-		};
-		^result;
+		^mapFunc.value(source.value, this);
+	}
+
+	//the destination value mapped to
+	//the source value range
+	unmappedValue{
+		^unmapFunc.value(destination.value, this);
 	}
 
 	pushToDestination{
@@ -191,44 +195,67 @@ VTMValueMapping {
 		this.pushToDestination;
 	}
 
-	*getDefaultForwardingFunc{arg mapping;
+	*getDefaultMappingFunc{|fromValue, targetValue|
 		var result;
-		case
-		{mapping.source.isKindOf(VTMNumberValue)} {
-			result = {arg inVal;
-				var outVal;
-				var inMin, inMax, outMin, outMax;
-				inMin = mapping.source.minVal;
-				inMax = mapping.source.maxVal;
-				outMin = mapping.destination.minVal;
-				outMax = mapping.destination.maxVal;
-				outVal = inVal.linlin(inMin, inMax, outMin, outMax);
-				mapping.destination.valueAction_(outVal);
-			};
-		} {
-			"No know the thing: %".format(mapping.source).vtmwarn(0, thisMethod);
-			result = {};
-		};
+		result = this.prGetMappingFunc(fromValue, targetValue);
 		^result;
 	}
 
-	*getDefaultSubscriptionFunc{|mapping|
-		var result;
-		case
-		{mapping.destination.isKindOf(VTMNumberValue)} {
-			result = {arg inVal;
-				var outVal;
-				var inMin, inMax, outMin, outMax;
-				inMin = mapping.destination.minVal;
-				inMax = mapping.destination.maxVal;
-				outMin = mapping.source.minVal;
-				outMax = mapping.source.maxVal;
-				outVal = inVal.linlin(inMin, inMax, outMin, outMax);
-				mapping.source.valueAction_(outVal);
-			};
-		} {
-			"No know the thing: %".format(mapping.destination).vtmwarn(0, thisMethod);
+	*prGetMappingFunc{|fromValue, targetValue|
+		var typeMap = Dictionary[
+			[VTMIntegerValue, VTMIntegerValue] -> \prNumberToNumberFunc,
+			[VTMDecimalValue, VTMIntegerValue] -> \prNumberToNumberFunc,
+			[VTMIntegerValue, VTMDecimalValue] -> \prNumberToNumberFunc,
+			[VTMDecimalValue, VTMDecimalValue] -> \prNumberToNumberFunc,
+			[VTMBooleanValue, VTMIntegerValue] -> \prBooleanToNumberFunc,
+			[VTMBooleanValue, VTMDecimalValue] -> \prBooleanToNumberFunc,
+			[VTMIntegerValue, VTMBooleanValue] -> \prNumberToBooleanFunc,
+			[VTMDecimalValue, VTMBooleanValue] -> \prNumberToBooleanFunc
+		];
+		var methodName = typeMap[[fromValue.class, targetValue.class]];
+		var func = this.perform(
+			methodName,
+			fromValue,
+			targetValue
+		);
+		if(func.isNil, {
+			Error(
+				"Non-implemented default mapping func for relation: % => %".format(
+					fromValue, targetValue
+				)
+			).throw;
+		});
+		^func;
+	}
+
+	*prNumberToNumberFunc{|fromValue, targetValue|
+		^{arg inVal;
+			var inMin, inMax, outMin, outMax;
+			var outVal;
+			inMin = fromValue.minVal;
+			inMax = fromValue.maxVal;
+			outMin = targetValue.minVal;
+			outMax = targetValue.maxVal;
+			outVal = inVal.linlin(inMin, inMax, outMin, outMax);
+			outVal;
 		};
-		^result;
+	}
+
+	*prNumberToBooleanFunc{|fromValue, targetValue|
+		^{arg inVal;
+			var inMin, inMax, outMin, outMax;
+			var outVal;
+			outVal = inVal.booleanValue;
+			outVal;
+		};
+	}
+
+	*prBooleanToNumberFunc{|fromValue, targetValue|
+		^{arg inVal;
+			var inMin, inMax, outMin, outMax;
+			var outVal;
+			outVal = inVal.asInteger;
+			outVal;
+		};
 	}
 }
