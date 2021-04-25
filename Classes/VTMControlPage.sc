@@ -46,13 +46,13 @@ VTMControlPage {
 			mappedScene = nil;
 			controlMappings.do(_.free);
 			buttons.keys.do({|k|
-				this.setButtonType(k, \gate);
+				this.setButtonMode(k, \gate);
 			});
 			this.changed(\unmappedScene, scene);
 		});
 	}
 
-	setButtonType{|buttonKey, buttonType, inverted=false|
+	setButtonMode{|buttonKey, buttonType, inverted=false|
 		var buttonClass;
 		if(buttons.includesKey(buttonKey), {
 		}, {
@@ -182,8 +182,9 @@ VTMControlPage {
 
 	prMakeButtonMapping{|cpCv, sceneCv, cpCvKey, mappingDesc, sceneCvKey|
 		var result;
-		var type = mappingDesc[\type] ? \gate;
+		var mode = mappingDesc[\mode] ? \gate;
 		var val = mappingDesc[\value];
+		this.setButtonMode(cpCvKey, mode);
 		result = VTMValueMapping((
 			source: cpCv,
 			destination: sceneCv,
