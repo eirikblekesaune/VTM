@@ -54,6 +54,8 @@ VTMLocalNetworkNode {
 		
 		this.prInitControlPages;
 
+		library = VTMDefinitionLibrary.new;
+
 		hostname = Pipe("hostname", "r").getLine();
 		if(".local$".matchRegexp(hostname), {
 			hostname = hostname.drop(-6);

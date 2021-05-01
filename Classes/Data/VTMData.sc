@@ -193,6 +193,10 @@ VTMData {
 		^parameters.at(key);
 	}
 
+	parent{
+		^manager;
+	}
+
 	leadingSeparator{ ^'/'; }
 
 	enableOSC {

@@ -27,7 +27,8 @@ VTMContextManager : VTMDataManager {
 			case 
 			{itemDeclaration.includesKey(\definition)} {
 				var defName = itemDeclaration[\definition].asSymbol;
-				"context: %".format(this.context.fullPath).vtmdebug(2, thisMethod);
+				"context: % %".format(this.context.fullPath, 
+					this.context.class).vtmdebug(2, thisMethod);
 				itemDefinition = this.context.findDefinition(defName);
 				"Definition name: %[%]".format(
 					defName, defName.class
@@ -102,7 +103,7 @@ VTMContextManager : VTMDataManager {
 
 				if(itemDeclaration.includesKey(\definition), {
 					var defName = itemDeclaration[\definition].asSymbol;
-					"context: %".format(this.context.fullPath).vtmdebug(2, thisMethod);
+					"context: % %".format(this.context.fullPath, this.context.class).vtmdebug(2, thisMethod);
 					itemDefinition = this.context.findDefinition(defName);
 					"Definition name: %[%]".format(defName, defName.class).vtmdebug(2, thisMethod);
 				}, {
