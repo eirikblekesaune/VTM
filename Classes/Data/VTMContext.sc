@@ -252,8 +252,29 @@ VTMContext : VTMElement {
 		^result;
 	}
 
+	parentApplication{
+		if(this.isUnmanaged.not, {
+			var p = this.parent;
+			while({p != VTM.local}, {
+				if(p.isKindOf(VTMApplication), {
+					^p;
+				}, {
+					p = p.parent;
+				});
+			});
+		});
+		^nil;
+	}
+
 	findDefinition{arg defName;
-		^VTM.local.library.findDefinition(defName);
+		var app = this.parentApplication;
+		var result;
+		if(app.notNil, {
+			result = app.findDefinition(defName);
+		}, {
+			result = VTM.local.library.findDefinition(defName);
+		});
+		^result;
 	}
 
 	find{|vtmPath|
@@ -273,5 +294,12 @@ VTMContext : VTMElement {
 		}, {
 			^super.makeView(parent, bounds, viewDef, settings);
 		});
+	}
+
+	contextTypeSymbol{
+		var result = this.class.asString.drop(3);
+		var firstLetter = result.first;
+		result.put(0, firstLetter.toLower);
+		^result;
 	}
 }
