@@ -52,7 +52,7 @@ VTMContextDefinition {
 			\name -> name
 		];
 
-		[\controls, \parameters].do{arg item;
+		[\controls, \parameters, \hardwareDevices].do{arg item;
 			var cc;
 			if(env.includesKey(item), {
 				cc = env.removeAt(item);
@@ -141,6 +141,18 @@ VTMContextDefinition {
 
 	controlMappings{
 		^definition[\controlMappings];
+	}
+
+	hardwareDevices{
+		^definition[\hardwareDevices];
+	}
+
+	modules{
+		^definition[\modules];
+	}
+
+	scenes{
+		^definition[\scenes];
 	}
 
 	makeView{|parent, bounds, viewDef, settings|
