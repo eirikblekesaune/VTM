@@ -52,7 +52,7 @@ VTMContextDefinition {
 			\name -> name
 		];
 
-		[\controls, \parameters, \hardwareDevices].do{arg item;
+		[\controls, \parameters, \hardwareDevices, \modules, \scenes].do{arg item;
 			var cc;
 			if(env.includesKey(item), {
 				cc = env.removeAt(item);
