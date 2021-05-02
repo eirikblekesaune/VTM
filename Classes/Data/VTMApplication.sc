@@ -33,6 +33,9 @@ VTMApplication : VTMContext {
 		hardwareDevices = VTMHardwareSetup(this);
 		modules = VTMModuleHost(this);
 		scenes = VTMSceneOwner(this);
+		this.registerChild(hardwareDevices);
+		this.registerChild(modules);
+		this.registerChild(scenes);
 		this.on(\didInit, {
 			this.makeComponents;
 		});
@@ -125,29 +128,6 @@ VTMApplication : VTMContext {
 			});
 			super.free(condition, action);
 		}
-	}
-
-	*childKeys{
-		^#[':scenes', ':hardwareDevices', ':modules'];
-	}
-
-	hasChildKey{arg key;
-		if(this.class.childKeys.includes(key), {
-			^true;
-		}, {
-			^super.hasChildKey(key);
-		});
-	}
-
-	getChild{arg key;
-		var result;
-		switch(key,
-			':scenes', {^scenes},
-			':modules', {^modules},
-			':hardwareDevices', {^hardwareDevices}
-		);
-		result = super.getChild(key);
-		^result;
 	}
 
 	//to make it act as a manager

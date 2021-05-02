@@ -151,18 +151,6 @@ VTMElement : VTMData {
 		controls.trace(bool);
 	}
 
-	hasChildKey{arg key;
-		^(controls.hasItemNamed(key) or: {key == ':controls'});
-	}
-
-	getChild{arg key;
-		if(key == ':controls', {
-			^controls;
-		}, {
-			^controls.at(key);
-		});
-	}
-
 	find{arg vtmPath;
 		if(vtmPath.isKindOf(VTMPath), {
 			if(vtmPath.isGlobal, {

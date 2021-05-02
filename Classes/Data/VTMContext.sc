@@ -277,16 +277,16 @@ VTMContext : VTMElement {
 		^result;
 	}
 
-	find{|vtmPath|
-		var result;
-		if(vtmPath.isLocal, {
-			var pathSym = vtmPath.first.asSymbol;
-			if(controls.names.includes(pathSym), {
-				result = controls[pathSym];
-			});
-		});
-		^result;
-	}
+	// find{|vtmPath|
+	// 	var result;
+	// 	if(vtmPath.isLocal, {
+	// 		var pathSym = vtmPath.first.asSymbol;
+	// 		if(controls.names.includes(pathSym), {
+	// 			result = controls[pathSym];
+	// 		});
+	// 	});
+	// 	^result;
+	// }
 
 	makeView{| parent, bounds, viewDef, settings |
 		if(envir.includesKey(\makeView), {

@@ -48,6 +48,7 @@ VTMDataManager {
 			});
 
 			items.put(newItem.name, newItem);
+			parent.registerChild(newItem);
 			this.addDependant(newItem);
 			this.changed(\items, \added, newItem);
 		});
@@ -58,6 +59,7 @@ VTMDataManager {
 		removedItem = items.removeAt(itemName);
 		if(removedItem.notNil, {
 			"% added item: % name: % path: %".format(this.fullPath, removedItem, removedItem.name, removedItem.path).vtmdebug(2, thisMethod);
+			parent.unregisterChild(removedItem);
 			this.changed(\items, \removed, removedItem);
 			this.removeDependant(removedItem);
 		})

@@ -4,6 +4,7 @@ VTMData {
 	var parameters;
 	var oscInterface;
 	var declaration;
+	var children;
 
 	classvar <isAbstractClass=true;
 
@@ -29,6 +30,7 @@ VTMData {
 	initData{| name_, declaration_, manager_ |
 		name = name_;
 		manager = manager_;
+		children = IdentityDictionary.new;
 
 		//manager must not rely on the item to be fully initalized
 		if(manager.notNil, {
@@ -55,6 +57,14 @@ VTMData {
 					tempVal.throw;
 			});
 		});
+	}
+
+	registerChild{|child|
+		children.put(child.name, child);
+	}
+
+	unregisterChild{|child|
+		children.remove(child);
 	}
 
 	*validateParameterValue{arg props, key, declaration;
@@ -178,11 +188,7 @@ VTMData {
 	}
 
 	path{
-		if(manager.isNil, {
-			^'';
-		}, {
-			^manager.fullPath;
-		});
+		^this.parent.fullPath;
 	}
 
 	hasDerivedPath{
@@ -194,10 +200,20 @@ VTMData {
 	}
 
 	parent{
-		^manager;
+		if(manager.isNil, {
+			^VTM.local;
+		}, {
+			^manager.parent;
+		});
 	}
 
-	leadingSeparator{ ^'/'; }
+	leadingSeparator{ 
+		if(this.parent === VTM.local, {
+			^'';
+		}, {
+			^'/';
+		})
+	}
 
 	enableOSC {
 		if( oscInterface.notNil, {
@@ -265,12 +281,16 @@ VTMData {
 		)
 	}
 
-	hasChildKey{arg key;
-		^false;
+	childKeys{
+		^children.keys;
 	}
 
 	getChild{arg key;
-		^nil;
+		^children.at(key);
+	}
+
+	hasChildKey{|key|
+		^children.includesKey(key);
 	}
 
 	find{arg vtmPath;

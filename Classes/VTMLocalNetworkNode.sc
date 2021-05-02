@@ -2,7 +2,6 @@
 VTMLocalNetworkNode {
 	classvar <singleton;
 	classvar <discoveryBroadcastPort = 57500;
-	classvar <childKeys;
 	var <hostname;
 	var <localNetworks;
 	var discoveryResponder;
@@ -21,6 +20,8 @@ VTMLocalNetworkNode {
 	var <sceneOwner;
 	var <controls;
 
+	var children;
+
 	var <active = false;
 
 	*initClass{
@@ -28,15 +29,6 @@ VTMLocalNetworkNode {
 		Class.initClassTree(VTMDataManager);
 		Class.initClassTree(VTMDefinitionLibrary);
 		Class.initClassTree(IdentitySet);
-		childKeys = [
-			':controls',
-			':applications',
-			':networkNodes',
-			':hardwareDevices',
-			':modules',
-			':scenes',
-			':controlPages'
-		];
 		singleton = super.new.initLocalNetworkNode;
 	}
 
@@ -51,6 +43,16 @@ VTMLocalNetworkNode {
 		moduleHost = VTMModuleHost.new(this);
 		sceneOwner = VTMSceneOwner.new(this);
 		controls = VTMControlManager(this);
+
+		//init children
+		children = IdentityDictionary[
+			':controls' -> controls,
+			':applications' -> applicationManager,
+			':networkNodes' -> networkNodeManager,
+			':hardwareDevices' -> hardwareSetup,
+			':modules' -> moduleHost,
+			':scenes' -> sceneOwner,
+		];
 		
 		this.prInitControlPages;
 
@@ -488,36 +490,6 @@ VTMLocalNetworkNode {
 		^viewClass.new(parent, bounds, viewDef, settings, this);
 	}
 
-	// find{arg key;
-	// 	var str = key.asString;
-	// 	var result, numToDrop = 0;
-	// 	//check if it is one of the managers keys
-	// 	if(str.first == $:, {
-	// 		var managerKey, aChar, manager;
-	// 		str = str.iter;
-	// 		aChar = str.next; //away with the colon
-	// 		aChar = str.next;
-	// 		numToDrop = 2;
-	// 		while({aChar != $/}, {
-	// 			managerKey = managerKey.add;
-	// 			aChar = str.next;
-	// 			numToDrop = numToDrop + 1;
-	// 		});
-	// 		switch(managerKey.asSymbol,
-	// 			\controls, { manager = controls; },
-	// 			\modules, { manager = moduleHost; },
-	// 			\applications, { manager = applicationManager; },
-	// 			\scenes, { manager = sceneOwner; },
-	// 			\networkNodes, { manager = networkNodeManager; },
-	// 			\devices, { manager = hardwareSetup; }
-	// 		);
-	// 		result = manager.find(key.asString.drop(numToDrop));
-	// 		}, {
-	//
-	// 	});
-	// 	^result;
-	// }'/ :applications / PinneInstallasjon / :modules / pinne.2'
-
 	find{arg vtmPath;
 		if(vtmPath.isKindOf(VTMPath), {
 			var i = 0, result;
@@ -550,35 +522,28 @@ VTMLocalNetworkNode {
 		});
 	}
 
-	hasChildKey{arg key;
-		^this.childKeys.includes(key.asSymbol);
-	}
-
-	childKeys{
-		^this.class.childKeys;
-	}
-
 	parentKey{
 		^'/'
 	}
 
 	getChild{arg childKey;
-		^this.children[childKey.asSymbol];
+		^children[childKey.asSymbol];
+	}
+
+	hasChildKey{|childKey|
+		^children.includesKey(childKey);
 	}
 
 	hasChildren{
 		^true;
 	}
 
-	children{
-		^VTMOrderedIdentityDictionary[
-			':controls' -> controls,
-			':applications' -> applicationManager,
-			':networkNodes' -> networkNodeManager,
-			':hardwareDevices' -> hardwareSetup,
-			':modules' -> moduleHost,
-			':scenes' -> sceneOwner,
-		];
+	registerChild{|child|
+		children.put(child.name, child);
+	}
+
+	unregisterChild{|child|
+		children.remove(child);
 	}
 }
 
