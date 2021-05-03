@@ -134,7 +134,6 @@ VTMContext : VTMElement {
 		//the stuff that needs to be freed in the envir will happen
 		//in a separate thread. Everything else happens synchronously.
 		this.prChangeState(\willFree);
-		super.free;
 		forkIfNeeded{
 			var cond = condition ?? {Condition.new};
 			if(envir.includesKey(\free), {
@@ -143,6 +142,7 @@ VTMContext : VTMElement {
 			this.prChangeState(\didFree);
 			action.value(this);
 			definition = nil;
+			super.free;
 		};
 	}
 
