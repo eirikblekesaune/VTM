@@ -107,7 +107,7 @@ VTMControlPage {
 
 	update{|theChanged, whatChanged ...args|
 		if(this.isMapped and: {mappedScene === theChanged}, {
-			if(whatChanged == \freed, {
+			if(whatChanged == \willFree, {
 				this.unmapFromScene(theChanged);
 			});
 			if(whatChanged == \willMapToControlPage 
