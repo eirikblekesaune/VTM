@@ -189,16 +189,46 @@ VTMControlPage {
 	prMakeButtonMapping{|cpCv, sceneCv, cpCvKey, mappingDesc, sceneCvKey|
 		var result;
 		var mode = mappingDesc[\mode] ? \gate;
-		var val = mappingDesc[\value];
+		var makeSingleValueButtonMapping = {
+			var val = mappingDesc[\value];
+			VTMValueMapping((
+				source: cpCv,
+				destination: sceneCv,
+				type: \forwarding,
+				mapFunc: {|v, m|
+					val ? v;
+				}
+			));
+		};
+		var makeBiValueButtonMapping = {
+			var onVal, offVal;
+			onVal = mappingDesc[\onValue];
+			offVal = mappingDesc[\offValue];
+			result = VTMValueMapping((
+				source: cpCv,
+				destination: sceneCv,
+				type: \forwarding,
+				mapFunc: {|v, m|
+					if(v.booleanValue, {
+						onVal ? v;
+					}, {
+						offVal ? v;
+					})
+				}
+			));
+		};
 		this.setButtonMode(cpCvKey, mode);
-		result = VTMValueMapping((
-			source: cpCv,
-			destination: sceneCv,
-			type: \forwarding,
-			mapFunc: {|v, m|
-				val ? v;
+		switch(mode, 
+			\gate, {
+				result = makeBiValueButtonMapping.value;
+			},
+			\toggle, {
+				result = makeBiValueButtonMapping.value;
+			},
+			\momentary, {
+				result = makeSingleValueButtonMapping.value;
 			}
-		));
+		);
 		^result;
 	}
 
