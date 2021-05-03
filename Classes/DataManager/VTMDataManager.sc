@@ -48,9 +48,9 @@ VTMDataManager {
 			});
 
 			items.put(newItem.name, newItem);
-			parent.registerChild(newItem);
 			this.addDependant(newItem);
 			this.changed(\items, \added, newItem);
+			parent.registerChild(newItem);
 		});
 	}
 
@@ -154,6 +154,10 @@ VTMDataManager {
 
 	path{
 		^parent.fullPath;
+	}
+
+	manager{
+		^parent;
 	}
 
 	fullPath{

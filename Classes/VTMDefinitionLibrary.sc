@@ -24,17 +24,27 @@ VTMDefinitionLibrary {
 	}
 
 	*new{| folderPaths |
-		^super.new.initDefinitionLibrary(folderPaths);
+		var definitions;
+		var paths;
+		if(folderPaths.isString, {
+			paths = [folderPaths];
+		});
+		paths = paths.asArray;
+		definitions = this.readLibrary(paths);
+		^super.new.initDefinitionLibrary(definitions, paths);
 	}
 
-	initDefinitionLibrary{| folderPaths_ |
-
-		folderPaths = folderPaths_;
-		if(folderPaths.isString, {
-			folderPaths = [folderPaths];
+	*newWithDefinitions{|definitionsArray|
+		var definitions = VTMOrderedIdentityDictionary.new;
+		definitionsArray.do({|def|
+			definitions.put(def.name, def);
 		});
-		folderPaths = folderPaths.asArray;
-		definitions = this.class.readLibrary(folderPaths);
+		^super.new.initDefinitionLibrary(definitions);
+	}
+
+	initDefinitionLibrary{| definitions_, folderPaths_ |
+		definitions = definitions_.deepCopy;
+		folderPaths = folderPaths;
 	}
 
 	findDefinition{| defName |

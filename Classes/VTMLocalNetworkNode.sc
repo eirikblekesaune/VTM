@@ -543,7 +543,7 @@ VTMLocalNetworkNode {
 	}
 
 	unregisterChild{|child|
-		children.remove(child);
+		children.removeAt(child.name);
 	}
 }
 

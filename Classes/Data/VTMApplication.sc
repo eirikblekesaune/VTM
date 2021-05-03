@@ -28,7 +28,12 @@ VTMApplication : VTMContext {
 		}, {
 			"Did not find folder app defintion: %".format(name).vtmwarn(1, thisMethod);
 		});
-		definitionLibrary = VTMDefinitionLibrary.new(defPaths, this);
+
+		if(declaration.includesKey(\definitionLibrary), {
+			definitionLibrary = declaration[\definitionLibrary];
+		}, {
+			definitionLibrary = VTMDefinitionLibrary.new(defPaths, this);
+		});
 
 		hardwareDevices = VTMHardwareSetup(this);
 		modules = VTMModuleHost(this);
@@ -37,8 +42,8 @@ VTMApplication : VTMContext {
 		this.registerChild(modules);
 		this.registerChild(scenes);
 		this.on(\didInit, {
-			this.makeComponents;
 		});
+		this.makeComponents;
 	}
 
 	makeComponents{
