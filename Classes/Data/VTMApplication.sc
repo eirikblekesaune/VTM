@@ -41,8 +41,6 @@ VTMApplication : VTMContext {
 		this.registerChild(hardwareDevices);
 		this.registerChild(modules);
 		this.registerChild(scenes);
-		this.on(\didInit, {
-		});
 		this.makeComponents;
 	}
 
@@ -64,13 +62,12 @@ VTMApplication : VTMContext {
 						var makeComponent = {|iName, iDecl|
 							var newItem;
 							try{
-								newItem = comp.makeItemFromDeclaration(
+								newItem = comp.addItemFromDeclaration(
 									iName, iDecl
 								);
 								"ADDDING: % to %".format(
 									newItem, comp
 								).vtmdebug(2, thisMethod);
-								comp.addItem(newItem);
 							} {|err|
 								"Failed making component named: % with declaration: %".format(
 									iName, iDecl

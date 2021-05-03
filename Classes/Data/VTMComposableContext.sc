@@ -27,13 +27,12 @@ VTMComposableContext : VTMContext {
 					var makeComponent = {|iName, iDecl|
 						var newItem;
 						try{
-							newItem = subContexts.makeItemFromDeclaration(
+							newItem = subContexts.addItemFromDeclaration(
 								iName, iDecl
 							);
 							"ADDDING: % to %".format(
 								newItem, subContexts
 							).vtmdebug(2, thisMethod);
-							this.addItem(newItem);
 						} {|err|
 							"Failed making component named: % with declaration: %".format(
 								iName, iDecl
