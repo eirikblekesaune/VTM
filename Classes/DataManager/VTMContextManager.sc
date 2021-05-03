@@ -49,6 +49,15 @@ VTMContextManager : VTMDataManager {
 				).vtmdebug(2, thisMethod);
 			};
 			"Definition: %".format(itemDefinition).vtmdebug(2, thisMethod);
+			//Check if any of the declaration keys are functions.
+			//If they are, they are meant to be evaluated in the context they were defined
+			//in.
+			itemDeclaration.keysValuesChange({|k,v|
+				if(v.isKindOf(Function), {
+					v = this.parent.envir.use{ v.value(this.parent);};
+				});
+				v;
+			});
 			newItem = this.class.dataClass.new(
 				name: itemName,
 				declaration: itemDeclaration,
