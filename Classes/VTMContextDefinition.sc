@@ -95,6 +95,13 @@ VTMContextDefinition {
 						'destination' -> desc,
 					]
 				});
+				if(desc.isKindOf(Array) and: {
+					desc.every({|it| it.isKindOf(Symbol)})
+				}, {
+					desc = VTMOrderedIdentityDictionary[
+						'destination' -> desc,
+					]
+				});
 				desc;
 			});
 

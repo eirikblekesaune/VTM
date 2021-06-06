@@ -159,7 +159,13 @@ VTMControlPage {
 			sceneCvKey = mappingDesc.atFail(\destination, {
 				Error("Mapping destination not defined").throw;
 			});
-			sceneCv = scene.find(VTMPath(sceneCvKey));
+			if(sceneCvKey.isKindOf(Array), {
+				sceneCv = sceneCvKey.collect({|k|
+					scene.find(VTMPath(k));
+				});
+			}, {
+				sceneCv = scene.find(VTMPath(sceneCvKey));
+			});
 			if(sceneCv.isNil, {
 				Error("Could not find scene cv: '%'".format(sceneCvKey)).throw;
 			});
