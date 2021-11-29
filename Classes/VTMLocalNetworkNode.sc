@@ -25,6 +25,7 @@ VTMLocalNetworkNode {
 	var <active = false;
 
 	*initClass{
+		Class.initClassTree(String);
 		Class.initClassTree(VTMData);
 		Class.initClassTree(VTMDataManager);
 		Class.initClassTree(VTMDefinitionLibrary);
@@ -58,7 +59,7 @@ VTMLocalNetworkNode {
 
 		library = VTMDefinitionLibrary.new;
 
-		hostname = Pipe("hostname", "r").getLine();
+		hostname = "echo -n $(cat /etc/hostname)".unixCmdGetStdOut;
 		if(".local$".matchRegexp(hostname), {
 			hostname = hostname.drop(-6);
 		});
