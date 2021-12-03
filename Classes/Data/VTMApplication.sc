@@ -12,9 +12,9 @@ VTMApplication : VTMContext {
 	}
 
 	initApplication{
-		var defPaths;
+		var defPaths = [];
 		if(declaration.includesKey(\definitionPaths), {
-			defPaths = declaration[\definitionPaths];
+			defPaths = defPaths.add(declaration[\definitionPaths]);
 		});
 
 		//always add the local path for the application definition path
@@ -32,7 +32,7 @@ VTMApplication : VTMContext {
 		if(declaration.includesKey(\definitionLibrary), {
 			definitionLibrary = declaration[\definitionLibrary];
 		}, {
-			definitionLibrary = VTMDefinitionLibrary.new(defPaths, this);
+			definitionLibrary = VTMDefinitionLibrary.new(defPaths);
 		});
 
 		hardwareDevices = VTMHardwareSetup(this);

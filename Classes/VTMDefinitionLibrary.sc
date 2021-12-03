@@ -26,10 +26,7 @@ VTMDefinitionLibrary {
 	*new{| folderPaths |
 		var definitions;
 		var paths;
-		if(folderPaths.isString, {
-			paths = [folderPaths];
-		});
-		paths = paths.asArray;
+		paths = folderPaths.asArray;
 		definitions = this.readLibrary(paths);
 		^super.new.initDefinitionLibrary(definitions, paths);
 	}
@@ -44,7 +41,7 @@ VTMDefinitionLibrary {
 
 	initDefinitionLibrary{| definitions_, folderPaths_ |
 		definitions = definitions_.deepCopy;
-		folderPaths = folderPaths;
+		folderPaths = folderPaths_;
 	}
 
 	findDefinition{| defName |
