@@ -69,9 +69,10 @@ VTMApplication : VTMContext {
 									newItem, comp
 								).vtmdebug(2, thisMethod);
 							} {|err|
-								"Failed making component named: % with declaration: %".format(
-									iName, iDecl
-								).vtmwarn(0, meth);
+								var warningStr = "Failed making component named: %".format(iName);
+								warningStr = warningStr ++ "with declaration: %".format(iDecl);
+								warningStr = warningStr ++ "\nerrorString: %".format(err.errorString);
+								warningStr.vtmwarn(0, meth);
 								err.errorString.vtmdebug(1, thisMethod);
 							}
 						};
