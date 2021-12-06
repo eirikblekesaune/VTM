@@ -20,7 +20,6 @@ VTMControl : VTMData {
 		mode = description.removeAt(\mode);
 		descName = description.removeAt(\name);
 		name = name ? descName;
-		//result = this.perform(mode ? \attribute, name, description, manager);
 		mode = mode ? \attribute;
 		switch(mode, 
 			\attribute, {
