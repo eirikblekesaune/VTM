@@ -52,15 +52,12 @@ VTMContextDefinition {
 			\name -> name
 		];
 
-		"DEGBUGUGUGU [%]: %".format(name, env).postln;
 
 		[\controls, \parameters, \hardwareDevices, \modules, \scenes].do{arg item;
 			var cc;
 			if(env.includesKey(item), {
 				cc = env.removeAt(item);
-				"putting CCC: name: % % - %".format(name, item, cc).postln;
 				cc = VTMOrderedIdentityDictionary.newFromNestedAssociationsArray(cc);
-				"After making: %\n%".format(cc.keys, cc.values).postln;
 			}, {
 				cc = VTMOrderedIdentityDictionary.new;
 			});
