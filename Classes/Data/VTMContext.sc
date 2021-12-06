@@ -89,15 +89,12 @@ VTMContext : VTMElement {
 				if(envir.includesKey(\init), {
 					this.execute(\init, envir, definition, cond);
 				});
-				//at this point it is assumed that control descripitons are
+				//At this point it is assumed that control descripitons are
 				// ready to be used for building controls. Note that this happens after the envir init.
-				"THe controls: %".format(envir[\controls]).postln;
 				if(envir[\controls].notNil, {
-					envir[\controls].keysValuesDo({arg item;
-						var ctrlKey, ctrlDesc;
+					var c = VTMOrderedIdentityDictionary.newFromNestedAssociationsArray(envir[\controls]);
+					c.keysValuesDo({arg ctrlKey, ctrlDesc;
 						var newCtrl;
-						ctrlKey = item.key;
-						ctrlDesc = item.value;
 						newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc, controls);
 						if(newCtrl.action.notNil, {
 							newCtrl.action = newCtrl.action.inEnvir(envir);
@@ -109,7 +106,6 @@ VTMContext : VTMElement {
 				this.prChangeState(\didInit);
 				action.value(this);
 			} {|err|
-				"init failed:".postln;
 				err.postProtectedBacktrace;
 				err.errorString.postln;
 			}
@@ -213,7 +209,6 @@ VTMContext : VTMElement {
 
 	runCue{|key|
 		if(cues.includesKey(key), {
-			"found cue".postln;
 			cues[key].go;
 		}, {
 			"Cue '%' not found".format(key).vtmwarn(0, thisMethod);
