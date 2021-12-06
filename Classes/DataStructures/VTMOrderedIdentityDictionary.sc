@@ -42,10 +42,10 @@ VTMOrderedIdentityDictionary : IdentityDictionary {
 							});
 						});
 					}, {
-						res = res.add(key -> value);
+						res = res.add(key -> value.copy);
 					});
 				}, {
-					res = res.add(key -> value);
+					res = res.add(key -> value.copy);
 				});
 			}, {
 				if(key.isKindOf(ArrayedCollection), {
