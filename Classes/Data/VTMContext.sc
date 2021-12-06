@@ -44,7 +44,7 @@ VTMContext : VTMElement {
 		envir = definition.makeEnvir(this);
 
 		//Check the parameters from the definition
-		"defintion parameters: %".format(definition.parameters).vtmdebug(2, thisMethod);
+		"Context definition parameters: %".format(definition.parameters).vtmdebug(2, thisMethod);
 		if(definition.parameters.notNil, {
 			definition.parameters.keysValuesDo({| paramKey, paramProps |
 				var tempVal;
@@ -90,12 +90,18 @@ VTMContext : VTMElement {
 					this.execute(\init, envir, definition, cond);
 				});
 				//at this point it is assumed that control descripitons are
-				// ready to be used for building controls. Not this happens after the envir init.
-				envir[\controls].keysValuesDo({arg ctrlKey, ctrlDesc;
-					var newCtrl;
-					newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc, controls);
-					if(newCtrl.action.notNil, {
-						newCtrl.action = newCtrl.action.inEnvir(envir);
+				// ready to be used for building controls. Note that this happens after the envir init.
+				"THe controls: %".format(envir[\controls]).postln;
+				if(envir[\controls].notNil, {
+					envir[\controls].keysValuesDo({arg item;
+						var ctrlKey, ctrlDesc;
+						var newCtrl;
+						ctrlKey = item.key;
+						ctrlDesc = item.value;
+						newCtrl = VTMControl.makeFromDescription(ctrlKey, ctrlDesc, controls);
+						if(newCtrl.action.notNil, {
+							newCtrl.action = newCtrl.action.inEnvir(envir);
+						});
 					});
 				});
 				this.changed(\controls);
