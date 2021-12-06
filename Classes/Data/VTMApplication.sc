@@ -65,6 +65,7 @@ VTMApplication : VTMContext {
 								newItem = comp.addItemFromDeclaration(
 									iName, iDecl
 								);
+								"ARGS: %".format(newItem.definition).postln;
 								"ADDDING: % to %".format(
 									newItem, comp
 								).vtmdebug(2, thisMethod);
