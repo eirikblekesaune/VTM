@@ -89,6 +89,18 @@ VTMStringValue : VTMValue {
 		});
 	}
 
+	enum_{|vals|
+		var enumVals;
+		vals.do({|val|
+			var inval = val.copy.asString;
+			if(inval.class == Symbol, {//Symbols are accepted and converted into strings
+				inval = inval.asString;
+			});
+			enumVals = enumVals.add(inval);
+		});
+		super.enum_(enumVals);
+	}
+
 	parseStringValue{|str|
 		^str;
 	}
