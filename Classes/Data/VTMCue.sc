@@ -6,6 +6,8 @@ VTMCue : VTMElement {
 	var <>armed = true;
 	classvar <isAbstractClass=false;
 
+	*managerClass{ ^VTMCueManager; }
+
 	*new{| name, declaration, manager |
 		^super.new(name, declaration, manager).initCue;
 	}
