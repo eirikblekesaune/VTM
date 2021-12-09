@@ -3,12 +3,14 @@ VTMView : View {
 	var <definition;
 	var model;
 	var labelView;
+	var label;
+	var toolTip;
 
 	var <units = 1;
 	classvar <unitWidth = 150, <unitHeight = 25;
 	var <color;
 
-	font{ ^font ? Font("Avenir Next", 10); }
+	font{ ^font ? Font("Iosevka Heavy", 12); }
 	background{
 		^Color(0.823, 0.757, 0.486)
 	}
@@ -20,41 +22,67 @@ VTMView : View {
 	*new{| parent, bounds, definition, settings, model |
 		var viewBounds;
 		viewBounds = bounds ?? { this.prCalculateSize(1).asRect; };
-		"Making VTM view with parent: %".format(parent).vtmdebug(4, thisMethod);
 		^super.new(parent, viewBounds).init(definition, settings, model);
 	}
 
 	init{| definition_, settings_, model_ |
-		settings = settings_;
+		settings = settings_ ?? {IdentityDictionary.new};
 		definition = definition_;
 		model = model_;
 		model.addDependant(this);
 
+		this.prInitLabel;
+		toolTip = "";
 		this.prMakeChildViews;
-
-		this.layout_( this.prMakeLayout.spacing_(2).margins_([5, 2]) );
-		//This is needed to set the fixedSize
-		this.bounds_(this.bounds);
 
 		this.addAction({| ...args |
 			model.removeDependant(this);
 		}, \onClose);
+
+		this.layout_( this.prMakeLayout );
+		//This is needed to set the fixedSize
+		this.bounds_(this.bounds);
+		this.mouseDownAction_({|...args| args.postln; true;})
+	}
+
+	prInitLabel{
+		this.subclassResponsibility(thisMethod);
 	}
 
 	prMakeChildViews{
-		labelView = this.prMakeLabelView;
+		this.subclassResponsibility(thisMethod);
+	}
+
+	label{ ^label; }
+
+	label_{| str |
+		label = str;
+		this.refreshLabel;
+	}
+
+	refreshLabel{
+		{
+			labelView
+			.string_(label)
+			.toolTip_(this.toolTip);
+		}.defer;
+	}
+
+	toolTip{ ^toolTip; }
+	toolTip_{|str|
+		{
+			toolTip = str;
+			this.refreshLabel;
+		}.defer;
 	}
 
 	prMakeLabelView{| str |
 		var result;
-		var labelStr = str ?? {model.name};
-		result = StaticText(
-			this,
-			Rect(0, 0, this.bounds.width, this.class.unitHeight)
-		)
-		.maxHeight_(this.class.unitHeight)
+		var labelStr = str ?? "";
+		result = StaticText()
+		// .maxHeight_(this.class.unitHeight)
 		.string_(labelStr)
-		.background_(this.background)
+		// .background_(this.background)
 		.mouseDownAction_({
 			model.debugString.vitmdebug(0, thisMethod);
 		})
@@ -64,9 +92,6 @@ VTMView : View {
 	}
 
 	prMakeLayout{
-		^VLayout(
-			labelView,
-			nil
-		)
+		this.subclassResponsibility(thisMethod);
 	}
 }
