@@ -248,10 +248,12 @@ VTMDataManager {
 		);
 	}
 
-	debugString{
+	debugString{|includeDeclaration = false|
 		var result;
 		result = "\n% [%]\n".format(this.name, this.class);
 		result = result ++ "\tpath: %\n".format(this.fullPath);
+		result = result ++ "\t'description':\n %".format(
+			this.description(includeDeclaration).makeTreeString(2));
 		^result;
 	}
 
@@ -261,6 +263,14 @@ VTMDataManager {
 
 	getChild{arg key;
 		^items.at(key);
+	}
+
+	description{|includeDeclaration = false|
+		var result = VTMOrderedIdentityDictionary.new;
+		items.keysValuesDo({|key, item|
+			result.put(key, item.description(includeDeclaration));
+		});
+		^result;
 	}
 
 	find{arg vtmPath;
