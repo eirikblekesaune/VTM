@@ -216,4 +216,8 @@ VTMNumberValue : VTMValue {
 		);
 	}
 
+	spec{
+		[this.minVal, this.maxVal].asSpec;
+	}
+
 }
