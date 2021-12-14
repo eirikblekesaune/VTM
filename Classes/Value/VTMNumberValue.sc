@@ -1,6 +1,7 @@
 VTMNumberValue : VTMValue {
 	var <dataspace;//Optional instance of VTMDataspace
 	var <scheduler;//Where instances of VTMNumberInterpolator will be
+	var spec;
 
 	*new{| properties |
 		^super.new(properties).initNumberValue;
@@ -29,7 +30,12 @@ VTMNumberValue : VTMValue {
 				this.stepsize = properties[\stepsize];
 			});
 		});
+		this.prInitSpec;
 		scheduler = Routine.new({});
+	}
+
+	prInitSpec{
+		spec = ControlSpec(this.minVal, this.maxVal, step: this.stepsize, default: this.defaultValue).asSpec;
 	}
 
 	stopRamp{
@@ -138,9 +144,13 @@ VTMNumberValue : VTMValue {
 	minVal_{ | val |
 		if(val.isNil, {
 			this.set(\minVal, nil);
+			this.prInitSpec;
+			this.changed(\minVal);
 		}, {
 			if(this.isValidType(val), {
 				this.set(\minVal, val);
+				this.prInitSpec;
+				this.changed(\minVal);
 				this.value_(this.value);//update the value, might be clipped in the value set method
 			}, {
 				"NumberValue:minVal_ - ignoring val because of invalid type: '%[%]'".format(
@@ -154,9 +164,13 @@ VTMNumberValue : VTMValue {
 	maxVal_{ | val |
 		if(val.isNil, {
 			this.set(\maxVal, nil);
+			this.prInitSpec;
+			this.changed(\maxVal);
 		}, {
 			if(this.isValidType(val), {
 				this.set(\maxVal, val);
+				this.prInitSpec;
+				this.changed(\maxVal);
 				this.value_(this.value);//update the value, might be clipped in the value set method
 			}, {
 				"NumberValue:maxVal_ - ignoring val because of invalid type: '%[%]'".format(
@@ -176,6 +190,8 @@ VTMNumberValue : VTMValue {
 				"NumberValue:stepsize_ - val converted to positive value".warn;
 			});
 			this.set(\stepsize, newVal);
+			this.prInitSpec;
+			this.changed(\stepsize);
 		}, {
 			"NumberValue:stepsize_ - ignoring val because of invalid type: '%[%]'".format(
 				val, val.class
@@ -217,7 +233,28 @@ VTMNumberValue : VTMValue {
 	}
 
 	spec{
-		[this.minVal, this.maxVal].asSpec;
+		^spec.copy;
+	}
+
+	//Calculate a value mapped from 0.0..1.0
+	//Does not set the value.
+	calculateMappedValue{|val|
+		^spec.map(val);
+	}
+	
+	//Return the value unmapped to the range 0.0..1.0
+	unmappedValue{|val|
+		^spec.unmap(val);
+	}
+
+	update{|theChanged, whatChanged ...args|
+		if(theChanged === this, {
+			switch(whatChanged,
+				\minVal, {this.prInitSpec;},
+				\maxVal, {this.prInitSpec;},
+				\stepsize, {this.prInitSpec;}
+			);
+		});
 	}
 
 }
