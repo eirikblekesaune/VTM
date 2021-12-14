@@ -243,8 +243,8 @@ VTMNumberValue : VTMValue {
 	}
 	
 	//Return the value unmapped to the range 0.0..1.0
-	unmappedValue{|val|
-		^spec.unmap(val);
+	unmappedValue{
+		^spec.unmap(this.value);
 	}
 
 	update{|theChanged, whatChanged ...args|
