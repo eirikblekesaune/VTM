@@ -41,7 +41,6 @@ VTMApplication : VTMContext {
 		this.registerChild(hardwareDevices);
 		this.registerChild(modules);
 		this.registerChild(scenes);
-		this.makeComponents;
 	}
 
 	makeComponents{
@@ -65,7 +64,6 @@ VTMApplication : VTMContext {
 								newItem = comp.addItemFromDeclaration(
 									iName, iDecl
 								);
-								"ARGS: %".format(newItem.definition).postln;
 								"ADDDING: % to %".format(
 									newItem, comp
 								).vtmdebug(2, thisMethod);
@@ -123,7 +121,7 @@ VTMApplication : VTMContext {
 	findDefinition{arg defName;
 		^definitionLibrary.findDefinition(defName);
 	}
-
+	
 	free{| condition, action |
 		forkIfNeeded{
 			var cond = condition ?? {Condition.new};
@@ -132,6 +130,13 @@ VTMApplication : VTMContext {
 			});
 			super.free(condition, action);
 		}
+	}
+
+	init{|condition, action|
+		forkIfNeeded{
+			super.init(condition, action);
+			this.makeComponents;
+		};
 	}
 
 	//to make it act as a manager

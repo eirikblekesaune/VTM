@@ -30,6 +30,11 @@ VTMContextManager : VTMDataManager {
 				"context: % %".format(this.context.fullPath, 
 					this.context.class).vtmdebug(2, thisMethod);
 				itemDefinition = this.context.findDefinition(defName);
+				if(itemDefinition.isNil, {
+					VTMContextDefinitionError("Context definition '%' not found in context: '%'".format(
+						defName, this.context.fullPath
+					)).throw;
+				});
 				"Definition name: %[%]".format(
 					defName, defName.class
 				).vtmdebug(2, thisMethod);
@@ -47,6 +52,9 @@ VTMContextManager : VTMDataManager {
 				"No definition for item: %".format(
 					itemDeclaration
 				).vtmdebug(2, thisMethod);
+				VTMContextDefinitionError("No definition for: '%' in context".format(
+					itemName, this.context.fullPath
+				)).throw;
 			};
 			"Definition: %".format(itemDefinition).vtmdebug(2, thisMethod);
 			//Check if any of the declaration keys are functions.

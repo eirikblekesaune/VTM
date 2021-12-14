@@ -19,10 +19,16 @@ VTMContext : VTMElement {
 	}
 
 	*fromFile{|name, filepath, declaration, manager, onInit|
-		var def = VTMContextDefinition.newFromFile(
-			filepath
-		);
-		^this.new(name, declaration, manager, def, onInit);
+		var def;
+		try{
+			"Trying with this file: %".format(filepath).postln;
+			def = VTMContextDefinition.newFromFile(
+				filepath
+			);
+			^this.new(name, declaration, manager, def, onInit);
+		} {|err|
+			err.throw;
+		}
 	}
 
 	//definition argument can be either nil, an instance of

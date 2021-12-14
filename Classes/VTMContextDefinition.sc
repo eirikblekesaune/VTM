@@ -13,13 +13,13 @@ VTMContextDefinition {
 			var loadedEnvir;
 			"filepath to load: %".format(pathName.fullPath).vtmdebug(4, thisMethod);
 			if(File.exists(pathName.fullPath).not, {
-				VTMError(
-					"Definifion file not found at path: '%'".format(pathName.fullPath)
+				VTMContextDefinitionError(
+					"Definition file not found at path: '%'".format(pathName.fullPath)
 				).throw;
 			});
 			loadedEnvir = File.loadEnvirFromFile(pathName.fullPath);
 			if(loadedEnvir.isNil, {
-				VTMError(
+				VTMContextDefinitionError(
 					"Could not load environment from definition file: '%'".format(
 						pathName.fullPath
 					)

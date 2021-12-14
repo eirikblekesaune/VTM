@@ -10,7 +10,7 @@ VTMView : View {
 	classvar <unitWidth = 150, <unitHeight = 25;
 	var <color;
 
-	font{ ^font ? Font("Iosevka Heavy", 12); }
+	font{ ^font ? Font("Iosevka Heavy", 16); }
 	background{
 		^Color(0.823, 0.757, 0.486)
 	}
