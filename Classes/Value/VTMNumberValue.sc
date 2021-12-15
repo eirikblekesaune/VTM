@@ -198,7 +198,7 @@ VTMNumberValue : VTMValue {
 			).warn;
 		});
 	}
-	stepsize{ ^this.get(\stepsize) ? 0; }
+	stepsize{ ^this.get(\stepsize) ? 1; }
 
 	clipmode_{ | val |
 		if(#['none', 'low', 'high', 'both'].includes(val.asSymbol), {
