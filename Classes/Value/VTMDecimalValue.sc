@@ -24,6 +24,10 @@ VTMDecimalValue : VTMNumberValue {
 		super.stepsize_(val);
 	}
 
+	prInitSpec{
+		spec = ControlSpec(this.minVal, this.maxVal, default: this.defaultValue).asSpec;
+	}
+
 	value_{| val |
 		if(val.class == Integer, {
 			val = val.asFloat;
