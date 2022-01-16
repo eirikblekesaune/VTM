@@ -78,4 +78,8 @@ VTMSchemaValue : VTMDictionaryValue {
 			).warn;
 		});
 	}
+
+	parseStringValue{|str|
+		//Expects sclang key val notation in event syntax: (hei: 123, hallo: 'kjubbing')
+	}
 }
