@@ -75,7 +75,13 @@ VTM{
 		^result;
 	}
 
-	*find{arg vtmPath;
-		^VTM.local.find(vtmPath);
+	*find{arg path;
+		var vtmPath;
+		if(vtmPath.class == Symbol, {
+			vtmPath = VTMPath(path);
+		}, {
+			vtmPath = path;
+		});
+		^VTM.local.find(path);
 	}
 }
