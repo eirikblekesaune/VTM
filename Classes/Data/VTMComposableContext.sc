@@ -4,6 +4,8 @@ e.g a Module can submodules.
 */
 VTMComposableContext : VTMContext {
 	var <subContexts;
+	var <owner;
+	var <ownedContexts;
 
 	*new{| name, declaration, manager, definition, onInit|
 		^super.new(name, declaration, manager, definition, onInit).initComposableContext;
@@ -11,6 +13,7 @@ VTMComposableContext : VTMContext {
 
 	initComposableContext{
 		//TODO: init subContexts here
+		ownedContexts = ();
 		subContexts = this.class.managerClass.new(this);
 		this.loadSubcontexts;
 	}
@@ -111,6 +114,56 @@ VTMComposableContext : VTMContext {
 	addItem{|comp|
 		subContexts.addItem(comp);
 	}
+
+	//Take ownership over another context
+	takeOwnership{|context|
+		if(context.isOwned.not, {
+			context.prRegisterOwner(this);
+			ownedContexts.put(context.fullPath, context);
+		}, {
+			"Context '%' can't take ownership over '%' \n\tContext is already owned by: %".format(
+				this.fullPath,
+				context.fullPath,
+				context.owner.fullPath
+			).warn;
+		});
+	}
+
+	//The current owner-context must submit itself as arg
+	// to check for identity upon ownership release.
+	releaseOwnership{|context|
+		if(context.isOwned, {
+			context.prUnregisterOwner(this);
+			ownedContexts.removeAt(context.fullPath);
+		});
+	}
+
+	isOwned{
+		^this.owner.notNil;
+	}
+
+	//This is a private method that is called by its owner,
+	//// could also be considered an friend class called method
+	prRegisterOwner{|context|
+		if(this.isOwned.not, {
+			owner = context;
+		}, {
+			"Context '%' can't take ownership over '%' \n\tContext is already owned by: %".format(
+				context.fullPath,
+				this.fullPath,
+				owner.fullPath
+			).warn;
+		});
+	}
+
+	//This is a private method that is called by its owner,
+	//// could also be considered an friend class called method
+	prUnregisterOwner{|context|
+		if(context === owner, {
+			owner = nil;
+		});
+	}
+
 
 	*parameterDescriptions{
 		^super.parameterDescriptions.putAll(VTMOrderedIdentityDictionary[
