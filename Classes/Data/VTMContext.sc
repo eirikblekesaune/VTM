@@ -176,6 +176,12 @@ VTMContext : VTMElement {
 	}
 
 	//Call functions in the runtime environment with this context as first arg.
+	//!!! Be very careful when calling functions in the context envir through
+	// this method. If they throw an error, there is a chance that the currentEnvironment
+	// will be changed, as the internal protect in the envir.use call doesn't always catch
+	// the internal errors.
+	// The problem seems to appear when the internal enviro function fork a process that
+	// throws an error.
 	execute{| selector ...args |
 		var result;
 		envir.use{
