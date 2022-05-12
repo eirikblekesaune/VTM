@@ -14,7 +14,7 @@ VTMApplication : VTMContext {
 	initApplication{
 		var defPaths = [];
 		if(declaration.includesKey(\definitionPaths), {
-			defPaths = defPaths.add(declaration[\definitionPaths]);
+			defPaths = defPaths.addAll(declaration[\definitionPaths]);
 		});
 
 		//always add the local path for the application definition path
