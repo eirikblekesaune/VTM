@@ -47,6 +47,10 @@ VTMElement : VTMData {
 		^result;
 	}
 
+	hasControl{|key| 
+		^controls.includesKey(key);
+	}
+
 	//set attribute values.
 	set{| key...args |
 		controls[key].valueAction_(*args);
