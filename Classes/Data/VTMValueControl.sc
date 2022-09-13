@@ -4,11 +4,14 @@ VTMValueControl : VTMControl {
 	var forwardings;
 	var forwarder;
 	var traceResponder;
+	var recordFunc;
+	var recording;
 
 	*new{| name, declaration, manager |
 		var action = declaration[\action];
 		^super.new(name, declaration, manager).initValueControl(action);
 	}
+
 
 	initValueControl{| action_ |
 		var valueClass = VTMValue.typeToClass(
@@ -33,6 +36,31 @@ VTMValueControl : VTMControl {
 
 		forwardings = VTMOrderedIdentityDictionary.new;
 		this.enableForwarding;
+	}
+
+	startRecording{
+		this.clearRecording;
+		recordFunc = {|...args|
+			recording.add([Main.elapsedTime, args]);
+		};
+		this.changed(\startedRecording);
+	}
+
+	clearRecording{
+		recording = List.new;
+	}
+
+	stopRecording{
+		recordFunc = nil;
+		this.changed(\stoppedRecording);
+	}
+
+	getRecording{
+		^recording.copy;
+	}
+
+	isRecording{
+		^recordFunc.isNil.not;
 	}
 
 	free{

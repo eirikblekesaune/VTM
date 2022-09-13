@@ -63,7 +63,9 @@ VTMElement : VTMData {
 			^result;
 		});
 		//if no attribute found try getting a parameter
-		^super.get(key);
+		result = super.get(key);
+
+		^result;
 	}
 
 	//do command with possible value args. Only run-time.
